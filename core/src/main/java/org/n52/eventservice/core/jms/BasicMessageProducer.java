@@ -1,10 +1,13 @@
 package org.n52.eventservice.core.jms;
 
 import java.util.Date;
+import javax.jms.ConnectionFactory;
+import javax.jms.Destination;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.Session;
 import javax.jms.TextMessage;
+import org.apache.activemq.command.ActiveMQQueue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jms.core.JmsTemplate;
@@ -17,26 +20,37 @@ public class BasicMessageProducer {
     
     private static final Logger LOG = LoggerFactory.getLogger(BasicMessageProducer.class);
     
-    protected JmsTemplate jmsTemplate;
-    
     protected int numberOfMessages = 100;
+    private ConnectionFactory connectionFactory;
+    private DestinationFactory destinationFactory;
     
     public void setNumberOfMessages(int numberOfMessages) {
         this.numberOfMessages = numberOfMessages;
     }
-    
-    public JmsTemplate getJmsTemplate() {
-        return jmsTemplate;
+
+    public ConnectionFactory getConnectionFactory() {
+        return connectionFactory;
     }
-    
-    public void setJmsTemplate(JmsTemplate jmsTemplate) {
-        this.jmsTemplate = jmsTemplate;
+
+    public void setConnectionFactory(ConnectionFactory connectionFactory) {
+        this.connectionFactory = connectionFactory;
+    }
+
+    public DestinationFactory getDestinationFactory() {
+        return destinationFactory;
+    }
+
+    public void setDestinationFactory(DestinationFactory destinationFactory) {
+        this.destinationFactory = destinationFactory;
     }
     
     public void sendMessages() throws JMSException {
         final StringBuilder buffer = new StringBuilder();
         
         for (int i = 0; i < numberOfMessages; ++i) {
+            JmsTemplate jmsTemplate = new JmsTemplate(this.connectionFactory);
+            jmsTemplate.setDefaultDestination(destinationFactory.createDestination("TEST-"+i));
+            
             buffer.append("Message '").append(i).append("' sent at: ").append(new Date());
             
             final int count = i;

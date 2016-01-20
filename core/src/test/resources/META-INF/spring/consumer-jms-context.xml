@@ -17,6 +17,6 @@
         container-type="default"
         connection-factory="connectionFactory"
         acknowledge="auto">
-        <jms:listener destination="TEST" ref="consumerMessageListener" method="onMessage" />
+        <jms:listener destination="TEST-10" ref="consumerMessageListener" method="onMessage" />
     </jms:listener-container>
 </beans>

@@ -8,15 +8,10 @@
     <bean id="connectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory"
         p:brokerURL="tcp://localhost:61616" />
   
-    <bean id="destination" class="org.apache.activemq.command.ActiveMQQueue">
-        <constructor-arg value="TEST" />
-    </bean>
-    
-    <bean id="jmsTemplate" class="org.springframework.jms.core.JmsTemplate"
-        p:connectionFactory-ref="connectionFactory"
-        p:defaultDestination-ref="destination" />
+    <bean id="destinationFactory" class="org.n52.eventservice.core.jms.ActiveMQQueueDestinationFactory" />
   
     <bean id="messageProducer" class="org.n52.eventservice.core.jms.BasicMessageProducer"
-        p:jmsTemplate-ref="jmsTemplate" />
+        p:connectionFactory-ref="connectionFactory"
+        p:destinationFactory-ref="destinationFactory" />
   
 </beans>
