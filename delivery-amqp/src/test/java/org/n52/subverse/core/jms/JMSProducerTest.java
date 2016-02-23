@@ -16,5 +16,5 @@ public class JMSProducerTest {
         BasicMessageProducer producer = (BasicMessageProducer) context.getBean("messageProducer");
         producer.sendMessages();
     }
-    
+
 }

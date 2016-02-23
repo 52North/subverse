@@ -11,9 +11,9 @@ import org.slf4j.LoggerFactory;
  *
  */
 public class ConsumerMessageListener implements MessageListener {
-    
+
     private static final Logger LOG = LoggerFactory.getLogger(ConsumerMessageListener.class);
-    
+
     public void onMessage(Message message) {
         try {
             TextMessage msg = (TextMessage) message;
@@ -22,5 +22,5 @@ public class ConsumerMessageListener implements MessageListener {
             LOG.warn(e.getMessage(), e);
         }
     }
-    
+
 }

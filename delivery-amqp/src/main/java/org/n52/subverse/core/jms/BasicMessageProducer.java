@@ -15,13 +15,13 @@ import org.springframework.amqp.core.AmqpTemplate;
  *
  */
 public class BasicMessageProducer {
-    
+
     private static final Logger LOG = LoggerFactory.getLogger(BasicMessageProducer.class);
-    
+
     protected int numberOfMessages = 100;
     private ConnectionFactory connectionFactory;
     private DestinationFactory destinationFactory;
-    
+
     public void setNumberOfMessages(int numberOfMessages) {
         this.numberOfMessages = numberOfMessages;
     }
@@ -41,19 +41,19 @@ public class BasicMessageProducer {
     public void setDestinationFactory(DestinationFactory destinationFactory) {
         this.destinationFactory = destinationFactory;
     }
-    
+
     public void sendMessages() throws JMSException {
         final StringBuilder buffer = new StringBuilder();
-        
+
 //        for (int i = 0; i < numberOfMessages; ++i) {
 //            JmsTemplate jmsTemplate = new JmsTemplate(this.connectionFactory);
 //            jmsTemplate.setDefaultDestination(destinationFactory.createDestination("TEST-"+i));
-//            
+//
 //            buffer.append("Message '").append(i).append("' sent at: ").append(new Date());
-//            
+//
 //            final int count = i;
 //            final String payload = buffer.toString();
-//            
+//
 //            jmsTemplate.send(new MessageCreator() {
 //                public Message createMessage(Session session) throws JMSException {
 //                    TextMessage message = session.createTextMessage(payload);
@@ -62,7 +62,7 @@ public class BasicMessageProducer {
 //                    return message;
 //                }
 //            });
-//            
+//
 //            buffer.delete(0, buffer.length());
 //        }
     }

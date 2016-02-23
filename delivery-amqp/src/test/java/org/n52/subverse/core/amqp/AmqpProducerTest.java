@@ -11,7 +11,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  *
  */
 public class AmqpProducerTest {
-    
+
     @Test
     public void testProducer() {
         ApplicationContext context = new ClassPathXmlApplicationContext("/META-INF/spring/producer-amqp-context.xml");
@@ -20,5 +20,5 @@ public class AmqpProducerTest {
             aTemplate.convertAndSend("my.routingkey", "Hello CloudAMQP, Message # " +i);
         }
     }
-    
+
 }

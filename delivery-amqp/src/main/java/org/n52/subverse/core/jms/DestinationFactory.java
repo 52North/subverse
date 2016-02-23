@@ -8,5 +8,5 @@ import javax.jms.Destination;
 public interface DestinationFactory {
 
     Destination createDestination(String name);
-    
+
 }
