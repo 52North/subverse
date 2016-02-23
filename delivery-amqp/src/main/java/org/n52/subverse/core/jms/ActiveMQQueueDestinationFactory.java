@@ -1,4 +1,4 @@
-package org.n52.eventservice.core.jms;
+package org.n52.subverse.core.jms;
 
 import javax.jms.Destination;
 import org.apache.activemq.command.ActiveMQQueue;

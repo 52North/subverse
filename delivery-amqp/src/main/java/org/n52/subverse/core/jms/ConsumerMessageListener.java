@@ -1,4 +1,4 @@
-package org.n52.eventservice.core.jms;
+package org.n52.subverse.core.jms;
 
 import javax.jms.JMSException;
 import javax.jms.Message;

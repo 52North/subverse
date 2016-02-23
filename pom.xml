@@ -2,14 +2,18 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.n52.eventservice</groupId>
-    <artifactId>parent</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <groupId>org.n52.subverse</groupId>
+    <artifactId>subverse</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
-    <name>parent</name>
+    <name>52°North subverse</name>
+    <description>52°North subverse - an OGC PubSub 1.0 Service implementation</description>
   
     <modules>
         <module>core</module>
+        <module>delivery</module>
+        <module>delivery-amqp</module>
+        <module>service</module>
         <module>webapp</module>
     </modules>
     
@@ -17,8 +21,10 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <junit-version>4.12</junit-version>
         <activemq-version>5.13.0</activemq-version>
+        <qpid-version>0.32</qpid-version>
         <slf4j-version>1.7.12</slf4j-version>
-        <spring-version>4.2.3.RELEASE</spring-version>
+        <spring-version>4.2.2.RELEASE</spring-version>
+        <spring-amqp-version>1.5.3.RELEASE</spring-amqp-version>
     </properties>
 
     <dependencyManagement>
@@ -26,7 +32,22 @@
             <dependency>
                 <groupId>${project.groupId}</groupId>
                 <artifactId>core</artifactId>
-                <version>${project.version}}</version>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>service</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>delivery</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>delivery-amqp</artifactId>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>junit</groupId>
@@ -34,14 +55,29 @@
                 <version>${junit-version}</version>
                 <scope>test</scope>
             </dependency>
-            <!--            <dependency>
-                <groupId>org.apache.activemq</groupId>
-                <artifactId>activemq-core</artifactId>
-                <version>${activemq-version}</version>
-            </dependency>-->
+            <dependency>
+                <groupId>org.apache.qpid</groupId>
+                <artifactId>qpid-amqp-1-0-client-jms</artifactId>
+                <version>${qpid-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.amqp</groupId>
+                <artifactId>spring-amqp</artifactId>
+                <version>${spring-amqp-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.amqp</groupId>
+                <artifactId>spring-rabbit</artifactId>
+                <version>${spring-amqp-version}</version>
+            </dependency>
             <dependency>
                 <groupId>org.apache.activemq</groupId>
                 <artifactId>activemq-client</artifactId>
+                <version>${activemq-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.activemq</groupId>
+                <artifactId>activemq-amqp</artifactId>
                 <version>${activemq-version}</version>
             </dependency>
 
