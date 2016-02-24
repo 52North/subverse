@@ -28,7 +28,7 @@ import org.n52.iceland.request.GetCapabilitiesRequest;
 import org.n52.iceland.util.KvpHelper;
 import org.n52.subverse.SubverseConstants;
 
-public class GetCapabilitiesKvpDecoderImpl extends KvpDecoder<GetCapabilitiesRequest> {
+public class GetCapabilitiesKvpDecoder extends KvpDecoder<GetCapabilitiesRequest> {
 
     private static final Set<DecoderKey> KEYS = Sets.newHashSet(createKey(SubverseConstants.SERVICE, null, OWSConstants.Operations.GetCapabilities.toString()),
             createKey(SubverseConstants.SERVICE, SubverseConstants.VERSION, OWSConstants.Operations.GetCapabilities.toString()));

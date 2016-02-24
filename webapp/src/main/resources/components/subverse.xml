@@ -27,7 +27,7 @@
     <bean class="org.n52.subverse.handler.GetSubscriptionHandler" />
 
     <!-- decoder -->
-    <bean class="org.n52.subverse.coding.GetCapabilitiesKvpDecoderImpl" />
+    <bean class="org.n52.subverse.coding.GetCapabilitiesKvpDecoder" />
 
     <!-- encoder -->
     <bean class="org.n52.subverse.coding.CapabilitiesEncoder" />
