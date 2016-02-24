@@ -30,9 +30,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 @RequestMapping(value = "/endpoint", produces = MediaType.APPLICATION_JSON_VALUE)
 @Configurable
-public class Endpoint {
+public class JsonEndpoint {
 
-    private static final Logger log = LoggerFactory.getLogger(Endpoint.class);
+    private static final Logger log = LoggerFactory.getLogger(JsonEndpoint.class);
 
     private static Properties gitProps;
 
@@ -50,22 +50,17 @@ public class Endpoint {
         this.serviceURL = url;
     }
 
-    public Endpoint() {
-        URL gitPropUrl = Resources.getResource("git.properties");
-        ByteSource gitSource = Resources.asByteSource(gitPropUrl);
+    public JsonEndpoint() {
         gitProps = new Properties();
-        try (InputStream in = gitSource.openStream()) {
-            log.info("Loading git properties from {} [via {}]", gitPropUrl, in);
-            gitProps.load(in);
-        } catch (IOException e) {
-            log.error("Could not load git properties", e);
-        }
+        gitProps.put("git.branch", "wwowowowo");
+        gitProps.put("git.commit.id", "wwowowowo1");
+        gitProps.put("git.build.time", "wwowowowo2");
 
         URL verPropUrl = Resources.getResource("version.properties");
         ByteSource verSource = Resources.asByteSource(verPropUrl);
         versionProps = new Properties();
         try (InputStream in = verSource.openStream()) {
-            log.info("Loading version properties from {} [via {}]", gitPropUrl, in);
+            log.info("Loading version properties from {} [via {}]", verPropUrl, in);
             versionProps.load(in);
         } catch (IOException e) {
             log.error("Could not load version properties", e);

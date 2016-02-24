@@ -15,17 +15,12 @@
  */
 package org.n52.subverse;
 
-import org.n52.iceland.ogc.ows.OWSConstants;
 import org.n52.iceland.ogc.ows.OwsCapabilities;
 
-/**
- *
- * @author <a href="mailto:d.nuest@52north.org">Daniel Nüst</a>
- */
 public class SubverseCapabilities extends OwsCapabilities {
 
     public SubverseCapabilities(String version) {
-        super(OWSConstants.GetCapabilitiesParams.service.name(), version);
+        super(SubverseConstants.SERVICE, version);
     }
 
 }

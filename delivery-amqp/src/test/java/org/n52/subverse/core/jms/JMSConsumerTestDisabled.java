@@ -6,11 +6,11 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 /**
  *
  */
-public class JMSConsumerTest {
+public class JMSConsumerTestDisabled {
 
     @Test
     public void testConsumer() {
-        new ClassPathXmlApplicationContext("/META-INF/spring/consumer-jms-context.xml", JMSConsumerTest.class);
+        new ClassPathXmlApplicationContext("/META-INF/spring/consumer-jms-context.xml", JMSConsumerTestDisabled.class);
 
         while(true);
     }

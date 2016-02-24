@@ -1,7 +1,5 @@
 package org.n52.subverse.core.amqp;
 
-import com.rabbitmq.client.ConnectionFactory;
-import com.rabbitmq.client.SaslConfig;
 import org.junit.Test;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.context.ApplicationContext;
@@ -10,7 +8,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 /**
  *
  */
-public class AmqpProducerTest {
+public class AmqpProducerTestDisabled {
 
     @Test
     public void testProducer() {

@@ -158,7 +158,7 @@ public class GetCapabilitiesHandlerImpl implements GetCapabilitiesHandler {
                 new OwsParameterValuePossibleValues(SubverseConstants.VERSION));
         operationsMetadata.addCommonValue(SubverseConstants.OperationParameter.request,
                 new OwsParameterValuePossibleValues(Sets.newHashSet(OWSConstants.Operations.GetCapabilities.name(),
-                                SubverseConstants.OPERATION_DEMO)));
+                                SubverseConstants.OPERATION_GET_CAPABILITIES)));
 
         exception.throwIfNotEmpty();
         return operationsMetadata;

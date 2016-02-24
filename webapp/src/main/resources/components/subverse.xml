@@ -11,10 +11,21 @@
         <constructor-arg name="service" value="#{T(org.n52.subverse.SubverseConstants).SERVICE}" />
         <constructor-arg name="version" value="#{T(org.n52.subverse.SubverseConstants).VERSION}" />
     </bean>
-    <bean class="org.n52.subverse.operator.GetCapabilitiesOperator" />
-    <bean class="org.n52.subverse.operator.DemoOperator" />
 
-    <bean class="org.n52.subverse.handler.impl.DemoHandlerImpl" />
+    <!-- operator -->
+    <bean class="org.n52.subverse.operator.GetCapabilitiesOperator" />
+
+    <!-- handler -->
     <bean class="org.n52.subverse.handler.impl.GetCapabilitiesHandlerImpl" />
+
+    <!-- decoder -->
+    <bean class="org.n52.subverse.coding.GetCapabilitiesKvpDecoderImpl" />
+
+    <!-- encoder -->
+    <bean class="org.n52.subverse.coding.CapabilitiesEncoder" />
+
+    <!-- response writer -->
+    <bean class="org.n52.subverse.writer.XmlBeansWriterFactory" />
+    <bean class="org.n52.subverse.writer.ServiceResponseWriterFactory" />
 
 </beans>

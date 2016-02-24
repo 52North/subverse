@@ -21,11 +21,11 @@ package org.n52.subverse;
  */
 public interface SubverseConstants {
 
-    String SERVICE = "skeleton";
+    String SERVICE = "PubSub";
 
-    String VERSION = "0.0.1";
+    String VERSION = "1.0.0";
 
-    String OPERATION_DEMO = "demo";
+    String OPERATION_GET_CAPABILITIES = "GetCapabilities";
 
     interface DemoParam {
 

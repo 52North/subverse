@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 52°North Initiative for Geospatial Open Source Software GmbH.
+ * Copyright 2016 52°North.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,30 +15,17 @@
  */
 package org.n52.subverse.response;
 
-import java.util.Collection;
 import org.n52.iceland.response.AbstractServiceResponse;
-import org.n52.subverse.SubverseConstants;
 
 /**
- * A POJO for the response.
  *
- * @author <a href="mailto:d.nuest@52north.org">Daniel Nüst</a>
+ * @author matthes
  */
-public class DemoResponse extends AbstractServiceResponse {
-
-    private Collection<String> three;
-
-    public void setThree(Collection<String> three) {
-        this.three = three;
-    }
-
-    public Collection<String> getThree() {
-        return this.three;
-    }
+public class SubscribeResponse extends AbstractServiceResponse {
 
     @Override
     public String getOperationName() {
-        return SubverseConstants.OPERATION_DEMO;
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

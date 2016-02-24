@@ -18,7 +18,7 @@ package org.n52.subverse.request;
 import com.google.common.base.MoreObjects;
 import org.n52.iceland.exception.ows.OwsExceptionReport;
 import org.n52.iceland.request.AbstractServiceRequest;
-import org.n52.subverse.response.DemoResponse;
+import org.n52.subverse.response.SubscribeResponse;
 import org.n52.subverse.SubverseConstants;
 
 /**
@@ -26,31 +26,31 @@ import org.n52.subverse.SubverseConstants;
  *
  * @author <a href="mailto:d.nuest@52north.org">Daniel Nüst</a>
  */
-public class DemoRequest extends AbstractServiceRequest<DemoResponse> {
+public class SubscribeRequest extends AbstractServiceRequest<SubscribeResponse> {
 
     private String one;
 
     private Integer two;
 
-    public DemoRequest(String service) {
+    public SubscribeRequest(String service) {
         setService(service);
     }
 
     @Override
-    public DemoResponse getResponse() throws OwsExceptionReport {
-        return (DemoResponse) new DemoResponse().set(this);
+    public SubscribeResponse getResponse() throws OwsExceptionReport {
+        return (SubscribeResponse) new SubscribeResponse().set(this);
     }
 
     @Override
     public String getOperationName() {
-        return SubverseConstants.OPERATION_DEMO;
+        return SubverseConstants.OPERATION_GET_CAPABILITIES;
     }
 
     public String getOne() {
         return one;
     }
 
-    public DemoRequest setOne(String one) {
+    public SubscribeRequest setOne(String one) {
         this.one = one;
         return this;
     }
@@ -59,7 +59,7 @@ public class DemoRequest extends AbstractServiceRequest<DemoResponse> {
         return two;
     }
 
-    public DemoRequest setTwo(Integer two) {
+    public SubscribeRequest setTwo(Integer two) {
         this.two = two;
         return this;
     }
