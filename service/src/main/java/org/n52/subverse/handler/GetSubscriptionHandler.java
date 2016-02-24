@@ -1,3 +1,18 @@
+/*
+ * Copyright 2016 52°North.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package org.n52.subverse.handler;
 
 import java.util.Collections;
@@ -7,22 +22,16 @@ import org.n52.iceland.ds.OperationHandlerKey;
 import org.n52.iceland.exception.ows.OwsExceptionReport;
 import org.n52.iceland.ogc.ows.OwsOperation;
 import org.n52.subverse.SubverseConstants;
-import org.n52.subverse.request.SubscribeRequest;
-import org.n52.subverse.response.SubscribeResponse;
 
 /**
- * Handlers are a second level layer under the operations and allow to combine business logic across several operators
  *
-*/
-public class SubscribeHandler implements OperationHandler {
+ * @author matthes
+ */
+public class GetSubscriptionHandler implements OperationHandler {
 
     private static final OperationHandlerKey KEY
             = new OperationHandlerKey(SubverseConstants.SERVICE,
-                    SubverseConstants.OPERATION_SUBSCRIBE);
-
-    public SubscribeResponse subscribe(SubscribeRequest request) throws OwsExceptionReport {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+                    SubverseConstants.OPERATION_GET_SUBSCRIPTION);
 
     @Override
     public String getOperationName() {
@@ -38,4 +47,5 @@ public class SubscribeHandler implements OperationHandler {
     public Set<OperationHandlerKey> getKeys() {
         return Collections.singleton(KEY);
     }
+
 }

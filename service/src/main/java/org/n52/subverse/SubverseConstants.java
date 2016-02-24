@@ -27,6 +27,14 @@ public interface SubverseConstants {
 
     String OPERATION_GET_CAPABILITIES = "GetCapabilities";
 
+    String OPERATION_SUBSCRIBE = "Subscribe";
+
+    String OPERATION_RENEW = "Renew";
+
+    String OPERATION_UNSUBSCRIBE = "Unsubscribe";
+
+    String OPERATION_GET_SUBSCRIPTION = "GetSubscription";
+
     interface DemoParam {
 
         String OUTPUT_FORMAT = "outputFormat";

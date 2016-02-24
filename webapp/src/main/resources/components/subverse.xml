@@ -14,9 +14,17 @@
 
     <!-- operator -->
     <bean class="org.n52.subverse.operator.GetCapabilitiesOperator" />
+    <bean class="org.n52.subverse.operator.SubscribeOperator" />
+    <bean class="org.n52.subverse.operator.RenewOperator" />
+    <bean class="org.n52.subverse.operator.UnsubscribeOperator" />
+    <bean class="org.n52.subverse.operator.GetSubscriptionOperator" />
 
     <!-- handler -->
-    <bean class="org.n52.subverse.handler.impl.GetCapabilitiesHandlerImpl" />
+    <bean class="org.n52.subverse.handler.GetCapabilitiesHandler" />
+    <bean class="org.n52.subverse.handler.SubscribeHandler" />
+    <bean class="org.n52.subverse.handler.RenewHandler" />
+    <bean class="org.n52.subverse.handler.UnsubscribeHandler" />
+    <bean class="org.n52.subverse.handler.GetSubscriptionHandler" />
 
     <!-- decoder -->
     <bean class="org.n52.subverse.coding.GetCapabilitiesKvpDecoderImpl" />
