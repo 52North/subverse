@@ -34,14 +34,36 @@
             <artifactId>classloader-leak-prevention</artifactId>
             <scope>runtime</scope>
         </dependency>
-            <dependency>
-                <groupId>com.thetransactioncompany</groupId>
-                <artifactId>cors-filter</artifactId>
-                <scope>runtime</scope>
-            </dependency>
+        <dependency>
+            <groupId>com.thetransactioncompany</groupId>
+            <artifactId>cors-filter</artifactId>
+            <scope>runtime</scope>
+        </dependency>
     </dependencies>
     
     <build>
         <finalName>subverse-webapp</finalName>
+        
+        <plugins>
+            <plugin>
+                <groupId>org.eclipse.jetty</groupId>
+                <artifactId>jetty-maven-plugin</artifactId>
+                <configuration>
+                    <scanIntervalSeconds>3</scanIntervalSeconds>
+                    <webAppConfig>
+                        <contextPath>/${project.build.finalName}</contextPath>
+                        <extraClasspath>target/classes;../core/target/classes;../delivery/target/classes;../delivery-amqp/target/classes;../service/target/classes;../svalbard/target/classes</extraClasspath>
+                    </webAppConfig>
+                    <scanTargets>
+                        <scanTarget>target/classes</scanTarget>
+                        <scanTarget>../core/target/classes</scanTarget>
+                        <scanTarget>../delivery/target/classes</scanTarget>
+                        <scanTarget>../delivery-amqp/target/classes</scanTarget>
+                        <scanTarget>../service/target/classes</scanTarget>
+                        <scanTarget>../svalbard/target/classes</scanTarget>
+                    </scanTargets>
+                </configuration>
+            </plugin>
+        </plugins>
     </build>
 </project>

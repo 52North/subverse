@@ -139,6 +139,10 @@
     "filewatcher.enabled" : {
       "type" : "boolean",
       "value" : true
+    },
+    "misc.includeOriginalRequest" : {
+      "type" : "boolean",
+      "value" : false
     }
   }
 }
