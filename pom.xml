@@ -56,6 +56,7 @@
         <module>delivery-amqp</module>
         <module>service</module>
         <module>webapp</module>
+        <module>svalbard</module>
     </modules>
     
     <properties>
@@ -69,6 +70,8 @@
         <version.iceland>1.3.0-SNAPSHOT</version.iceland>
         <spring-version>4.2.3.RELEASE</spring-version>
         <spring-amqp-version>1.5.3.RELEASE</spring-amqp-version>
+        <common-xml.version>2.1.0</common-xml.version>
+        <version.mockito>1.10.19</version.mockito>
     </properties>
     
     <repositories>
@@ -101,6 +104,11 @@
                 <version>${project.version}</version>
             </dependency>
             <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>svalbard</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>org.n52.iceland</groupId>
                 <artifactId>iceland</artifactId>
                 <version>${version.iceland}</version>
@@ -109,6 +117,12 @@
                 <groupId>junit</groupId>
                 <artifactId>junit</artifactId>
                 <version>${junit-version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.mockito</groupId>
+                <artifactId>mockito-all</artifactId>
+                <version>${version.mockito}</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
@@ -183,7 +197,7 @@
                 <artifactId>guava</artifactId>
                 <version>18.0</version>
             </dependency>
-<!--            <dependency>
+            <!--            <dependency>
                 <groupId>javax.xml.bind</groupId>
                 <artifactId>jaxb-api</artifactId>
                 <version>2.2.12</version>
@@ -210,6 +224,12 @@
                 <version>2.4</version>
                 <scope>runtime</scope>
             </dependency>
+            
+            <dependency>
+                <groupId>org.n52.sensorweb</groupId>
+                <artifactId>52n-xml-soap-v12</artifactId>
+                <version>${common-xml.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
     
@@ -224,7 +244,19 @@
                     <target>${version.java}</target>
                 </configuration>
             </plugin>
-        
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>2.4</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-enforcer-plugin</artifactId>

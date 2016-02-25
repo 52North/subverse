@@ -21,6 +21,8 @@ package org.n52.subverse;
  */
 public interface SubverseConstants {
 
+    String WS_N_NAMESPACE = "http://docs.oasis-open.org/wsn/b-2";
+
     String SERVICE = "PubSub";
 
     String VERSION = "1.0.0";

@@ -28,9 +28,12 @@
 
     <!-- decoder -->
     <bean class="org.n52.subverse.coding.GetCapabilitiesKvpDecoder" />
+    <bean class="org.n52.svalbard.soap.SoapEnvelopeDecoder" />
+    <bean class="org.n52.subverse.coding.SubscribeDecoder" />
 
     <!-- encoder -->
     <bean class="org.n52.subverse.coding.CapabilitiesEncoder" />
+
 
     <!-- response writer -->
     <bean class="org.n52.subverse.writer.XmlBeansWriterFactory" />
