@@ -237,6 +237,11 @@
             </dependency>
             <dependency>
                 <groupId>org.n52.sensorweb</groupId>
+                <artifactId>52n-xml-filter-v20</artifactId>
+                <version>${common-xml.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.n52.sensorweb</groupId>
                 <artifactId>52n-xml-wsn-v13</artifactId>
                 <version>${common-xml.version}</version>
             </dependency>
@@ -249,6 +254,12 @@
                 <groupId>org.n52.sensorweb</groupId>
                 <artifactId>52n-xml-wsrf-v12</artifactId>
                 <version>${common-xml.version}</version>
+            </dependency>
+            
+            <dependency>
+                <groupId>joda-time</groupId>
+                <artifactId>joda-time</artifactId>
+                <version>2.9.1</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

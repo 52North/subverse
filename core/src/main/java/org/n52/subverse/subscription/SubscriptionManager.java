@@ -13,23 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.n52.subverse.response;
+package org.n52.subverse.subscription;
 
-import org.n52.iceland.response.AbstractServiceResponse;
-import org.n52.subverse.SubverseConstants;
-import org.n52.subverse.subscription.SubscriptionReference;
+public interface SubscriptionManager {
 
-public class SubscribeResponse extends AbstractServiceResponse {
-
-    private final SubscriptionReference reference;
-
-    public SubscribeResponse(SubscriptionReference ref) {
-        this.reference = ref;
-    }
-
-    @Override
-    public String getOperationName() {
-        return SubverseConstants.OPERATION_SUBSCRIBE;
-    }
+    public SubscriptionReference subscribe(SubscribeOptions aThis);
 
 }

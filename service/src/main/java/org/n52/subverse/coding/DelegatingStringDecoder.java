@@ -44,7 +44,7 @@ import org.n52.iceland.exception.ows.OwsExceptionReport;
 import org.n52.iceland.exception.ows.concrete.NoDecoderForKeyException;
 import org.n52.iceland.exception.ows.concrete.UnsupportedDecoderInputException;
 import org.n52.iceland.service.AbstractServiceCommunicationObject;
-import org.n52.subverse.request.SubscribeRequest;
+import org.n52.subverse.subscription.SubscribeOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -66,7 +66,7 @@ public class DelegatingStringDecoder
 
     public DelegatingStringDecoder(Set<DecoderKey> keys) throws JAXBException {
         this.keys = Objects.requireNonNull(keys);
-        this.context = JAXBContext.newInstance(SubscribeRequest.class);
+        this.context = JAXBContext.newInstance(SubscribeOptions.class);
     }
 
     @Inject

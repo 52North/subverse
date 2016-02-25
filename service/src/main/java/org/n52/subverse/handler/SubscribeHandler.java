@@ -7,7 +7,7 @@ import org.n52.iceland.ds.OperationHandlerKey;
 import org.n52.iceland.exception.ows.OwsExceptionReport;
 import org.n52.iceland.ogc.ows.OwsOperation;
 import org.n52.subverse.SubverseConstants;
-import org.n52.subverse.request.SubscribeRequest;
+import org.n52.subverse.subscription.SubscribeOptions;
 import org.n52.subverse.response.SubscribeResponse;
 
 /**
@@ -20,7 +20,7 @@ public class SubscribeHandler implements OperationHandler {
             = new OperationHandlerKey(SubverseConstants.SERVICE,
                     SubverseConstants.OPERATION_SUBSCRIBE);
 
-    public SubscribeResponse subscribe(SubscribeRequest request) throws OwsExceptionReport {
+    public SubscribeResponse subscribe(SubscribeOptions request) throws OwsExceptionReport {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

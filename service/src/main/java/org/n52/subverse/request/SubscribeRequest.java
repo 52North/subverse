@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 52°North Initiative for Geospatial Open Source Software GmbH.
+ * Copyright 2016 52°North.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,61 +15,43 @@
  */
 package org.n52.subverse.request;
 
-import com.google.common.base.MoreObjects;
+import javax.inject.Inject;
 import org.n52.iceland.exception.ows.OwsExceptionReport;
 import org.n52.iceland.request.AbstractServiceRequest;
-import org.n52.subverse.response.SubscribeResponse;
 import org.n52.subverse.SubverseConstants;
+import org.n52.subverse.response.SubscribeResponse;
+import org.n52.subverse.subscription.SubscribeOptions;
+import org.n52.subverse.subscription.SubscriptionManager;
+import org.n52.subverse.subscription.SubscriptionReference;
 
-/**
- * A POJO for the request, including a helper constructor to pass input parameters to the response.
- *
- * @author <a href="mailto:d.nuest@52north.org">Daniel Nüst</a>
- */
 public class SubscribeRequest extends AbstractServiceRequest<SubscribeResponse> {
 
-    private String one;
+    private final SubscribeOptions options;
 
-    private Integer two;
+    private SubscriptionManager manager;
 
-    public SubscribeRequest(String service) {
-        setService(service);
+    public SubscribeRequest(SubscribeOptions options) {
+        this.options = options;
+    }
+
+    public SubscriptionManager getManager() {
+        return manager;
+    }
+
+    @Inject
+    public void setManager(SubscriptionManager manager) {
+        this.manager = manager;
     }
 
     @Override
     public SubscribeResponse getResponse() throws OwsExceptionReport {
-        return (SubscribeResponse) new SubscribeResponse().set(this);
+        SubscriptionReference ref = this.manager.subscribe(options);
+        return new SubscribeResponse(ref);
     }
 
     @Override
     public String getOperationName() {
-        return SubverseConstants.OPERATION_GET_CAPABILITIES;
-    }
-
-    public String getOne() {
-        return one;
-    }
-
-    public SubscribeRequest setOne(String one) {
-        this.one = one;
-        return this;
-    }
-
-    public Integer getTwo() {
-        return two;
-    }
-
-    public SubscribeRequest setTwo(Integer two) {
-        this.two = two;
-        return this;
-    }
-
-    @Override
-    public String toString() {
-        return MoreObjects.toStringHelper(this)
-                .add("one", one)
-                .add("two", two)
-                .toString();
+        return SubverseConstants.OPERATION_SUBSCRIBE;
     }
 
 }
