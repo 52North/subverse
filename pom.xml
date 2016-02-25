@@ -70,7 +70,7 @@
         <version.iceland>1.3.0-SNAPSHOT</version.iceland>
         <spring-version>4.2.3.RELEASE</spring-version>
         <spring-amqp-version>1.5.3.RELEASE</spring-amqp-version>
-        <common-xml.version>2.1.0</common-xml.version>
+        <common-xml.version>2.1.1-SNAPSHOT</common-xml.version>
         <version.mockito>1.10.19</version.mockito>
     </properties>
     
@@ -228,6 +228,26 @@
             <dependency>
                 <groupId>org.n52.sensorweb</groupId>
                 <artifactId>52n-xml-soap-v12</artifactId>
+                <version>${common-xml.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.n52.sensorweb</groupId>
+                <artifactId>52n-xml-pubsub-v10</artifactId>
+                <version>${common-xml.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.n52.sensorweb</groupId>
+                <artifactId>52n-xml-wsn-v13</artifactId>
+                <version>${common-xml.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.n52.sensorweb</groupId>
+                <artifactId>52n-xml-wsa-v10</artifactId>
+                <version>${common-xml.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.n52.sensorweb</groupId>
+                <artifactId>52n-xml-wsrf-v12</artifactId>
                 <version>${common-xml.version}</version>
             </dependency>
         </dependencies>

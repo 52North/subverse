@@ -44,6 +44,12 @@ This project includes:
   Logback Classic Module under Eclipse Public License - v 1.0 or GNU Lesser General Public License
   Logback Core Module under Eclipse Public License - v 1.0 or GNU Lesser General Public License
   Mockito under The MIT License
+  OASIS WS-N specification schemas - including WS-BrokeredNotification (v1.3) under The Apache Software License, Version 2.0
+  OASIS WS-Resources specification schemas v1.2 under The Apache Software License, Version 2.0
+  OGC Filter schema (spec. v2.0) under The Apache Software License, Version 2.0
+  OGC GML schema (spec. v3.2.1) under The Apache Software License, Version 2.0
+  OGC OWS schema (spec. v1.1.0) under The Apache Software License, Version 2.0
+  OGC PubSub SOAP schema (spec. v1.0) under The Apache Software License, Version 2.0
   proton-j under The Apache Software License, Version 2.0
   Qpid AMQP 1.0 Client under The Apache Software License, Version 2.0
   Qpid AMQP 1.0 Client JMS under The Apache Software License, Version 2.0
@@ -71,6 +77,7 @@ This project includes:
   subverse webapp under The Apache Software License, Version 2.0
   svalbard under The Apache Software License, Version 2.0
   W3C SOAP specification recommondation (v1.2 part 1) under The Apache Software License, Version 2.0
+  W3C WS-Addressing specification schemas (v1.0) under The Apache Software License, Version 2.0
   W3C xlink schema (spec. v1.1.0) under The Apache Software License, Version 2.0
   XmlBeans under The Apache Software License, Version 2.0
 
