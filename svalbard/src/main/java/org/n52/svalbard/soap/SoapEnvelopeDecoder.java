@@ -33,6 +33,7 @@ import org.n52.iceland.exception.ows.OwsExceptionReport;
 import org.n52.iceland.exception.ows.concrete.NoDecoderForKeyException;
 import org.n52.iceland.exception.ows.concrete.UnsupportedDecoderInputException;
 import org.n52.iceland.request.AbstractServiceRequest;
+import org.n52.iceland.w3c.soap.SoapRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3.x2003.x05.soapEnvelope.Envelope;
@@ -66,7 +67,8 @@ public class SoapEnvelopeDecoder implements Decoder<AbstractServiceRequest, Stri
             header = env.getHeader();
         }
 
-        return internalDecode(new SoapEnvelopeContainer<>(null, header, env.getBody()));
+        AbstractServiceRequest innerRequest = internalDecode(new SoapEnvelopeContainer<>(null, header, env.getBody()));
+        return innerRequest;
     }
 
     @Override

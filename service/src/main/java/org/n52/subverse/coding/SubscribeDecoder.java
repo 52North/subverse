@@ -16,7 +16,13 @@
 package org.n52.subverse.coding;
 
 import java.util.Collections;
+import java.util.Optional;
 import java.util.Set;
+import javax.xml.namespace.QName;
+import net.opengis.pubsub.x10.PublicationIdentifierDocument;
+import net.opengis.pubsub.x10.PublicationIdentifierType;
+import org.apache.xmlbeans.XmlException;
+import org.apache.xmlbeans.XmlObject;
 import org.n52.iceland.coding.decode.Decoder;
 import org.n52.iceland.coding.decode.DecoderKey;
 import org.n52.iceland.coding.decode.XmlNamespaceOperationDecoderKey;
@@ -24,6 +30,9 @@ import org.n52.iceland.exception.ows.OwsExceptionReport;
 import org.n52.iceland.exception.ows.concrete.UnsupportedDecoderInputException;
 import org.n52.iceland.request.AbstractServiceRequest;
 import org.n52.subverse.SubverseConstants;
+import org.n52.subverse.request.SubscribeRequest;
+import org.n52.subverse.subscription.SubscribeOptions;
+import org.oasisOpen.docs.wsn.b2.SubscribeDocument;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,9 +42,24 @@ public class SubscribeDecoder implements Decoder<AbstractServiceRequest, String>
     private static final DecoderKey KEY = new XmlNamespaceOperationDecoderKey(SubverseConstants.WS_N_NAMESPACE,
             "Subscribe");
 
+    private static final QName PUBLICATION_ID_QN = PublicationIdentifierDocument.type.getDocumentElementName();
+
     @Override
     public AbstractServiceRequest decode(String objectToDecode) throws OwsExceptionReport, UnsupportedDecoderInputException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        SubscribeDocument subDoc;
+        try {
+            subDoc = SubscribeDocument.Factory.parse(objectToDecode);
+        } catch (XmlException ex) {
+            LOG.warn("Could not decode Subscribe XML", ex);
+            throw new UnsupportedDecoderInputException(this, ex);
+        }
+
+        SubscribeDocument.Subscribe subscribe = subDoc.getSubscribe();
+        Optional<String> pubId = XmlBeansHelper.findFirstChild(PUBLICATION_ID_QN, subscribe)
+                .map(c -> XmlBeansHelper.extractStringContent(c));
+
+        SubscribeOptions options = new SubscribeOptions(pubId.get(), null, null, null, null, null, null, null);
+        return new SubscribeRequest(options);
     }
 
     @Override
