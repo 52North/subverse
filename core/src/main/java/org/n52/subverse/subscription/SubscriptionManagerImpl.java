@@ -15,11 +15,45 @@
  */
 package org.n52.subverse.subscription;
 
+import org.n52.subverse.IdProvider;
+import javax.inject.Inject;
+import org.n52.subverse.dao.SubscriptionDao;
+
 public class SubscriptionManagerImpl implements SubscriptionManager {
 
+    private SubscriptionDao dao;
+    private IdProvider idProvider;
+
+    public SubscriptionDao getDao() {
+        return dao;
+    }
+
+    @Inject
+    public void setDao(SubscriptionDao dao) {
+        this.dao = dao;
+    }
+
+    public IdProvider getIdProvider() {
+        return idProvider;
+    }
+
+    @Inject
+    public void setIdProvider(IdProvider idProvider) {
+        this.idProvider = idProvider;
+    }
+    
     @Override
-    public SubscriptionReference subscribe(SubscribeOptions options) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Subscription subscribe(SubscribeOptions options) {
+        SubscriptionEndpoint endpoint = createEndpoint(options);
+        Subscription result = new Subscription(this.idProvider.generateId(), options, endpoint);
+        
+        this.dao.storeSubscription(result);
+        
+        return result;
+    }
+
+    private SubscriptionEndpoint createEndpoint(SubscribeOptions options) {
+        return new SubscriptionEndpoint();
     }
 
 }

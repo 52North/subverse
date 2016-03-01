@@ -18,16 +18,14 @@ package org.n52.subverse.operator;
 import java.util.Collections;
 import java.util.Set;
 import org.n52.iceland.exception.ows.OwsExceptionReport;
-import org.n52.iceland.ogc.ows.OwsOperation;
 import org.n52.iceland.request.AbstractServiceRequest;
-import org.n52.iceland.request.operator.RequestOperator;
 import org.n52.iceland.request.operator.RequestOperatorKey;
 import org.n52.iceland.response.AbstractServiceResponse;
 import org.n52.subverse.SubverseConstants;
 
 /**
  *
- * @author matthes
+ * @author Matthes Rieke <m.rieke@52north.org>
  */
 public class UnsubscribeOperator extends AbstractOperator {
 

@@ -29,5 +29,6 @@
     </bean>
 
     <import resource="classpath:settings/*.xml" />
+    <import resource="classpath:settings/spring-config.xml" />
 
 </beans>

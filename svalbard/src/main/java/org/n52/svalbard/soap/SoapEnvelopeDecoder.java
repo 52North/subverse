@@ -40,7 +40,7 @@ import org.w3.x2003.x05.soapEnvelope.Envelope;
 import org.w3.x2003.x05.soapEnvelope.EnvelopeDocument;
 import org.w3.x2003.x05.soapEnvelope.Header;
 
-public class SoapEnvelopeDecoder implements Decoder<AbstractServiceRequest, String> {
+public class SoapEnvelopeDecoder implements Decoder<SoapRequest, String> {
 
     private static final Logger LOG = LoggerFactory.getLogger(SoapEnvelopeDecoder.class);
     private static final DecoderKey KEY = new XmlNamespaceOperationDecoderKey(Envelope.type.getName().getNamespaceURI(),
@@ -49,7 +49,7 @@ public class SoapEnvelopeDecoder implements Decoder<AbstractServiceRequest, Stri
     private DecoderRepository decoderRepository;
 
     @Override
-    public AbstractServiceRequest decode(String xml) throws OwsExceptionReport, UnsupportedDecoderInputException {
+    public SoapRequest decode(String xml) throws OwsExceptionReport, UnsupportedDecoderInputException {
         Objects.requireNonNull(xml);
 
         EnvelopeDocument envDoc;
@@ -68,7 +68,9 @@ public class SoapEnvelopeDecoder implements Decoder<AbstractServiceRequest, Stri
         }
 
         AbstractServiceRequest innerRequest = internalDecode(new SoapEnvelopeContainer<>(null, header, env.getBody()));
-        return innerRequest;
+        SoapRequest soap = new SoapRequest(Envelope.type.getName().getNamespaceURI(), "1.2");
+        soap.setSoapBodyContent(innerRequest);
+        return soap;
     }
 
     @Override

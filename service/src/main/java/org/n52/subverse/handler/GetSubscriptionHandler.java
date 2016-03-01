@@ -25,7 +25,7 @@ import org.n52.subverse.SubverseConstants;
 
 /**
  *
- * @author matthes
+ * @author Matthes Rieke <m.rieke@52north.org>
  */
 public class GetSubscriptionHandler implements OperationHandler {
 

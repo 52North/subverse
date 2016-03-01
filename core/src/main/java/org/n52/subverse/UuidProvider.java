@@ -13,23 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.n52.subverse.response;
+package org.n52.subverse;
 
-import org.n52.iceland.response.AbstractServiceResponse;
-import org.n52.subverse.SubverseConstants;
-import org.n52.subverse.subscription.Subscription;
+import java.util.UUID;
 
-public class SubscribeResponse extends AbstractServiceResponse {
-
-    private final Subscription reference;
-
-    public SubscribeResponse(Subscription ref) {
-        this.reference = ref;
-    }
+/**
+ *
+ * @author Matthes Rieke <m.rieke@52north.org>
+ */
+public class UuidProvider implements IdProvider {
 
     @Override
-    public String getOperationName() {
-        return SubverseConstants.OPERATION_SUBSCRIBE;
+    public String generateId() {
+        return UUID.randomUUID().toString();
     }
-
+    
 }

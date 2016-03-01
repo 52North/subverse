@@ -33,10 +33,13 @@
 
     <!-- encoder -->
     <bean class="org.n52.subverse.coding.CapabilitiesEncoder" />
-
+    <bean class="org.n52.svalbard.soap.SoapEnvelopeEncoder" />
+    <bean class="org.n52.subverse.coding.SubscribeResponseEncoder" />
 
     <!-- response writer -->
     <bean class="org.n52.subverse.writer.XmlBeansWriterFactory" />
     <bean class="org.n52.subverse.writer.ServiceResponseWriterFactory" />
+    <bean class="org.n52.svalbard.soap.SoapChainResponseWriterFactory" />
+    
 
 </beans>

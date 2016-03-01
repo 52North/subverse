@@ -17,15 +17,19 @@ package org.n52.subverse.operator;
 
 import java.util.Collections;
 import java.util.Set;
+import org.n52.iceland.exception.ows.InvalidParameterValueException;
 import org.n52.iceland.exception.ows.OwsExceptionReport;
 import org.n52.iceland.request.AbstractServiceRequest;
 import org.n52.iceland.request.operator.RequestOperatorKey;
 import org.n52.iceland.response.AbstractServiceResponse;
 import org.n52.subverse.SubverseConstants;
+import org.n52.subverse.handler.SubscribeHandler;
+import org.n52.subverse.request.SubscribeRequest;
+import org.n52.subverse.response.SubscribeResponse;
 
 /**
  *
- * @author matthes
+ * @author Matthes Rieke <m.rieke@52north.org>
  */
 public class SubscribeOperator extends AbstractOperator {
 
@@ -36,7 +40,19 @@ public class SubscribeOperator extends AbstractOperator {
 
     @Override
     public AbstractServiceResponse receiveRequest(AbstractServiceRequest<?> request) throws OwsExceptionReport {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (request instanceof SubscribeRequest) {
+            SubscribeHandler handler = getSubscribeHandler(request);
+            SubscribeResponse result = handler.subscribe(((SubscribeRequest) request).getOptions());
+            result.setService(((SubscribeRequest) request).getService());
+            result.setVersion(((SubscribeRequest) request).getVersion());
+            return result;
+        }
+        
+        throw new InvalidParameterValueException().withMessage("Invalid Subscribe request received");
+    }
+
+    private SubscribeHandler getSubscribeHandler(AbstractServiceRequest<?> request) {
+        return (SubscribeHandler) getHandler(request);
     }
 
     @Override

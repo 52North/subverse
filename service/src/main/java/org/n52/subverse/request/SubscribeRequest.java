@@ -15,38 +15,28 @@
  */
 package org.n52.subverse.request;
 
-import javax.inject.Inject;
 import org.n52.iceland.exception.ows.OwsExceptionReport;
 import org.n52.iceland.request.AbstractServiceRequest;
 import org.n52.subverse.SubverseConstants;
 import org.n52.subverse.response.SubscribeResponse;
 import org.n52.subverse.subscription.SubscribeOptions;
-import org.n52.subverse.subscription.SubscriptionManager;
-import org.n52.subverse.subscription.SubscriptionReference;
 
 public class SubscribeRequest extends AbstractServiceRequest<SubscribeResponse> {
 
     private final SubscribeOptions options;
-
-    private SubscriptionManager manager;
+    private SubscribeResponse response;
 
     public SubscribeRequest(SubscribeOptions options) {
         this.options = options;
     }
 
-    public SubscriptionManager getManager() {
-        return manager;
+    public void setResponse(SubscribeResponse response) {
+        this.response = response;
     }
-
-    @Inject
-    public void setManager(SubscriptionManager manager) {
-        this.manager = manager;
-    }
-
+    
     @Override
     public SubscribeResponse getResponse() throws OwsExceptionReport {
-        SubscriptionReference ref = this.manager.subscribe(options);
-        return new SubscribeResponse(ref);
+        return this.response;
     }
 
     @Override
@@ -54,4 +44,29 @@ public class SubscribeRequest extends AbstractServiceRequest<SubscribeResponse> 
         return SubverseConstants.OPERATION_SUBSCRIBE;
     }
 
+
+    @Override
+    public boolean isSetVersion() {
+        return true;
+    }
+
+    @Override
+    public boolean isSetService() {
+        return true;
+    }
+
+    @Override
+    public String getVersion() {
+        return SubverseConstants.VERSION;
+    }
+
+    @Override
+    public String getService() {
+        return SubverseConstants.SERVICE;
+    }
+
+    public SubscribeOptions getOptions() {
+        return this.options;
+    }
+    
 }

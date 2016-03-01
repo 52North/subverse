@@ -13,8 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.n52.subverse.subscription;
+package org.n52.subverse;
 
-public class SubscriptionReference {
-
+/**
+ *
+ * @author Matthes Rieke <m.rieke@52north.org>
+ */
+public interface IdProvider {
+    
+    String generateId();
+    
 }

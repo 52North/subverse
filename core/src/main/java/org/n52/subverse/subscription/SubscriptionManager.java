@@ -17,6 +17,6 @@ package org.n52.subverse.subscription;
 
 public interface SubscriptionManager {
 
-    public SubscriptionReference subscribe(SubscribeOptions aThis);
+    public Subscription subscribe(SubscribeOptions aThis);
 
 }

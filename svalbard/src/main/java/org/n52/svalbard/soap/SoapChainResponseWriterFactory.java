@@ -13,51 +13,41 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.n52.subverse.writer;
+package org.n52.svalbard.soap;
 
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Set;
 import javax.inject.Inject;
-
 import org.n52.iceland.coding.encode.EncoderRepository;
 import org.n52.iceland.coding.encode.ResponseWriter;
 import org.n52.iceland.coding.encode.ResponseWriterFactory;
 import org.n52.iceland.coding.encode.ResponseWriterKey;
-import org.n52.iceland.coding.encode.ResponseWriterRepository;
 
 /**
- * @author Christian Autermann
+ *
+ * @author Matthes Rieke <m.rieke@52north.org>
  */
-public class XmlBeansWriterFactory
-        implements ResponseWriterFactory {
+public class SoapChainResponseWriterFactory implements ResponseWriterFactory {
 
-    private final Set<ResponseWriterKey> KEYS = new HashSet<>(Arrays.asList(
-            new ResponseWriterKey[] {XmlBeansWriter.KEY}));
-    private ResponseWriterRepository responseWriterRepository;
     private EncoderRepository encoderRepository;
+
+    public EncoderRepository getEncoderRepository() {
+        return encoderRepository;
+    }
 
     @Inject
     public void setEncoderRepository(EncoderRepository encoderRepository) {
         this.encoderRepository = encoderRepository;
     }
-
-    @Inject
-    public void setResponseWriterRepository(
-            ResponseWriterRepository responseWriterRepository) {
-        this.responseWriterRepository = responseWriterRepository;
-    }
-
+    
     @Override
     public Set<ResponseWriterKey> getKeys() {
-        return Collections.unmodifiableSet(KEYS);
+        return Collections.singleton(SoapChainResponseWriter.KEY);
     }
 
     @Override
     public ResponseWriter<?> create(ResponseWriterKey key) {
-        return new XmlBeansWriter();
+        return new SoapChainResponseWriter(this.encoderRepository);
     }
-
-
+    
 }

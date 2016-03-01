@@ -22,11 +22,10 @@ import java.util.stream.Stream;
 import javax.xml.namespace.QName;
 import org.apache.xmlbeans.XmlCursor;
 import org.apache.xmlbeans.XmlObject;
-import org.oasisOpen.docs.wsn.b2.SubscribeDocument;
 
 /**
  *
- * @author matthes
+ * @author Matthes Rieke <m.rieke@52north.org>
  */
 public class XmlBeansHelper {
 
