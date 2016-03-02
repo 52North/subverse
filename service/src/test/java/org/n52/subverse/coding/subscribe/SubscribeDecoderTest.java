@@ -34,7 +34,7 @@ public class SubscribeDecoderTest {
     @Test
     public void testDecoding() throws OwsExceptionReport, IOException {
         SubscribeDecoder dec = new SubscribeDecoder();
-        
+
         URL res = getClass().getResource("subscribe.xml");
 
         AbstractServiceRequest subscribe = dec.decode(Resources.toString(res,

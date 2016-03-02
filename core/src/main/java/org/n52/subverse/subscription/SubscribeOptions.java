@@ -95,5 +95,5 @@ public class SubscribeOptions {
     public Optional<String> getContentType() {
         return contentType;
     }
-    
+
 }
