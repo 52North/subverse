@@ -44,7 +44,7 @@ public class SubscribeHandler implements OperationHandler {
 
     @Override
     public OwsOperation getOperationsMetadata(String service, String version) throws OwsExceptionReport {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return new OwsOperation();
     }
 
     @Override

@@ -18,6 +18,7 @@
     <bean class="org.n52.subverse.operator.RenewOperator" />
     <bean class="org.n52.subverse.operator.UnsubscribeOperator" />
     <bean class="org.n52.subverse.operator.GetSubscriptionOperator" />
+    <bean class="org.n52.subverse.operator.NotifyOperator" />
 
     <!-- handler -->
     <bean class="org.n52.subverse.handler.GetCapabilitiesHandler" />
@@ -25,16 +26,19 @@
     <bean class="org.n52.subverse.handler.RenewHandler" />
     <bean class="org.n52.subverse.handler.UnsubscribeHandler" />
     <bean class="org.n52.subverse.handler.GetSubscriptionHandler" />
+    <bean class="org.n52.subverse.handler.NotifyHandler" />
 
     <!-- decoder -->
-    <bean class="org.n52.subverse.coding.GetCapabilitiesKvpDecoder" />
+    <bean class="org.n52.subverse.coding.capabilities.GetCapabilitiesKvpDecoder" />
     <bean class="org.n52.svalbard.soap.SoapEnvelopeDecoder" />
-    <bean class="org.n52.subverse.coding.SubscribeDecoder" />
+    <bean class="org.n52.subverse.coding.subscribe.SubscribeDecoder" />
+    <bean class="org.n52.subverse.coding.notify.NotifyDecoder" />
 
     <!-- encoder -->
-    <bean class="org.n52.subverse.coding.CapabilitiesEncoder" />
+    <bean class="org.n52.subverse.coding.capabilities.CapabilitiesEncoder" />
     <bean class="org.n52.svalbard.soap.SoapEnvelopeEncoder" />
-    <bean class="org.n52.subverse.coding.SubscribeResponseEncoder" />
+    <bean class="org.n52.subverse.coding.subscribe.SubscribeResponseEncoder" />
+    <bean class="org.n52.subverse.coding.notify.NoContentEncoder" />
 
     <!-- response writer -->
     <bean class="org.n52.subverse.writer.XmlBeansWriterFactory" />

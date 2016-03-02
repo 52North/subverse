@@ -30,8 +30,10 @@ import org.n52.iceland.exception.ows.concrete.NoEncoderForResponseException;
 import org.n52.iceland.exception.ows.concrete.UnsupportedEncoderInputException;
 import org.n52.iceland.ogc.ows.OWSConstants;
 import org.n52.iceland.response.AbstractServiceResponse;
+import org.n52.iceland.response.NoContentResponse;
 import org.n52.iceland.util.http.MediaType;
 import org.n52.iceland.util.http.MediaTypes;
+import org.n52.iceland.util.http.NoContent;
 import org.n52.iceland.w3c.soap.SoapResponse;
 import org.w3.x2003.x05.soapEnvelope.Body;
 import org.w3.x2003.x05.soapEnvelope.Envelope;
@@ -41,7 +43,7 @@ import org.w3.x2003.x05.soapEnvelope.EnvelopeDocument;
  *
  * @author Matthes Rieke <m.rieke@52north.org>
  */
-public class SoapEnvelopeEncoder implements Encoder<XmlObject, SoapResponse> {
+public class SoapEnvelopeEncoder implements Encoder<Object, SoapResponse> {
 
     private static final EncoderKey KEY = new XmlEncoderKey(Envelope.type.getName().getNamespaceURI(),
             SoapResponse.class);
@@ -58,13 +60,20 @@ public class SoapEnvelopeEncoder implements Encoder<XmlObject, SoapResponse> {
     }
 
     @Override
-    public XmlObject encode(SoapResponse objectToEncode) throws OwsExceptionReport, UnsupportedEncoderInputException {
+    public Object encode(SoapResponse objectToEncode) throws OwsExceptionReport, UnsupportedEncoderInputException {
         return encode(objectToEncode, Collections.emptyMap());
     }
 
     @Override
-    public XmlObject encode(SoapResponse objectToEncode, Map<OWSConstants.HelperValues, String> additionalValues) throws OwsExceptionReport, UnsupportedEncoderInputException {
+    public Object encode(SoapResponse objectToEncode, Map<OWSConstants.HelperValues, String> additionalValues) throws OwsExceptionReport, UnsupportedEncoderInputException {
         AbstractServiceResponse bodyContent = objectToEncode.getBodyContent();
+
+        /*
+        * Special case: NoContent
+        */
+        if (bodyContent instanceof NoContentResponse) {
+            return new NoContent();
+        }
 
         EnvelopeDocument envDoc = EnvelopeDocument.Factory.newInstance();
         Envelope env = envDoc.addNewEnvelope();

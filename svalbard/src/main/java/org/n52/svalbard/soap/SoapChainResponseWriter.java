@@ -30,6 +30,9 @@ import org.n52.iceland.coding.encode.ResponseWriterKey;
 import org.n52.iceland.coding.encode.XmlEncoderKey;
 import org.n52.iceland.exception.ows.OwsExceptionReport;
 import org.n52.iceland.exception.ows.concrete.NoEncoderForKeyException;
+import org.n52.iceland.response.NoContentResponse;
+import org.n52.iceland.util.http.HTTPStatus;
+import org.n52.iceland.util.http.NoContent;
 import org.n52.iceland.w3c.soap.SoapChain;
 import org.n52.iceland.w3c.soap.SoapResponse;
 
@@ -74,6 +77,16 @@ public class SoapChainResponseWriter extends AbstractResponseWriter<SoapChain> {
     @Override
     public Set<ResponseWriterKey> getKeys() {
         return Collections.singleton(KEY);
+    }
+
+    @Override
+    public boolean hasForcedHttpStatus(SoapChain t) {
+        return t.getBodyResponse() instanceof NoContentResponse;
+    }
+
+    @Override
+    public HTTPStatus getForcedHttpStatus(SoapChain t) {
+        return t.getBodyResponse() instanceof NoContentResponse ? HTTPStatus.NO_CONTENT : HTTPStatus.OK;
     }
 
 }

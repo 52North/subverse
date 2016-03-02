@@ -37,6 +37,8 @@ public interface SubverseConstants {
 
     String OPERATION_GET_SUBSCRIPTION = "GetSubscription";
 
+    String OPERATION_NOTIFY = "Notify";
+
     interface DemoParam {
 
         String OUTPUT_FORMAT = "outputFormat";

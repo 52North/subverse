@@ -43,8 +43,8 @@ public class SubscribeOperator extends AbstractOperator {
         if (request instanceof SubscribeRequest) {
             SubscribeHandler handler = getSubscribeHandler(request);
             SubscribeResponse result = handler.subscribe(((SubscribeRequest) request).getOptions());
-            result.setService(((SubscribeRequest) request).getService());
-            result.setVersion(((SubscribeRequest) request).getVersion());
+            result.setService(request.getService());
+            result.setVersion(request.getVersion());
             return result;
         }
 
