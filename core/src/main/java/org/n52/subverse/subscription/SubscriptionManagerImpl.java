@@ -41,14 +41,14 @@ public class SubscriptionManagerImpl implements SubscriptionManager {
     public void setIdProvider(IdProvider idProvider) {
         this.idProvider = idProvider;
     }
-    
+
     @Override
     public Subscription subscribe(SubscribeOptions options) {
         SubscriptionEndpoint endpoint = createEndpoint(options);
         Subscription result = new Subscription(this.idProvider.generateId(), options, endpoint);
-        
+
         this.dao.storeSubscription(result);
-        
+
         return result;
     }
 

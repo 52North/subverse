@@ -29,6 +29,7 @@ import org.n52.iceland.coding.decode.DecoderRepository;
 import org.n52.iceland.coding.decode.XmlNamespaceOperationDecoderKey;
 import org.n52.iceland.exception.ows.OwsExceptionReport;
 import org.n52.iceland.request.AbstractServiceRequest;
+import org.n52.iceland.w3c.soap.SoapRequest;
 
 public class SoapEnvelopeDecoderTest {
 
@@ -41,7 +42,7 @@ public class SoapEnvelopeDecoderTest {
     public void testDecoding() throws OwsExceptionReport {
         SoapEnvelopeDecoder dec = new SoapEnvelopeDecoder();
         dec.setDecoderRepository(createMockRepo());
-        AbstractServiceRequest result = dec.decode(readResource(SOAP12_ENV_FILE));
+        SoapRequest result = dec.decode(readResource(SOAP12_ENV_FILE));
 
         Assert.assertThat(result, CoreMatchers.notNullValue());
     }

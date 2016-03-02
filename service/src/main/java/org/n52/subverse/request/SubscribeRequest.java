@@ -33,7 +33,7 @@ public class SubscribeRequest extends AbstractServiceRequest<SubscribeResponse> 
     public void setResponse(SubscribeResponse response) {
         this.response = response;
     }
-    
+
     @Override
     public SubscribeResponse getResponse() throws OwsExceptionReport {
         return this.response;
@@ -68,5 +68,5 @@ public class SubscribeRequest extends AbstractServiceRequest<SubscribeResponse> 
     public SubscribeOptions getOptions() {
         return this.options;
     }
-    
+
 }

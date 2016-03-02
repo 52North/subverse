@@ -39,7 +39,7 @@ public class SoapChainResponseWriterFactory implements ResponseWriterFactory {
     public void setEncoderRepository(EncoderRepository encoderRepository) {
         this.encoderRepository = encoderRepository;
     }
-    
+
     @Override
     public Set<ResponseWriterKey> getKeys() {
         return Collections.singleton(SoapChainResponseWriter.KEY);
@@ -49,5 +49,5 @@ public class SoapChainResponseWriterFactory implements ResponseWriterFactory {
     public ResponseWriter<?> create(ResponseWriterKey key) {
         return new SoapChainResponseWriter(this.encoderRepository);
     }
-    
+
 }

@@ -32,7 +32,7 @@ public class SubscribeHandler implements OperationHandler {
     public void setManager(SubscriptionManager manager) {
         this.manager = manager;
     }
-    
+
     public SubscribeResponse subscribe(SubscribeOptions request) throws OwsExceptionReport {
         return new SubscribeResponse(this.manager.subscribe(request));
     }

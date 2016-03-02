@@ -45,7 +45,7 @@ public class SoapChainResponseWriter extends AbstractResponseWriter<SoapChain> {
     SoapChainResponseWriter(EncoderRepository encoderRepository) {
         this.encoderRepository = encoderRepository;
     }
-    
+
     @Override
     public void write(SoapChain chain, OutputStream out, ResponseProxy responseProxy) throws IOException, OwsExceptionReport {
         Object o = encodeSoapResponse(chain);
@@ -55,7 +55,7 @@ public class SoapChainResponseWriter extends AbstractResponseWriter<SoapChain> {
             }
         }
     }
-    
+
     private Object encodeSoapResponse(SoapChain chain) throws OwsExceptionReport {
         EncoderKey key = new XmlEncoderKey(chain.getSoapResponse().getSoapNamespace(), chain.getSoapResponse().getClass());
         Encoder<?, SoapResponse> encoder = this.encoderRepository.getEncoder(key);
@@ -75,5 +75,5 @@ public class SoapChainResponseWriter extends AbstractResponseWriter<SoapChain> {
     public Set<ResponseWriterKey> getKeys() {
         return Collections.singleton(KEY);
     }
-    
+
 }

@@ -38,5 +38,5 @@ public class Subscription {
     public SubscriptionEndpoint getEndpoint() {
         return endpoint;
     }
-    
+
 }

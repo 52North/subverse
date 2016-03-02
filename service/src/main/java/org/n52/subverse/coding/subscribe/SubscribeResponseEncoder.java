@@ -50,7 +50,7 @@ public class SubscribeResponseEncoder implements Encoder<XmlObject, SubscribeRes
                     SubverseConstants.VERSION,
                     SubverseConstants.OPERATION_SUBSCRIBE,
                     MediaTypes.APPLICATION_XML));
-    
+
     @Override
     public XmlObject encode(SubscribeResponse objectToEncode) throws OwsExceptionReport, UnsupportedEncoderInputException {
         return encode(objectToEncode, Collections.emptyMap());
@@ -60,18 +60,18 @@ public class SubscribeResponseEncoder implements Encoder<XmlObject, SubscribeRes
     public XmlObject encode(SubscribeResponse objectToEncode, Map<OWSConstants.HelperValues, String> additionalValues) throws OwsExceptionReport, UnsupportedEncoderInputException {
         SubscribeResponseDocument result = SubscribeResponseDocument.Factory.newInstance();
         SubscribeResponseDocument.SubscribeResponse resp = result.addNewSubscribeResponse();
-        
+
         /*
         * TODO: implement details
         */
-        
+
         EndpointReferenceType ref = resp.addNewSubscriptionReference();
         AttributedURIType add = ref.addNewAddress();
-        
+
         XmlCursor cur = add.newCursor();
         cur.toFirstContentToken();
         cur.insertChars("test");
-        
+
         return result;
     }
 
@@ -84,5 +84,5 @@ public class SubscribeResponseEncoder implements Encoder<XmlObject, SubscribeRes
     public Set<EncoderKey> getKeys() {
         return ENCODER_KEYS;
     }
-    
+
 }

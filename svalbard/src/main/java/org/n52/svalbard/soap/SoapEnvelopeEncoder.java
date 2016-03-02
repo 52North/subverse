@@ -42,7 +42,7 @@ import org.w3.x2003.x05.soapEnvelope.EnvelopeDocument;
  * @author Matthes Rieke <m.rieke@52north.org>
  */
 public class SoapEnvelopeEncoder implements Encoder<XmlObject, SoapResponse> {
-    
+
     private static final EncoderKey KEY = new XmlEncoderKey(Envelope.type.getName().getNamespaceURI(),
             SoapResponse.class);
 
@@ -56,7 +56,7 @@ public class SoapEnvelopeEncoder implements Encoder<XmlObject, SoapResponse> {
     public void setEncoderRepository(EncoderRepository encoderRepository) {
         this.encoderRepository = encoderRepository;
     }
-    
+
     @Override
     public XmlObject encode(SoapResponse objectToEncode) throws OwsExceptionReport, UnsupportedEncoderInputException {
         return encode(objectToEncode, Collections.emptyMap());
@@ -65,14 +65,14 @@ public class SoapEnvelopeEncoder implements Encoder<XmlObject, SoapResponse> {
     @Override
     public XmlObject encode(SoapResponse objectToEncode, Map<OWSConstants.HelperValues, String> additionalValues) throws OwsExceptionReport, UnsupportedEncoderInputException {
         AbstractServiceResponse bodyContent = objectToEncode.getBodyContent();
-        
+
         EnvelopeDocument envDoc = EnvelopeDocument.Factory.newInstance();
         Envelope env = envDoc.addNewEnvelope();
-        
+
         Body body = env.addNewBody();
-        
+
         body.set(encodeBody(bodyContent));
-        
+
         return envDoc;
     }
 
@@ -90,12 +90,12 @@ public class SoapEnvelopeEncoder implements Encoder<XmlObject, SoapResponse> {
         EncoderKey key = new OperationResponseEncoderKey(bodyContent.getService(), bodyContent.getVersion(),
                 bodyContent.getOperationKey().getOperation(), MediaTypes.APPLICATION_XML);
         Encoder<Object, Object> encoder = this.encoderRepository.getEncoder(key);
-        
+
         if (encoder != null) {
             return (XmlObject) encoder.encode(bodyContent);
         }
-        
+
         throw new NoEncoderForResponseException().withMessage("No encoder found for key: "+key);
     }
-    
+
 }

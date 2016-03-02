@@ -47,7 +47,7 @@ public class SubscribeOperator extends AbstractOperator {
             result.setVersion(((SubscribeRequest) request).getVersion());
             return result;
         }
-        
+
         throw new InvalidParameterValueException().withMessage("Invalid Subscribe request received");
     }
 

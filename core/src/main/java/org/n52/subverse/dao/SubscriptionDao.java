@@ -24,11 +24,11 @@ import org.n52.subverse.subscription.Subscription;
  * @author Matthes Rieke <m.rieke@52north.org>
  */
 public interface SubscriptionDao {
-    
+
     void storeSubscription(Subscription sub);
-    
+
     Stream<Subscription> getAllSubscriptions();
-    
+
     Optional<Subscription> getSubscription(String id);
-    
+
 }

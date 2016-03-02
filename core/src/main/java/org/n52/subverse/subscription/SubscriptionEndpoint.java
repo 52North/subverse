@@ -20,5 +20,5 @@ package org.n52.subverse.subscription;
  * @author Matthes Rieke <m.rieke@52north.org>
  */
 public class SubscriptionEndpoint {
-    
+
 }

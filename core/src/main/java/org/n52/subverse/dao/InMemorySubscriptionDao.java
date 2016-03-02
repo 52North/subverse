@@ -29,7 +29,7 @@ import org.n52.subverse.subscription.Subscription;
 public class InMemorySubscriptionDao implements SubscriptionDao {
 
     private final Map<String, Subscription> storage = new HashMap<>();
-    
+
     @Override
     public synchronized void storeSubscription(Subscription sub) {
         this.storage.put(sub.getId(), sub);
@@ -44,5 +44,5 @@ public class InMemorySubscriptionDao implements SubscriptionDao {
     public synchronized Optional<Subscription> getSubscription(String id) {
         return Optional.ofNullable(this.storage.get(id));
     }
-    
+
 }

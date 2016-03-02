@@ -56,7 +56,7 @@ public class SubscribeDecoder implements Decoder<AbstractServiceRequest, String>
         SubscribeDocument.Subscribe subscribe = subDoc.getSubscribe();
         Optional<String> pubId = XmlBeansHelper.findFirstChild(PUBLICATION_ID_QN, subscribe)
                 .map(c -> XmlBeansHelper.extractStringContent(c));
-        
+
         /*
         * TODO: parse other parameters
         */

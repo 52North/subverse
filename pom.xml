@@ -114,6 +114,11 @@
                 <version>${version.iceland}</version>
             </dependency>
             <dependency>
+                <groupId>org.n52.iceland</groupId>
+                <artifactId>util</artifactId>
+                <version>${version.iceland}</version>
+            </dependency>
+            <dependency>
                 <groupId>junit</groupId>
                 <artifactId>junit</artifactId>
                 <version>${junit-version}</version>

@@ -20,7 +20,7 @@ package org.n52.subverse;
  * @author Matthes Rieke <m.rieke@52north.org>
  */
 public interface IdProvider {
-    
+
     String generateId();
-    
+
 }

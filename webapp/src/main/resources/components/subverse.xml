@@ -40,6 +40,6 @@
     <bean class="org.n52.subverse.writer.XmlBeansWriterFactory" />
     <bean class="org.n52.subverse.writer.ServiceResponseWriterFactory" />
     <bean class="org.n52.svalbard.soap.SoapChainResponseWriterFactory" />
-    
+
 
 </beans>

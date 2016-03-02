@@ -16,6 +16,7 @@ limitations under the License.
 This project includes:
 
   52°North Iceland under The Apache Software License, Version 2.0
+  52°North Iceland Util module under The Apache Software License, Version 2.0
   52°North subverse under The Apache Software License, Version 2.0
   ActiveMQ :: AMQP under Apache License, Version 2.0
   ActiveMQ :: Broker under Apache License, Version 2.0

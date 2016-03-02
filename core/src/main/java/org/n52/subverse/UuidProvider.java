@@ -27,5 +27,5 @@ public class UuidProvider implements IdProvider {
     public String generateId() {
         return UUID.randomUUID().toString();
     }
-    
+
 }
