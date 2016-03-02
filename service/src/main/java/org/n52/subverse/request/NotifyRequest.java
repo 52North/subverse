@@ -46,7 +46,7 @@ public class NotifyRequest extends AbstractServiceRequest<NoContentResponse> {
 
     @Override
     public String getOperationName() {
-        return NotifyDecoder.OPERATION;
+        return SubverseConstants.OPERATION_NOTIFY;
     }
 
     @Override

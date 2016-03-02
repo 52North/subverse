@@ -20,12 +20,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.apache.xmlbeans.XmlCursor;
 import org.apache.xmlbeans.XmlException;
 import org.apache.xmlbeans.XmlObject;
-import org.n52.iceland.coding.decode.ConformanceClassDecoder;
 import org.n52.iceland.coding.decode.Decoder;
 import org.n52.iceland.coding.decode.DecoderKey;
 import org.n52.iceland.coding.decode.XmlNamespaceOperationDecoderKey;
@@ -47,9 +44,8 @@ import org.slf4j.LoggerFactory;
 public class NotifyDecoder implements Decoder<AbstractServiceRequest, String> {
 
     private static final org.slf4j.Logger LOG = LoggerFactory.getLogger(NotifyDecoder.class);
-    public static final String OPERATION = "Notify";
     private static final DecoderKey KEY = new XmlNamespaceOperationDecoderKey(SubverseConstants.WS_N_NAMESPACE,
-        OPERATION);
+        SubverseConstants.OPERATION_NOTIFY);
 
     private static final String SIMPLE_TOPIC_DIALECT = "http://docs.oasis-open.org/wsn/t-1/TopicExpression/Simple";
 
@@ -86,6 +82,10 @@ public class NotifyDecoder implements Decoder<AbstractServiceRequest, String> {
                 cur = topicElem.newCursor();
                 cur.toFirstContentToken();
                 topic = cur.getTextValue();
+
+                if (topic != null) {
+                    topic = topic.trim();
+                }
             }
 
             NotificationMessageHolderType.Message messageHolder = n.getMessage();

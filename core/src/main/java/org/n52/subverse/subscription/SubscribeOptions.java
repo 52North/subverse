@@ -17,21 +17,29 @@ package org.n52.subverse.subscription;
 
 import com.google.common.base.MoreObjects;
 import java.util.Map;
+import java.util.Optional;
 import net.opengis.fes.x20.FilterType;
 import org.joda.time.DateTime;
 
 public class SubscribeOptions {
 
     private final String publicationIdentifier;
-    private final DateTime terminationTime;
-    private final FilterType filter;
-    private final String filterLanguageId;
-    private final String deliveryLocation;
-    private final String deliveryMethod;
+    private final Optional<DateTime> terminationTime;
+    private final Optional<FilterType> filter;
+    private final Optional<String> filterLanguageId;
+    private final Optional<String> deliveryLocation;
+    private final Optional<String> deliveryMethod;
     private final Map<String, String> deliveryParameters;
-    private final String contentType;
+    private final Optional<String> contentType;
 
-    public SubscribeOptions(String publicationIdentifier, DateTime terminationTime, FilterType filter, String filterLanguageId, String deliveryLocation, String deliveryMethod, Map<String, String> deliveryParameters, String contentType) {
+    public SubscribeOptions(String publicationIdentifier,
+            Optional<DateTime> terminationTime,
+            Optional<FilterType> filter,
+            Optional<String> filterLanguageId,
+            Optional<String> deliveryLocation,
+            Optional<String> deliveryMethod,
+            Map<String, String> deliveryParameters,
+            Optional<String> contentType) {
         this.publicationIdentifier = publicationIdentifier;
         this.terminationTime = terminationTime;
         this.filter = filter;
@@ -56,4 +64,36 @@ public class SubscribeOptions {
                 .toString();
     }
 
+    public String getPublicationIdentifier() {
+        return publicationIdentifier;
+    }
+
+    public Optional<DateTime> getTerminationTime() {
+        return terminationTime;
+    }
+
+    public Optional<FilterType> getFilter() {
+        return filter;
+    }
+
+    public Optional<String> getFilterLanguageId() {
+        return filterLanguageId;
+    }
+
+    public Optional<String> getDeliveryLocation() {
+        return deliveryLocation;
+    }
+
+    public Optional<String> getDeliveryMethod() {
+        return deliveryMethod;
+    }
+
+    public Map<String, String> getDeliveryParameters() {
+        return deliveryParameters;
+    }
+
+    public Optional<String> getContentType() {
+        return contentType;
+    }
+    
 }

@@ -45,7 +45,8 @@ public class XmlBeansHelper {
     public static String extractStringContent(XmlObject subDoc) {
         XmlCursor cur = subDoc.newCursor();
         cur.toFirstContentToken();
-        return cur.getTextValue();
+        String textValue = cur.getTextValue();
+        return textValue != null ? textValue.trim() : null;
     }
 
 }
