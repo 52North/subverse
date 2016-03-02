@@ -13,64 +13,66 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.n52.subverse.coding;
+package org.n52.subverse.coding.subscribe;
 
 import com.google.common.collect.Sets;
-import java.io.IOException;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import org.apache.xmlbeans.XmlException;
+import org.apache.xmlbeans.XmlCursor;
 import org.apache.xmlbeans.XmlObject;
 import org.n52.iceland.coding.encode.Encoder;
 import org.n52.iceland.coding.encode.EncoderKey;
-import org.n52.iceland.coding.encode.OperationRequestEncoderKey;
-import org.n52.iceland.config.annotation.Configurable;
-import org.n52.iceland.exception.ows.NoApplicableCodeException;
+import org.n52.iceland.coding.encode.OperationResponseEncoderKey;
 import org.n52.iceland.exception.ows.OwsExceptionReport;
 import org.n52.iceland.exception.ows.concrete.UnsupportedEncoderInputException;
 import org.n52.iceland.ogc.ows.OWSConstants;
-import org.n52.iceland.response.GetCapabilitiesResponse;
 import org.n52.iceland.util.http.MediaType;
 import org.n52.iceland.util.http.MediaTypes;
 import org.n52.subverse.SubverseConstants;
+import org.n52.subverse.response.SubscribeResponse;
+import org.oasisOpen.docs.wsn.b2.SubscribeResponseDocument;
+import org.w3.x2005.x08.addressing.AttributedURIType;
+import org.w3.x2005.x08.addressing.EndpointReferenceType;
 
 /**
  *
  * @author Matthes Rieke <m.rieke@52north.org>
  */
-@Configurable
-public class CapabilitiesEncoder implements
-        Encoder<XmlObject, GetCapabilitiesResponse> {
+public class SubscribeResponseEncoder implements Encoder<XmlObject, SubscribeResponse> {
 
     private static final Set<EncoderKey> ENCODER_KEYS = Sets.<EncoderKey>newHashSet(
-            new OperationRequestEncoderKey(SubverseConstants.SERVICE,
+            new OperationResponseEncoderKey(SubverseConstants.SERVICE,
                     SubverseConstants.VERSION,
-                    SubverseConstants.OPERATION_GET_CAPABILITIES,
+                    SubverseConstants.OPERATION_SUBSCRIBE,
                     MediaTypes.TEXT_XML),
-            new OperationRequestEncoderKey(SubverseConstants.SERVICE,
+            new OperationResponseEncoderKey(SubverseConstants.SERVICE,
                     SubverseConstants.VERSION,
-                    SubverseConstants.OPERATION_GET_CAPABILITIES,
+                    SubverseConstants.OPERATION_SUBSCRIBE,
                     MediaTypes.APPLICATION_XML));
-
-
+    
     @Override
-    public XmlObject encode(GetCapabilitiesResponse objectToEncode) throws OwsExceptionReport, UnsupportedEncoderInputException {
+    public XmlObject encode(SubscribeResponse objectToEncode) throws OwsExceptionReport, UnsupportedEncoderInputException {
         return encode(objectToEncode, Collections.emptyMap());
     }
 
     @Override
-    public XmlObject encode(GetCapabilitiesResponse objectToEncode, Map<OWSConstants.HelperValues, String> additionalValues) throws OwsExceptionReport, UnsupportedEncoderInputException {
-        try {
-            //JAXBContext.newInstance(this.packageName).createUnmarshaller().unmarshal(s, c);
-            XmlObject elem = XmlObject.Factory.parse(getClass().getResourceAsStream("/coding/capabilities_template.xml"));
-            return elem;
-        } catch (IOException | XmlException ex) {
-            Logger.getLogger(CapabilitiesEncoder.class.getName()).log(Level.SEVERE, null, ex);
-            throw new NoApplicableCodeException().causedBy(ex);
-        }
+    public XmlObject encode(SubscribeResponse objectToEncode, Map<OWSConstants.HelperValues, String> additionalValues) throws OwsExceptionReport, UnsupportedEncoderInputException {
+        SubscribeResponseDocument result = SubscribeResponseDocument.Factory.newInstance();
+        SubscribeResponseDocument.SubscribeResponse resp = result.addNewSubscribeResponse();
+        
+        /*
+        * TODO: implement details
+        */
+        
+        EndpointReferenceType ref = resp.addNewSubscriptionReference();
+        AttributedURIType add = ref.addNewAddress();
+        
+        XmlCursor cur = add.newCursor();
+        cur.toFirstContentToken();
+        cur.insertChars("test");
+        
+        return result;
     }
 
     @Override
@@ -80,7 +82,7 @@ public class CapabilitiesEncoder implements
 
     @Override
     public Set<EncoderKey> getKeys() {
-        return Collections.unmodifiableSet(ENCODER_KEYS);
+        return ENCODER_KEYS;
     }
-
+    
 }

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.n52.subverse.coding;
+package org.n52.subverse.coding.capabilities;
 
 import com.google.common.collect.Sets;
 import java.util.Arrays;
@@ -27,6 +27,7 @@ import org.n52.iceland.ogc.ows.OWSConstants;
 import org.n52.iceland.request.GetCapabilitiesRequest;
 import org.n52.iceland.util.KvpHelper;
 import org.n52.subverse.SubverseConstants;
+import org.n52.subverse.coding.KvpDecoder;
 
 public class GetCapabilitiesKvpDecoder extends KvpDecoder<GetCapabilitiesRequest> {
 

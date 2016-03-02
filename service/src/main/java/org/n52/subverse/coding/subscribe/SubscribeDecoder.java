@@ -13,16 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.n52.subverse.coding;
+package org.n52.subverse.coding.subscribe;
 
 import java.util.Collections;
 import java.util.Optional;
 import java.util.Set;
 import javax.xml.namespace.QName;
 import net.opengis.pubsub.x10.PublicationIdentifierDocument;
-import net.opengis.pubsub.x10.PublicationIdentifierType;
 import org.apache.xmlbeans.XmlException;
-import org.apache.xmlbeans.XmlObject;
 import org.n52.iceland.coding.decode.Decoder;
 import org.n52.iceland.coding.decode.DecoderKey;
 import org.n52.iceland.coding.decode.XmlNamespaceOperationDecoderKey;
@@ -30,6 +28,7 @@ import org.n52.iceland.exception.ows.OwsExceptionReport;
 import org.n52.iceland.exception.ows.concrete.UnsupportedDecoderInputException;
 import org.n52.iceland.request.AbstractServiceRequest;
 import org.n52.subverse.SubverseConstants;
+import org.n52.subverse.coding.XmlBeansHelper;
 import org.n52.subverse.request.SubscribeRequest;
 import org.n52.subverse.subscription.SubscribeOptions;
 import org.oasisOpen.docs.wsn.b2.SubscribeDocument;
@@ -57,6 +56,10 @@ public class SubscribeDecoder implements Decoder<AbstractServiceRequest, String>
         SubscribeDocument.Subscribe subscribe = subDoc.getSubscribe();
         Optional<String> pubId = XmlBeansHelper.findFirstChild(PUBLICATION_ID_QN, subscribe)
                 .map(c -> XmlBeansHelper.extractStringContent(c));
+        
+        /*
+        * TODO: parse other parameters
+        */
 
         SubscribeOptions options = new SubscribeOptions(pubId.get(), null, null, null, null, null, null, null);
         return new SubscribeRequest(options);
