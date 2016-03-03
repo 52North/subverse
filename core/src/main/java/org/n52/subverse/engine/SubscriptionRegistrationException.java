@@ -13,28 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.n52.subverse.delivery;
+package org.n52.subverse.engine;
 
 /**
  *
  * @author Matthes Rieke <m.rieke@52north.org>
  */
-public class DeliveryDefinition {
+public class SubscriptionRegistrationException extends Exception {
 
-    private final String identifier;
-    private final String location;
-
-    public DeliveryDefinition(String identifier, String location) {
-        this.identifier = identifier;
-        this.location = location;
+    public SubscriptionRegistrationException(String message) {
+        super(message);
     }
 
-    public String getIdentifier() {
-        return identifier;
+    public SubscriptionRegistrationException(String message, Throwable cause) {
+        super(message, cause);
     }
-
-    public String getLocation() {
-        return location;
-    }
-
+    
 }

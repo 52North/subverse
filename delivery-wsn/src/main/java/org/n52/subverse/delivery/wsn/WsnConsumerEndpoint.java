@@ -13,10 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.n52.subverse.notify;
+package org.n52.subverse.delivery.wsn;
 
-import javax.inject.Inject;
-import org.n52.subverse.engine.FilterEngine;
+import java.net.MalformedURLException;
+import java.net.URL;
+import org.n52.subverse.delivery.DeliveryEndpoint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,25 +25,18 @@ import org.slf4j.LoggerFactory;
  *
  * @author Matthes Rieke <m.rieke@52north.org>
  */
-public class NotificationConsumerImpl implements NotificationConsumer {
+public class WsnConsumerEndpoint implements DeliveryEndpoint {
 
-    private static final Logger LOG = LoggerFactory.getLogger(NotificationConsumerImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(WsnConsumerEndpoint.class);
+    private final URL targetUrl;
 
-    private FilterEngine engine;
-
-    public FilterEngine getEngine() {
-        return engine;
+    public WsnConsumerEndpoint(String location) throws MalformedURLException {
+        this.targetUrl = new URL(location);
     }
 
-    @Inject
-    public void setEngine(FilterEngine engine) {
-        this.engine = engine;
-    }
-    
     @Override
-    public void receive(NotificationMessage m) {
-        LOG.info("Received message: "+m);
-        this.engine.filterMessage(m.getMessage());
+    public void deliver(Object o) {
+        LOG.info("Should delivery this object to {}: {}", targetUrl, o);
     }
 
 }

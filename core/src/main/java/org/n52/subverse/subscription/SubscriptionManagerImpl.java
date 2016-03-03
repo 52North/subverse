@@ -15,17 +15,46 @@
  */
 package org.n52.subverse.subscription;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.n52.subverse.IdProvider;
 import javax.inject.Inject;
 import org.n52.subverse.dao.SubscriptionDao;
+import org.n52.subverse.delivery.DeliveryProvider;
+import org.n52.subverse.delivery.DeliveryProviderRepository;
+import org.n52.subverse.delivery.UnsupportedDeliveryDefinitionException;
+import org.n52.subverse.engine.FilterEngine;
+import org.n52.subverse.engine.SubscriptionRegistrationException;
+import org.slf4j.LoggerFactory;
 
 public class SubscriptionManagerImpl implements SubscriptionManager {
 
+    private static final org.slf4j.Logger LOG = LoggerFactory.getLogger(SubscriptionManagerImpl.class);
     private SubscriptionDao dao;
     private IdProvider idProvider;
+    private DeliveryProviderRepository deliveryProviderRepository;
+    private FilterEngine filterEngine;
+
+    public FilterEngine getFilterEngine() {
+        return filterEngine;
+    }
+
+    @Inject
+    public void setFilterEngine(FilterEngine filterEngine) {
+        this.filterEngine = filterEngine;
+    }
 
     public SubscriptionDao getDao() {
         return dao;
+    }
+
+    public DeliveryProviderRepository getDeliveryProviderRepository() {
+        return deliveryProviderRepository;
+    }
+
+    @Inject
+    public void setDeliveryProviderRepository(DeliveryProviderRepository deliveryProviderRepository) {
+        this.deliveryProviderRepository = deliveryProviderRepository;
     }
 
     @Inject
@@ -43,17 +72,27 @@ public class SubscriptionManagerImpl implements SubscriptionManager {
     }
 
     @Override
-    public Subscription subscribe(SubscribeOptions options) {
+    public Subscription subscribe(SubscribeOptions options) throws UnsupportedDeliveryDefinitionException,
+            SubscriptionRegistrationException {
         SubscriptionEndpoint endpoint = createEndpoint(options);
         Subscription result = new Subscription(this.idProvider.generateId(), options, endpoint);
 
         this.dao.storeSubscription(result);
 
+        this.filterEngine.register(result, endpoint.getDeliveryEndpoint());
+        
         return result;
     }
 
-    private SubscriptionEndpoint createEndpoint(SubscribeOptions options) {
-        return new SubscriptionEndpoint();
+    private SubscriptionEndpoint createEndpoint(SubscribeOptions options) throws UnsupportedDeliveryDefinitionException {
+        DeliveryProvider provider = this.deliveryProviderRepository.getProvider(options.getDeliveryDefinition());
+
+        if (provider == null) {
+            throw new UnsupportedDeliveryDefinitionException("No provider for the delivery definition is available: "
+                    +options.getDeliveryDefinition());
+        }
+
+        return new SubscriptionEndpoint(provider.createDeliveryEndpoint(options.getDeliveryDefinition().get()));
     }
 
 }

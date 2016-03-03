@@ -13,36 +13,38 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.n52.subverse.notify;
+package org.n52.subverse.delivery;
 
-import javax.inject.Inject;
-import org.n52.subverse.engine.FilterEngine;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.google.common.base.MoreObjects;
 
 /**
  *
  * @author Matthes Rieke <m.rieke@52north.org>
  */
-public class NotificationConsumerImpl implements NotificationConsumer {
+public class DeliveryDefinition {
 
-    private static final Logger LOG = LoggerFactory.getLogger(NotificationConsumerImpl.class);
+    private final String identifier;
+    private final String location;
 
-    private FilterEngine engine;
-
-    public FilterEngine getEngine() {
-        return engine;
+    public DeliveryDefinition(String identifier, String location) {
+        this.identifier = identifier;
+        this.location = location;
     }
 
-    @Inject
-    public void setEngine(FilterEngine engine) {
-        this.engine = engine;
+    public String getIdentifier() {
+        return identifier;
     }
-    
+
+    public String getLocation() {
+        return location;
+    }
+
     @Override
-    public void receive(NotificationMessage m) {
-        LOG.info("Received message: "+m);
-        this.engine.filterMessage(m.getMessage());
+    public String toString() {
+        return MoreObjects.toStringHelper(this)
+               .add("identifier", identifier)
+               .add("location", location)
+               .toString();
     }
 
 }

@@ -13,14 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.n52.subverse.subscription;
+package org.n52.subverse.delivery;
 
-import org.n52.subverse.delivery.UnsupportedDeliveryDefinitionException;
-import org.n52.subverse.engine.SubscriptionRegistrationException;
+/**
+ *
+ * @author Matthes Rieke <m.rieke@52north.org>
+ */
+public interface DeliveryEndpoint {
 
-public interface SubscriptionManager {
-
-    public Subscription subscribe(SubscribeOptions aThis) throws UnsupportedDeliveryDefinitionException,
-            SubscriptionRegistrationException;
+    void deliver(Object o);
 
 }

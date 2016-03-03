@@ -15,10 +15,22 @@
  */
 package org.n52.subverse.subscription;
 
+import org.n52.subverse.delivery.DeliveryEndpoint;
+
 /**
  *
  * @author Matthes Rieke <m.rieke@52north.org>
  */
 public class SubscriptionEndpoint {
+
+    private final DeliveryEndpoint deliveryEndpoint;
+
+    public SubscriptionEndpoint(DeliveryEndpoint deliveryEndpoint) {
+        this.deliveryEndpoint = deliveryEndpoint;
+    }
+
+    public DeliveryEndpoint getDeliveryEndpoint() {
+        return deliveryEndpoint;
+    }
 
 }
