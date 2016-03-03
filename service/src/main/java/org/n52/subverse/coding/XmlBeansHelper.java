@@ -22,6 +22,7 @@ import java.util.stream.Stream;
 import javax.xml.namespace.QName;
 import org.apache.xmlbeans.XmlCursor;
 import org.apache.xmlbeans.XmlObject;
+import org.oasisOpen.docs.wsn.b2.QueryExpressionType;
 
 /**
  *
@@ -47,6 +48,16 @@ public class XmlBeansHelper {
         cur.toFirstContentToken();
         String textValue = cur.getTextValue();
         return textValue != null ? textValue.trim() : null;
+    }
+
+    public static Optional<XmlObject> findFirstChild(XmlObject elem) {
+        XmlCursor cur = elem.newCursor();
+        XmlObject result = null;
+        if (cur.toFirstChild()) {
+            result = cur.getObject();
+        }
+
+        return Optional.ofNullable(result);
     }
 
 }

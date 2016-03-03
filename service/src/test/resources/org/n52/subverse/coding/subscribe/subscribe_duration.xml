@@ -19,7 +19,7 @@
             </fes:Filter>
         </wsn:MessageContent>
     </wsn:Filter>
-    <wsn:InitialTerminationTime>2112-09-16T00:00:00Z</wsn:InitialTerminationTime>
+    <wsn:InitialTerminationTime>P1Y1M1DT1H</wsn:InitialTerminationTime>
     <wsn:SubscriptionPolicy>
         <!-- When true, deliver raw content without the wsn:Notify wrapper -->
         <!--wsn:UseRaw/-->

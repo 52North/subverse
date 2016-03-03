@@ -18,34 +18,32 @@ package org.n52.subverse.subscription;
 import com.google.common.base.MoreObjects;
 import java.util.Map;
 import java.util.Optional;
-import net.opengis.fes.x20.FilterType;
+import org.apache.xmlbeans.XmlObject;
 import org.joda.time.DateTime;
+import org.n52.subverse.delivery.DeliveryDefinition;
 
 public class SubscribeOptions {
 
     private final String publicationIdentifier;
     private final Optional<DateTime> terminationTime;
-    private final Optional<FilterType> filter;
+    private final Optional<XmlObject> filter;
     private final Optional<String> filterLanguageId;
-    private final Optional<String> deliveryLocation;
-    private final Optional<String> deliveryMethod;
+    private final Optional<DeliveryDefinition> deliveryDefinition;
     private final Map<String, String> deliveryParameters;
     private final Optional<String> contentType;
 
     public SubscribeOptions(String publicationIdentifier,
             Optional<DateTime> terminationTime,
-            Optional<FilterType> filter,
+            Optional<XmlObject> filter,
             Optional<String> filterLanguageId,
-            Optional<String> deliveryLocation,
-            Optional<String> deliveryMethod,
+            Optional<DeliveryDefinition> deliveryDef,
             Map<String, String> deliveryParameters,
             Optional<String> contentType) {
         this.publicationIdentifier = publicationIdentifier;
         this.terminationTime = terminationTime;
         this.filter = filter;
         this.filterLanguageId = filterLanguageId;
-        this.deliveryLocation = deliveryLocation;
-        this.deliveryMethod = deliveryMethod;
+        this.deliveryDefinition = deliveryDef;
         this.deliveryParameters = deliveryParameters;
         this.contentType = contentType;
     }
@@ -57,8 +55,7 @@ public class SubscribeOptions {
                 .add("terminationTime", terminationTime)
                 .add("filter", filter)
                 .add("filterLanguageId", filterLanguageId)
-                .add("deliveryLocation", deliveryLocation)
-                .add("deliveryMethod", deliveryMethod)
+                .add("deliveryLocation", deliveryDefinition)
                 .add("deliveryParameters", deliveryParameters)
                 .add("contentType", contentType)
                 .toString();
@@ -72,7 +69,7 @@ public class SubscribeOptions {
         return terminationTime;
     }
 
-    public Optional<FilterType> getFilter() {
+    public Optional<XmlObject> getFilter() {
         return filter;
     }
 
@@ -80,12 +77,8 @@ public class SubscribeOptions {
         return filterLanguageId;
     }
 
-    public Optional<String> getDeliveryLocation() {
-        return deliveryLocation;
-    }
-
-    public Optional<String> getDeliveryMethod() {
-        return deliveryMethod;
+    public Optional<DeliveryDefinition> getDeliveryDefinition() {
+        return deliveryDefinition;
     }
 
     public Map<String, String> getDeliveryParameters() {
