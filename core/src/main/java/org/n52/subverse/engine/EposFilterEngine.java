@@ -40,7 +40,7 @@ import org.slf4j.LoggerFactory;
  * @author Matthes Rieke <m.rieke@52north.org>
  */
 public class EposFilterEngine implements FilterEngine {
-    
+
     private static final org.slf4j.Logger LOG = LoggerFactory.getLogger(EposFilterEngine.class);
 
     private final EposEngine engine = EposEngine.getInstance();
@@ -54,7 +54,7 @@ public class EposFilterEngine implements FilterEngine {
             LOG.warn("could not transform to EposEvent", ex);
         }
     }
-    
+
     @Override
     public void register(Subscription result, DeliveryEndpoint deliveryEndpoint)
             throws SubscriptionRegistrationException {
@@ -67,11 +67,11 @@ public class EposFilterEngine implements FilterEngine {
             throw new SubscriptionRegistrationException("Could not instantiate rule", ex);
         }
     }
-    
+
     private Rule createRule(Optional<XmlObject> filter, DeliveryEndpoint endpoint)
             throws FilterInstantiationException {
         Rule rule = new RuleInstance(new LocalRuleListener(endpoint));
-        
+
         if (filter.isPresent()) {
             try {
                 EposFilter instantiate = FilterInstantiationRepository.Instance
@@ -93,7 +93,7 @@ public class EposFilterEngine implements FilterEngine {
             doc.setFilter((FilterType) obj);
             return doc;
         }
-        
+
         return obj;
     }
 
@@ -119,7 +119,7 @@ public class EposFilterEngine implements FilterEngine {
         public Object getEndpointReference() {
             return this.endpoint;
         }
-        
+
     }
-    
+
 }

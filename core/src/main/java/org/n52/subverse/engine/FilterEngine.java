@@ -25,7 +25,7 @@ import org.n52.subverse.subscription.Subscription;
 public interface FilterEngine {
 
     void filterMessage(Object message);
-    
+
     void register(Subscription result, DeliveryEndpoint deliveryEndpoint)
             throws SubscriptionRegistrationException;
 

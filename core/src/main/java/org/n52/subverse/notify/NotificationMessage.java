@@ -57,7 +57,7 @@ public class NotificationMessage {
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(this).
-                add("message", message).
+                add("messageQName", message.schemaType() != null ? message.schemaType().getName() : "n/a").
                 add("topic", topic).
                 add("producerReference", producerReference).
                 add("subscriptionReference", subscriptionReference).toString();

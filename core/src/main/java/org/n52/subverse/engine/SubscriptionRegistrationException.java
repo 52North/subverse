@@ -28,5 +28,5 @@ public class SubscriptionRegistrationException extends Exception {
     public SubscriptionRegistrationException(String message, Throwable cause) {
         super(message, cause);
     }
-    
+
 }

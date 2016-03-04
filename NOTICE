@@ -22,21 +22,26 @@ This project includes:
   ActiveMQ :: Broker under Apache License, Version 2.0
   ActiveMQ :: Client under Apache License, Version 2.0
   ActiveMQ :: Openwire Legacy Support under Apache License, Version 2.0
-  AIXM 5.1 schemas (adjusted to support metadata by reference) under The Apache Software License, Version 2.0
+  Antlr 3 Runtime under BSD License
+  AntLR Parser Generator under BSD License
+  ANTLR StringTemplate under BSD licence
   AOP alliance under Public Domain
   Apache Commons Logging under The Apache Software License, Version 2.0
   Apache HttpClient under Apache License, Version 2.0
   Apache HttpCore under Apache License, Version 2.0
   Apache Log4j under The Apache Software License, Version 2.0
   ClassLoader Leak Prevention library under Apache 2
+  Code Generation Library under ASF 2.0
   Commons Codec under The Apache Software License, Version 2.0
   Cross-Origin Resource Sharing (CORS) Filter under The Apache Software License, Version 2.0
   EPOS API module under GNU GENERAL PUBLIC LICENSE Version 2, June 1991
   EPOS Basic filters module under GNU GENERAL PUBLIC LICENSE Version 2, June 1991
   EPOS Core module under GNU GENERAL PUBLIC LICENSE Version 2, June 1991
   EPOS EML Patterns under GNU GENERAL PUBLIC LICENSE Version 2, June 1991
+  EPOS Esper Pattern Engine under GNU GENERAL PUBLIC LICENSE Version 2, June 1991
   EPOS Patterns Tools under GNU GENERAL PUBLIC LICENSE Version 2, June 1991
-  EPOS Transform module for XMLBeans bindings under GNU GENERAL PUBLIC LICENSE Version 2, June 1991
+  EPOS Transform module for AIXM using simple XPath under GNU GENERAL PUBLIC LICENSE Version 2, June 1991
+  Esper under GNU General Public License Version 2
   Event Model schema version 0.2.0 under The Apache Software License, Version 2.0
   Guava: Google Core Libraries for Java under The Apache Software License, Version 2.0
   Hamcrest Core under New BSD License
@@ -61,16 +66,11 @@ This project includes:
   OGC Filter schema (spec. v2.0) under The Apache Software License, Version 2.0
   OGC GML schema (spec. v3.1.1) under The Apache Software License, Version 2.0
   OGC GML schema (spec. v3.2.1) under The Apache Software License, Version 2.0
-  OGC O&M schema (spec. v1.0.0) under The Apache Software License, Version 2.0
-  OGC O&M schema (spec. v2.0) under The Apache Software License, Version 2.0
   OGC OWS schema (spec. v1.1.0) under The Apache Software License, Version 2.0
   OGC PubSub SOAP schema (spec. v1.0) under The Apache Software License, Version 2.0
-  OGC Sampling schema (spec. v1.0.0) under The Apache Software License, Version 2.0
-  OGC SensorML schema (spec. v1.0.1) under The Apache Software License, Version 2.0
   OGC SWECommon schema (spec. v1.0.1) under The Apache Software License, Version 2.0
   org.n52.sensorweb:52n-oxf-conversion under GNU GENERAL PUBLIC LICENSE Version 2, June 1991
   org.n52.sensorweb:52n-oxf-xmlbeans under GNU GENERAL PUBLIC LICENSE Version 2, June 1991
-  org.n52.sensorweb:52n-xml-swes-v20 under GNU GENERAL PUBLIC LICENSE Version 2, June 1991
   org.vast:swe-common-data-framework under GNU GENERAL PUBLIC LICENSE Version 2, June 1991
   proton-j under The Apache Software License, Version 2.0
   Qpid AMQP 1.0 Client under The Apache Software License, Version 2.0

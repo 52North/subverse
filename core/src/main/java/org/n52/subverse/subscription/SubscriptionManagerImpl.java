@@ -15,8 +15,6 @@
  */
 package org.n52.subverse.subscription;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.n52.subverse.IdProvider;
 import javax.inject.Inject;
 import org.n52.subverse.dao.SubscriptionDao;
@@ -80,7 +78,7 @@ public class SubscriptionManagerImpl implements SubscriptionManager {
         this.dao.storeSubscription(result);
 
         this.filterEngine.register(result, endpoint.getDeliveryEndpoint());
-        
+
         return result;
     }
 

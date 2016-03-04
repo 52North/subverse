@@ -38,7 +38,7 @@ public class NotificationConsumerImpl implements NotificationConsumer {
     public void setEngine(FilterEngine engine) {
         this.engine = engine;
     }
-    
+
     @Override
     public void receive(NotificationMessage m) {
         LOG.info("Received message: "+m);

@@ -1,0 +1,211 @@
+2016-03-04 10:16:55,418 [main] ERROR org.n52.epos.engine.EposEngine: No instance of org.n52.epos.pattern.PatternEngine available. Provide one through the ServiceLoader mechanism. Rules with instances of org.n52.epos.filter.PassiveFilter will not match!
+2016-03-04 10:16:57,330 [main] INFO  org.n52.subverse.JsonEndpoint: Loading version properties from file:/home/matthes/git/subverse/service/target/classes/version.properties [via java.io.BufferedInputStream@2bed5828]
+2016-03-04 10:16:57,330 [main] INFO  org.n52.subverse.JsonEndpoint: NEW org.n52.subverse.JsonEndpoint@1164990a
+2016-03-04 10:16:58,815 [qtp405700314-27] INFO  org.n52.subverse.notify.NotificationConsumerImpl: Received message: NotificationMessage{messageQName={http://www.opengis.net/om/1.0}ObservationType, topic=Optional[Measurements], producerReference=Optional.empty, subscriptionReference=Optional.empty}
+2016-03-04 10:16:58,828 [qtp405700314-27] DEBUG org.n52.epos.transform.TransformationRepository$Instance: Using org.n52.epos.transform.TransformationToEposEventRepository TransformationRepository
+2016-03-04 10:16:58,832 [qtp405700314-27] DEBUG org.n52.epos.transform.TransformationToEposEventRepository: Using transformer org.n52.epos.transform.xmlbeans.om10.OMParser
+2016-03-04 10:16:59,004 [qtp405700314-27] DEBUG org.n52.epos.transform.xmlbeans.om10.OMParser: ########################## parsing observed property
+2016-03-04 10:16:59,122 [qtp405700314-27] DEBUG org.n52.epos.engine.EposEngine: Received new Event: MapEvent={water_gauge=0.56, observedProperty=water_gauge, foiID=water_gauge_sensor-1, doubleValue=0.56, procedure=water_gauge_sensor-1, causality={}, sensorID=water_gauge_sensor-1, stringValue=0.56, urn__ogc__data__feature=water_gauge, startTime=1315612440000, geometry=POINT (23.581 33.023), endTime=1315612440000, value=0.56}
+2016-03-04 10:17:53,495 [PathWatcher-Thread[/home/matthes/git/subverse/core/target/classes (+51)]] ERROR org.n52.epos.engine.EposEngine: No instance of org.n52.epos.pattern.PatternEngine available. Provide one through the ServiceLoader mechanism. Rules with instances of org.n52.epos.filter.PassiveFilter will not match!
+2016-03-04 10:17:55,240 [PathWatcher-Thread[/home/matthes/git/subverse/core/target/classes (+51)]] INFO  org.n52.subverse.JsonEndpoint: Loading version properties from file:/home/matthes/git/subverse/service/target/classes/version.properties [via java.io.BufferedInputStream@d4c1a7d]
+2016-03-04 10:17:55,241 [PathWatcher-Thread[/home/matthes/git/subverse/core/target/classes (+51)]] INFO  org.n52.subverse.JsonEndpoint: NEW org.n52.subverse.JsonEndpoint@5f7dd20c
+2016-03-04 10:18:23,381 [PathWatcher-Thread[/home/matthes/git/subverse/core/target/classes (+51)]] ERROR org.n52.epos.engine.EposEngine: No instance of org.n52.epos.pattern.PatternEngine available. Provide one through the ServiceLoader mechanism. Rules with instances of org.n52.epos.filter.PassiveFilter will not match!
+2016-03-04 10:18:24,441 [PathWatcher-Thread[/home/matthes/git/subverse/core/target/classes (+51)]] INFO  org.n52.subverse.JsonEndpoint: Loading version properties from file:/home/matthes/git/subverse/service/target/classes/version.properties [via java.io.BufferedInputStream@67dd265]
+2016-03-04 10:18:24,442 [PathWatcher-Thread[/home/matthes/git/subverse/core/target/classes (+51)]] INFO  org.n52.subverse.JsonEndpoint: NEW org.n52.subverse.JsonEndpoint@b71cca7
+2016-03-04 10:18:26,475 [qtp405700314-21] INFO  org.n52.subverse.notify.NotificationConsumerImpl: Received message: NotificationMessage{messageQName={http://www.opengis.net/om/1.0}ObservationType, topic=Optional[Measurements], producerReference=Optional.empty, subscriptionReference=Optional.empty}
+2016-03-04 10:18:26,488 [qtp405700314-21] DEBUG org.n52.epos.transform.TransformationRepository$Instance: Using org.n52.epos.transform.TransformationToEposEventRepository TransformationRepository
+2016-03-04 10:18:26,488 [qtp405700314-21] DEBUG org.n52.epos.transform.TransformationToEposEventRepository: Using transformer org.n52.epos.transform.xmlbeans.om10.OMParser
+2016-03-04 10:18:26,632 [qtp405700314-21] DEBUG org.n52.epos.transform.xmlbeans.om10.OMParser: ########################## parsing observed property
+2016-03-04 10:18:26,734 [qtp405700314-21] DEBUG org.n52.epos.engine.EposEngine: Received new Event: MapEvent={water_gauge=0.56, observedProperty=water_gauge, foiID=water_gauge_sensor-1, doubleValue=0.56, procedure=water_gauge_sensor-1, causality={}, sensorID=water_gauge_sensor-1, stringValue=0.56, urn__ogc__data__feature=water_gauge, startTime=1315612440000, geometry=POINT (23.581 33.023), endTime=1315612440000, value=0.56}
+2016-03-04 10:20:31,002 [PathWatcher-Thread[/home/matthes/git/subverse/core/target/classes (+51)]] ERROR o.n.epos.engine.EposEngine: No instance of org.n52.epos.pattern.PatternEngine available. Provide one through the ServiceLoader mechanism. Rules with instances of org.n52.epos.filter.PassiveFilter will not match!
+2016-03-04 10:20:32,035 [PathWatcher-Thread[/home/matthes/git/subverse/core/target/classes (+51)]] INFO  o.n.subverse.JsonEndpoint: Loading version properties from file:/home/matthes/git/subverse/service/target/classes/version.properties [via java.io.BufferedInputStream@41f6815]
+2016-03-04 10:20:32,036 [PathWatcher-Thread[/home/matthes/git/subverse/core/target/classes (+51)]] INFO  o.n.subverse.JsonEndpoint: NEW org.n52.subverse.JsonEndpoint@563b0dd2
+2016-03-04 10:20:35,358 [qtp405700314-20] INFO  o.n.s.n.NotificationConsumerImpl: Received message: NotificationMessage{messageQName={http://www.opengis.net/om/1.0}ObservationType, topic=Optional[Measurements], producerReference=Optional.empty, subscriptionReference=Optional.empty}
+2016-03-04 10:20:35,372 [qtp405700314-20] DEBUG o.n.e.t.TransformationRepository$Instance: Using org.n52.epos.transform.TransformationToEposEventRepository TransformationRepository
+2016-03-04 10:20:35,372 [qtp405700314-20] DEBUG o.n.e.t.TransformationToEposEventRepository: Using transformer org.n52.epos.transform.xmlbeans.om10.OMParser
+2016-03-04 10:20:35,503 [qtp405700314-20] DEBUG o.n.e.t.x.om10.OMParser: ########################## parsing observed property
+2016-03-04 10:20:35,608 [qtp405700314-20] DEBUG o.n.epos.engine.EposEngine: Received new Event: MapEvent={water_gauge=0.56, observedProperty=water_gauge, foiID=water_gauge_sensor-1, doubleValue=0.56, procedure=water_gauge_sensor-1, causality={}, sensorID=water_gauge_sensor-1, stringValue=0.56, urn__ogc__data__feature=water_gauge, startTime=1315612440000, geometry=POINT (23.581 33.023), endTime=1315612440000, value=0.56}
+2016-03-04 10:20:59,253 [PathWatcher-Thread[/home/matthes/git/subverse/core/target/classes (+51)]] ERROR org.n52.epos.engine.EposEngine: No instance of org.n52.epos.pattern.PatternEngine available. Provide one through the ServiceLoader mechanism. Rules with instances of org.n52.epos.filter.PassiveFilter will not match!
+2016-03-04 10:21:00,276 [PathWatcher-Thread[/home/matthes/git/subverse/core/target/classes (+51)]] INFO  org.n52.subverse.JsonEndpoint: Loading version properties from file:/home/matthes/git/subverse/service/target/classes/version.properties [via java.io.BufferedInputStream@e6b16cf]
+2016-03-04 10:21:00,276 [PathWatcher-Thread[/home/matthes/git/subverse/core/target/classes (+51)]] INFO  org.n52.subverse.JsonEndpoint: NEW org.n52.subverse.JsonEndpoint@275b24a7
+2016-03-04 10:21:07,140 [qtp405700314-52] INFO  o.n.e.f.FilterInstantiationRepository$Instance: New FilterInstantiationRepository: org.n52.epos.engine.filter.XPathFilterRepository, supportedInput=class org.n52.epos.engine.filter.XPathConfiguration
+2016-03-04 10:21:07,142 [qtp405700314-52] INFO  o.n.e.f.FilterInstantiationRepository$Instance: New FilterInstantiationRepository: org.n52.epos.pattern.eml.EMLRuleInstantiation, supportedInput=interface net.opengis.eml.x001.EMLDocument
+2016-03-04 10:21:07,143 [qtp405700314-52] INFO  o.n.e.f.FilterInstantiationRepository$Instance: New FilterInstantiationRepository: org.n52.epos.pattern.eml.FES20FilterInstantiation, supportedInput=interface net.opengis.fes.x20.FilterDocument
+2016-03-04 10:21:07,143 [qtp405700314-52] DEBUG o.n.e.f.FilterInstantiationRepository$Instance: Found implementation: org.n52.epos.pattern.eml.FES20FilterInstantiation
+2016-03-04 10:21:07,165 [qtp405700314-52] DEBUG o.n.e.p.eml.EMLPatternFilter: initializing EMLPatternFilter controller
+2016-03-04 10:21:07,168 [qtp405700314-52] INFO  o.n52.epos.pattern.eml.EMLParser: parsing EML document
+2016-03-04 10:21:07,176 [qtp405700314-52] DEBUG o.n.e.p.eml.EMLPatternFilter: building listener for pattern defaultSimplePattern
+2016-03-04 10:21:07,271 [qtp405700314-52] DEBUG o.n.e.p.eml.EMLPatternFilter: Pattern defaultSimplePattern with statement: select * from input.win:length(1)  where SpatialMethods.bbox(SpatialMethods.fromWKT("POLYGON ((31.5899 13.0983, 31.5899 35.5472, 42.8143 35.5472, 42.8143 13.0983, 31.5899 13.0983))"), geometry)
+2016-03-04 10:21:07,271 [qtp405700314-52] DEBUG org.n52.epos.engine.EposEngine: Added new Rule: [RuleInstance] ActiveFilters: []; PassiveFilter: org.n52.epos.pattern.eml.EMLPatternFilter@7f8e7fbd
+2016-03-04 10:21:11,528 [qtp405700314-20] DEBUG o.n.e.f.FilterInstantiationRepository$Instance: Found implementation: org.n52.epos.pattern.eml.FES20FilterInstantiation
+2016-03-04 10:21:11,529 [qtp405700314-20] DEBUG o.n.e.p.eml.EMLPatternFilter: initializing EMLPatternFilter controller
+2016-03-04 10:21:11,529 [qtp405700314-20] INFO  o.n52.epos.pattern.eml.EMLParser: parsing EML document
+2016-03-04 10:21:11,530 [qtp405700314-20] DEBUG o.n.e.p.eml.EMLPatternFilter: building listener for pattern defaultSimplePattern
+2016-03-04 10:21:11,531 [qtp405700314-20] DEBUG o.n.e.p.eml.EMLPatternFilter: Pattern defaultSimplePattern with statement: select * from input.win:length(1)  where SpatialMethods.bbox(SpatialMethods.fromWKT("POLYGON ((31.5899 13.0983, 31.5899 35.5472, 42.8143 35.5472, 42.8143 13.0983, 31.5899 13.0983))"), geometry)
+2016-03-04 10:21:11,532 [qtp405700314-20] DEBUG org.n52.epos.engine.EposEngine: Added new Rule: [RuleInstance] ActiveFilters: []; PassiveFilter: org.n52.epos.pattern.eml.EMLPatternFilter@63966cc6
+2016-03-04 10:21:21,205 [qtp405700314-51] INFO  o.n.s.n.NotificationConsumerImpl: Received message: NotificationMessage{messageQName={http://www.opengis.net/om/1.0}ObservationType, topic=Optional[Measurements], producerReference=Optional.empty, subscriptionReference=Optional.empty}
+2016-03-04 10:21:21,216 [qtp405700314-51] DEBUG o.n.e.t.TransformationRepository$Instance: Using org.n52.epos.transform.TransformationToEposEventRepository TransformationRepository
+2016-03-04 10:21:21,216 [qtp405700314-51] DEBUG o.n.e.t.TransformationToEposEventRepository: Using transformer org.n52.epos.transform.xmlbeans.om10.OMParser
+2016-03-04 10:21:21,318 [qtp405700314-51] DEBUG o.n.e.t.xmlbeans.om10.OMParser: ########################## parsing observed property
+2016-03-04 10:21:21,345 [qtp405700314-51] DEBUG org.n52.epos.engine.EposEngine: Received new Event: MapEvent={water_gauge=0.56, observedProperty=water_gauge, foiID=water_gauge_sensor-1, doubleValue=0.56, procedure=water_gauge_sensor-1, causality={}, sensorID=water_gauge_sensor-1, stringValue=0.56, urn__ogc__data__feature=water_gauge, startTime=1315612440000, geometry=POINT (56.023 2.581), endTime=1315612440000, value=0.56}
+2016-03-04 10:22:05,952 [qtp405700314-38] DEBUG o.n.e.f.FilterInstantiationRepository$Instance: Found implementation: org.n52.epos.pattern.eml.FES20FilterInstantiation
+2016-03-04 10:22:05,954 [qtp405700314-38] DEBUG o.n.e.p.eml.EMLPatternFilter: initializing EMLPatternFilter controller
+2016-03-04 10:22:05,955 [qtp405700314-38] INFO  o.n52.epos.pattern.eml.EMLParser: parsing EML document
+2016-03-04 10:22:05,956 [qtp405700314-38] DEBUG o.n.e.p.eml.EMLPatternFilter: building listener for pattern defaultSimplePattern
+2016-03-04 10:22:05,958 [qtp405700314-38] DEBUG o.n.e.p.eml.EMLPatternFilter: Pattern defaultSimplePattern with statement: select * from input.win:length(1)  where SpatialMethods.bbox(SpatialMethods.fromWKT("POLYGON ((31.5899 13.0983, 31.5899 35.5472, 42.8143 35.5472, 42.8143 13.0983, 31.5899 13.0983))"), geometry)
+2016-03-04 10:22:05,958 [qtp405700314-38] DEBUG org.n52.epos.engine.EposEngine: Added new Rule: [RuleInstance] ActiveFilters: []; PassiveFilter: org.n52.epos.pattern.eml.EMLPatternFilter@4d82672d
+2016-03-04 10:22:18,323 [qtp405700314-52] INFO  o.n.s.n.NotificationConsumerImpl: Received message: NotificationMessage{messageQName={http://www.opengis.net/om/1.0}ObservationType, topic=Optional[Measurements], producerReference=Optional.empty, subscriptionReference=Optional.empty}
+2016-03-04 10:22:18,323 [qtp405700314-52] DEBUG o.n.e.t.TransformationRepository$Instance: Using org.n52.epos.transform.TransformationToEposEventRepository TransformationRepository
+2016-03-04 10:22:18,323 [qtp405700314-52] DEBUG o.n.e.t.TransformationToEposEventRepository: Using transformer org.n52.epos.transform.xmlbeans.om10.OMParser
+2016-03-04 10:22:18,328 [qtp405700314-52] DEBUG o.n.e.t.xmlbeans.om10.OMParser: ########################## parsing observed property
+2016-03-04 10:22:18,332 [qtp405700314-52] DEBUG org.n52.epos.engine.EposEngine: Received new Event: MapEvent={water_gauge=0.56, observedProperty=water_gauge, foiID=water_gauge_sensor-1, doubleValue=0.56, procedure=water_gauge_sensor-1, causality={}, sensorID=water_gauge_sensor-1, stringValue=0.56, urn__ogc__data__feature=water_gauge, startTime=1315612440000, geometry=POINT (56.023 2.581), endTime=1315612440000, value=0.56}
+2016-03-04 10:23:16,872 [qtp405700314-51] DEBUG o.n.e.f.FilterInstantiationRepository$Instance: Found implementation: org.n52.epos.pattern.eml.FES20FilterInstantiation
+2016-03-04 10:23:16,873 [qtp405700314-51] DEBUG o.n.e.p.eml.EMLPatternFilter: initializing EMLPatternFilter controller
+2016-03-04 10:23:16,874 [qtp405700314-51] INFO  o.n52.epos.pattern.eml.EMLParser: parsing EML document
+2016-03-04 10:23:16,874 [qtp405700314-51] DEBUG o.n.e.p.eml.EMLPatternFilter: building listener for pattern defaultSimplePattern
+2016-03-04 10:23:16,876 [qtp405700314-51] DEBUG o.n.e.p.eml.EMLPatternFilter: Pattern defaultSimplePattern with statement: select * from input.win:length(1)  where SpatialMethods.bbox(SpatialMethods.fromWKT("POLYGON ((-89 -179, -89 179, 89 179, 89 -179, -89 -179))"), geometry)
+2016-03-04 10:23:16,877 [qtp405700314-51] DEBUG org.n52.epos.engine.EposEngine: Added new Rule: [RuleInstance] ActiveFilters: []; PassiveFilter: org.n52.epos.pattern.eml.EMLPatternFilter@16b5af
+2016-03-04 10:23:34,305 [qtp405700314-52] INFO  o.n.s.n.NotificationConsumerImpl: Received message: NotificationMessage{messageQName={http://www.opengis.net/om/1.0}ObservationType, topic=Optional[Measurements], producerReference=Optional.empty, subscriptionReference=Optional.empty}
+2016-03-04 10:23:34,305 [qtp405700314-52] DEBUG o.n.e.t.TransformationRepository$Instance: Using org.n52.epos.transform.TransformationToEposEventRepository TransformationRepository
+2016-03-04 10:23:34,305 [qtp405700314-52] DEBUG o.n.e.t.TransformationToEposEventRepository: Using transformer org.n52.epos.transform.xmlbeans.om10.OMParser
+2016-03-04 10:23:34,308 [qtp405700314-52] DEBUG o.n.e.t.xmlbeans.om10.OMParser: ########################## parsing observed property
+2016-03-04 10:23:34,310 [qtp405700314-52] DEBUG org.n52.epos.engine.EposEngine: Received new Event: MapEvent={water_gauge=0.56, observedProperty=water_gauge, foiID=water_gauge_sensor-1, doubleValue=0.56, procedure=water_gauge_sensor-1, causality={}, sensorID=water_gauge_sensor-1, stringValue=0.56, urn__ogc__data__feature=water_gauge, startTime=1315612440000, geometry=POINT (1.023 2.581), endTime=1315612440000, value=0.56}
+2016-03-04 10:23:58,457 [qtp405700314-21] INFO  o.n.s.n.NotificationConsumerImpl: Received message: NotificationMessage{messageQName={http://www.opengis.net/om/1.0}ObservationType, topic=Optional[Measurements], producerReference=Optional.empty, subscriptionReference=Optional.empty}
+2016-03-04 10:24:03,553 [qtp405700314-21] DEBUG o.n.e.t.TransformationRepository$Instance: Using org.n52.epos.transform.TransformationToEposEventRepository TransformationRepository
+2016-03-04 10:24:03,555 [qtp405700314-21] DEBUG o.n.e.t.TransformationToEposEventRepository: Using transformer org.n52.epos.transform.xmlbeans.om10.OMParser
+2016-03-04 10:24:03,602 [qtp405700314-21] DEBUG o.n.e.t.xmlbeans.om10.OMParser: ########################## parsing observed property
+2016-03-04 10:24:07,030 [qtp405700314-21] DEBUG org.n52.epos.engine.EposEngine: Received new Event: MapEvent={water_gauge=0.56, observedProperty=water_gauge, foiID=water_gauge_sensor-1, doubleValue=0.56, procedure=water_gauge_sensor-1, causality={}, sensorID=water_gauge_sensor-1, stringValue=0.56, urn__ogc__data__feature=water_gauge, startTime=1315612440000, geometry=POINT (1.023 2.581), endTime=1315612440000, value=0.56}
+2016-03-04 10:25:51,208 [main] ERROR org.n52.epos.engine.EposEngine: No instance of org.n52.epos.pattern.PatternEngine available. Provide one through the ServiceLoader mechanism. Rules with instances of org.n52.epos.filter.PassiveFilter will not match!
+2016-03-04 10:25:53,215 [main] INFO  org.n52.subverse.JsonEndpoint: Loading version properties from file:/home/matthes/git/subverse/service/target/classes/version.properties [via java.io.BufferedInputStream@5bfdabf3]
+2016-03-04 10:25:53,216 [main] INFO  org.n52.subverse.JsonEndpoint: NEW org.n52.subverse.JsonEndpoint@663e1144
+2016-03-04 10:27:50,669 [PathWatcher-Thread[/home/matthes/git/subverse/core/target/classes (+51)]] ERROR org.n52.epos.engine.EposEngine: No instance of org.n52.epos.pattern.PatternEngine available. Provide one through the ServiceLoader mechanism. Rules with instances of org.n52.epos.filter.PassiveFilter will not match!
+2016-03-04 10:27:51,934 [PathWatcher-Thread[/home/matthes/git/subverse/core/target/classes (+51)]] INFO  org.n52.subverse.JsonEndpoint: Loading version properties from file:/home/matthes/git/subverse/service/target/classes/version.properties [via java.io.BufferedInputStream@76c6ad23]
+2016-03-04 10:27:51,935 [PathWatcher-Thread[/home/matthes/git/subverse/core/target/classes (+51)]] INFO  org.n52.subverse.JsonEndpoint: NEW org.n52.subverse.JsonEndpoint@40d2a636
+2016-03-04 10:28:14,405 [main] ERROR org.n52.epos.engine.EposEngine: No instance of org.n52.epos.pattern.PatternEngine available. Provide one through the ServiceLoader mechanism. Rules with instances of org.n52.epos.filter.PassiveFilter will not match!
+2016-03-04 10:28:16,318 [main] INFO  org.n52.subverse.JsonEndpoint: Loading version properties from file:/home/matthes/git/subverse/service/target/classes/version.properties [via java.io.BufferedInputStream@135a8808]
+2016-03-04 10:28:16,319 [main] INFO  org.n52.subverse.JsonEndpoint: NEW org.n52.subverse.JsonEndpoint@1a48a582
+2016-03-04 10:28:17,596 [qtp1560671315-23] INFO  o.n.e.f.FilterInstantiationRepository$Instance: New FilterInstantiationRepository: org.n52.epos.engine.filter.XPathFilterRepository, supportedInput=class org.n52.epos.engine.filter.XPathConfiguration
+2016-03-04 10:28:17,598 [qtp1560671315-23] INFO  o.n.e.f.FilterInstantiationRepository$Instance: New FilterInstantiationRepository: org.n52.epos.pattern.eml.EMLRuleInstantiation, supportedInput=interface net.opengis.eml.x001.EMLDocument
+2016-03-04 10:28:17,599 [qtp1560671315-23] INFO  o.n.e.f.FilterInstantiationRepository$Instance: New FilterInstantiationRepository: org.n52.epos.pattern.eml.FES20FilterInstantiation, supportedInput=interface net.opengis.fes.x20.FilterDocument
+2016-03-04 10:28:17,599 [qtp1560671315-23] DEBUG o.n.e.f.FilterInstantiationRepository$Instance: Found implementation: org.n52.epos.pattern.eml.FES20FilterInstantiation
+2016-03-04 10:28:17,625 [qtp1560671315-23] DEBUG o.n.e.p.eml.EMLPatternFilter: initializing EMLPatternFilter controller
+2016-03-04 10:28:17,629 [qtp1560671315-23] INFO  o.n52.epos.pattern.eml.EMLParser: parsing EML document
+2016-03-04 10:28:17,642 [qtp1560671315-23] DEBUG o.n.e.p.eml.EMLPatternFilter: building listener for pattern defaultSimplePattern
+2016-03-04 10:28:17,759 [qtp1560671315-23] DEBUG o.n.e.p.eml.EMLPatternFilter: Pattern defaultSimplePattern with statement: select * from input.win:length(1)  where SpatialMethods.bbox(SpatialMethods.fromWKT("POLYGON ((-89 -179, -89 179, 89 179, 89 -179, -89 -179))"), geometry)
+2016-03-04 10:28:17,760 [qtp1560671315-23] DEBUG org.n52.epos.engine.EposEngine: Added new Rule: [RuleInstance] ActiveFilters: []; PassiveFilter: org.n52.epos.pattern.eml.EMLPatternFilter@3cde5a90
+2016-03-04 10:28:21,379 [qtp1560671315-27] INFO  o.n.s.n.NotificationConsumerImpl: Received message: NotificationMessage{messageQName={http://www.opengis.net/om/1.0}ObservationType, topic=Optional[Measurements], producerReference=Optional.empty, subscriptionReference=Optional.empty}
+2016-03-04 10:28:21,389 [qtp1560671315-27] DEBUG o.n.e.t.TransformationRepository$Instance: Using org.n52.epos.transform.TransformationToEposEventRepository TransformationRepository
+2016-03-04 10:28:21,392 [qtp1560671315-27] DEBUG o.n.e.t.TransformationToEposEventRepository: Using transformer org.n52.epos.transform.xmlbeans.om10.OMParser
+2016-03-04 10:28:21,522 [qtp1560671315-27] DEBUG o.n.e.t.xmlbeans.om10.OMParser: ########################## parsing observed property
+2016-03-04 10:28:21,554 [qtp1560671315-27] DEBUG org.n52.epos.engine.EposEngine: Received new Event: MapEvent={water_gauge=0.56, observedProperty=water_gauge, foiID=water_gauge_sensor-1, doubleValue=0.56, procedure=water_gauge_sensor-1, causality={}, sensorID=water_gauge_sensor-1, stringValue=0.56, urn__ogc__data__feature=water_gauge, startTime=1315612440000, geometry=POINT (1.023 2.581), endTime=1315612440000, value=0.56}
+2016-03-04 10:28:38,022 [qtp1560671315-19] INFO  o.n.s.n.NotificationConsumerImpl: Received message: NotificationMessage{messageQName={http://www.opengis.net/om/1.0}ObservationType, topic=Optional[Measurements], producerReference=Optional.empty, subscriptionReference=Optional.empty}
+2016-03-04 10:28:40,891 [qtp1560671315-19] DEBUG o.n.e.t.TransformationRepository$Instance: Using org.n52.epos.transform.TransformationToEposEventRepository TransformationRepository
+2016-03-04 10:28:40,892 [qtp1560671315-19] DEBUG o.n.e.t.TransformationToEposEventRepository: Using transformer org.n52.epos.transform.xmlbeans.om10.OMParser
+2016-03-04 10:28:40,899 [qtp1560671315-19] DEBUG o.n.e.t.xmlbeans.om10.OMParser: ########################## parsing observed property
+2016-03-04 10:28:40,903 [qtp1560671315-19] DEBUG org.n52.epos.engine.EposEngine: Received new Event: MapEvent={water_gauge=0.56, observedProperty=water_gauge, foiID=water_gauge_sensor-1, doubleValue=0.56, procedure=water_gauge_sensor-1, causality={}, sensorID=water_gauge_sensor-1, stringValue=0.56, urn__ogc__data__feature=water_gauge, startTime=1315612440000, geometry=POINT (1.023 2.581), endTime=1315612440000, value=0.56}
+2016-03-04 10:29:42,926 [PathWatcher-Thread[/home/matthes/git/subverse/core/target/classes (+51)]] ERROR org.n52.epos.engine.EposEngine: No instance of org.n52.epos.pattern.PatternEngine available. Provide one through the ServiceLoader mechanism. Rules with instances of org.n52.epos.filter.PassiveFilter will not match!
+2016-03-04 10:29:45,156 [PathWatcher-Thread[/home/matthes/git/subverse/core/target/classes (+51)]] INFO  org.n52.subverse.JsonEndpoint: Loading version properties from file:/home/matthes/git/subverse/service/target/classes/version.properties [via java.io.BufferedInputStream@6862dc0d]
+2016-03-04 10:29:45,157 [PathWatcher-Thread[/home/matthes/git/subverse/core/target/classes (+51)]] INFO  org.n52.subverse.JsonEndpoint: NEW org.n52.subverse.JsonEndpoint@607af0c6
+2016-03-04 10:30:28,752 [main] INFO  o.n.e.e.esper.EsperFilterEngine: Init EsperFilterEngine...
+2016-03-04 10:30:30,528 [main] INFO  org.n52.subverse.JsonEndpoint: Loading version properties from file:/home/matthes/git/subverse/service/target/classes/version.properties [via java.io.BufferedInputStream@1e49a77e]
+2016-03-04 10:30:30,529 [main] INFO  org.n52.subverse.JsonEndpoint: NEW org.n52.subverse.JsonEndpoint@781bd9dd
+2016-03-04 10:30:39,809 [qtp149052735-21] INFO  o.n.e.f.FilterInstantiationRepository$Instance: New FilterInstantiationRepository: org.n52.epos.engine.filter.XPathFilterRepository, supportedInput=class org.n52.epos.engine.filter.XPathConfiguration
+2016-03-04 10:30:39,811 [qtp149052735-21] INFO  o.n.e.f.FilterInstantiationRepository$Instance: New FilterInstantiationRepository: org.n52.epos.pattern.eml.EMLRuleInstantiation, supportedInput=interface net.opengis.eml.x001.EMLDocument
+2016-03-04 10:30:39,812 [qtp149052735-21] INFO  o.n.e.f.FilterInstantiationRepository$Instance: New FilterInstantiationRepository: org.n52.epos.pattern.eml.FES20FilterInstantiation, supportedInput=interface net.opengis.fes.x20.FilterDocument
+2016-03-04 10:30:39,812 [qtp149052735-21] DEBUG o.n.e.f.FilterInstantiationRepository$Instance: Found implementation: org.n52.epos.pattern.eml.FES20FilterInstantiation
+2016-03-04 10:30:39,854 [qtp149052735-21] DEBUG o.n.e.p.eml.EMLPatternFilter: initializing EMLPatternFilter controller
+2016-03-04 10:30:39,858 [qtp149052735-21] INFO  o.n52.epos.pattern.eml.EMLParser: parsing EML document
+2016-03-04 10:30:39,880 [qtp149052735-21] DEBUG o.n.e.p.eml.EMLPatternFilter: building listener for pattern defaultSimplePattern
+2016-03-04 10:30:40,073 [qtp149052735-21] DEBUG o.n.e.p.eml.EMLPatternFilter: Pattern defaultSimplePattern with statement: select * from input.win:length(1)  where SpatialMethods.bbox(SpatialMethods.fromWKT("POLYGON ((-89 -179, -89 179, 89 179, 89 -179, -89 -179))"), geometry)
+2016-03-04 10:30:40,074 [qtp149052735-21] DEBUG o.n.e.e.esper.EsperController: initializing esper controller
+2016-03-04 10:30:40,074 [qtp149052735-21] DEBUG o.n.e.e.esper.EsperController: building listener for pattern defaultSimplePattern
+2016-03-04 10:30:40,076 [qtp149052735-21] INFO  o.n.e.e.esper.EsperController: Statements:
+	defaultSimplePattern: select * from input.win:length(1)  where SpatialMethods.bbox(SpatialMethods.fromWKT("POLYGON ((-89 -179, -89 179, 89 179, 89 -179, -89 -179))"), geometry)
+--
+2016-03-04 10:30:40,847 [qtp149052735-21] DEBUG o.n.e.e.esper.EsperController: esper controller is ready
+2016-03-04 10:30:40,847 [qtp149052735-21] INFO  o.n.e.e.esper.EsperFilterEngine: Registering EML Controller for external input stream 'input'
+2016-03-04 10:30:40,847 [qtp149052735-21] DEBUG org.n52.epos.engine.EposEngine: Added new Rule: [RuleInstance] ActiveFilters: []; PassiveFilter: org.n52.epos.pattern.eml.EMLPatternFilter@2a1c275b
+2016-03-04 10:30:47,392 [qtp149052735-19] INFO  o.n.s.n.NotificationConsumerImpl: Received message: NotificationMessage{messageQName={http://www.opengis.net/om/1.0}ObservationType, topic=Optional[Measurements], producerReference=Optional.empty, subscriptionReference=Optional.empty}
+2016-03-04 10:30:47,403 [qtp149052735-19] DEBUG o.n.e.t.TransformationRepository$Instance: Using org.n52.epos.transform.TransformationToEposEventRepository TransformationRepository
+2016-03-04 10:30:47,406 [qtp149052735-19] DEBUG o.n.e.t.TransformationToEposEventRepository: Using transformer org.n52.epos.transform.xmlbeans.om10.OMParser
+2016-03-04 10:30:47,536 [qtp149052735-19] DEBUG o.n.e.t.xmlbeans.om10.OMParser: ########################## parsing observed property
+2016-03-04 10:30:47,565 [qtp149052735-19] DEBUG org.n52.epos.engine.EposEngine: Received new Event: MapEvent={water_gauge=0.56, observedProperty=water_gauge, foiID=water_gauge_sensor-1, doubleValue=0.56, procedure=water_gauge_sensor-1, causality={}, sensorID=water_gauge_sensor-1, stringValue=0.56, urn__ogc__data__feature=water_gauge, startTime=1315612440000, geometry=POINT (1.023 2.581), endTime=1315612440000, value=0.56}
+2016-03-04 10:30:53,323 [qtp149052735-19] DEBUG org.n52.epos.engine.EposEngine: Pusing event into PatternEngine instance.
+2016-03-04 10:30:53,323 [qtp149052735-19] INFO  o.n.e.e.esper.EsperFilterEngine: Inserting Event: MapEvent={water_gauge=0.56, observedProperty=water_gauge, foiID=water_gauge_sensor-1, doubleValue=0.56, procedure=water_gauge_sensor-1, causality={}, sensorID=water_gauge_sensor-1, stringValue=0.56, urn__ogc__data__feature=water_gauge, startTime=1315612440000, geometry=POINT (1.023 2.581), endTime=1315612440000, value=0.56}
+2016-03-04 10:30:53,323 [qtp149052735-19] DEBUG o.n.e.e.esper.EsperController: posting new event (1457083853323; hash=1849460569):
+	name:  input
+2016-03-04 10:30:53,328 [qtp149052735-19] DEBUG o.n.e.e.esper.StatementListener: Statement EMLEventPattern: select * from input.win:length(1)  where SpatialMethods.bbox(SpatialMethods.fromWKT("POLYGON ((-89 -179, -89 179, 89 179, 89 -179, -89 -179))"), geometry) matched for Event 'MapEvent={water_gauge=0.56, observedProperty=water_gauge, foiID=water_gauge_sensor-1, doubleValue=0.56, procedure=water_gauge_sensor-1, causality={}, sensorID=water_gauge_sensor-1, stringValue=0.56, urn__ogc__data__feature=water_gauge, startTime=1315612440000, geometry=POINT (1.023 2.581), endTime=1315612440000, value=0.56}'
+2016-03-04 10:30:53,330 [EML-UpdateHandlerPool-2-thread-1] DEBUG o.n.e.e.e.UpdateHandlerThread: Update received for pattern: EMLEventPattern: select * from input.win:length(1)  where SpatialMethods.bbox(SpatialMethods.fromWKT("POLYGON ((-89 -179, -89 179, 89 179, 89 -179, -89 -179))"), geometry)
+2016-03-04 10:30:53,331 [EML-UpdateHandlerPool-2-thread-1] DEBUG o.n.e.e.e.UpdateHandlerThread: performing output for statement: select * from input.win:length(1)  where SpatialMethods.bbox(SpatialMethods.fromWKT("POLYGON ((-89 -179, -89 179, 89 179, 89 -179, -89 -179))"), geometry)
+2016-03-04 10:30:53,331 [EML-UpdateHandlerPool-2-thread-1] DEBUG o.n.e.e.esper.StatementListener: performing output for pattern:
+EMLEventPattern: select * from input.win:length(1)  where SpatialMethods.bbox(SpatialMethods.fromWKT("POLYGON ((-89 -179, -89 179, 89 179, 89 -179, -89 -179))"), geometry)
+2016-03-04 10:30:53,331 [EML-UpdateHandlerPool-2-thread-1] INFO  o.n.e.e.esper.StatementListener: trying to send original message as output
+2016-03-04 10:30:53,331 [EML-UpdateHandlerPool-2-thread-1] INFO  o.n.e.e.esper.StatementListener: sending original message
+2016-03-04 10:30:53,331 [EML-UpdateHandlerPool-2-thread-1] DEBUG o.n.e.engine.rules.RuleInstance: Received Event, evaluating activeFilters...
+2016-03-04 10:30:53,331 [EML-UpdateHandlerPool-2-thread-1] DEBUG o.n.e.engine.rules.RuleInstance: All activeFilters matched. Calling listener.
+2016-03-04 10:30:53,332 [EML-UpdateHandlerPool-2-thread-1] INFO  o.n.s.d.wsn.WsnConsumerEndpoint: Should delivery this object to http://receiver.org/consumer: <xml-fragment gml:id="ot_279501-4" xmlns:gml="http://www.opengis.net/gml" xmlns:om="http://www.opengis.net/om/1.0" xmlns:sa="http://www.opengis.net/sampling/1.0" xmlns:swe="http://www.opengis.net/swe/1.0.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:wsa="http://www.w3.org/2005/08/addressing" xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2">
+  <om:samplingTime>
+    <gml:TimePeriod>
+      <gml:beginPosition>2011-09-10T01:54:00.000+02:00</gml:beginPosition>
+      <gml:endPosition>2011-09-10T01:54:00.000+02:00</gml:endPosition>
+    </gml:TimePeriod>
+  </om:samplingTime>
+  <om:procedure xlink:href="water_gauge_sensor-1"/>
+  <om:observedProperty xlink:href="water_gauge"/>
+  <om:featureOfInterest>
+    <gml:FeatureCollection>
+      <gml:featureMember>
+        <sa:SamplingPoint gml:id="water_gauge_sensor-1">
+          <gml:name>water_gauge_sensor-1</gml:name>
+          <sa:sampledFeature xlink:href="urn:ogc:def:nil:OGC:unknown"/>
+          <sa:position>
+            <gml:Point>
+              <gml:pos srsName="urn:ogc:def:crs:EPSG::4326">1.023 2.581</gml:pos>
+            </gml:Point>
+          </sa:position>
+        </sa:SamplingPoint>
+      </gml:featureMember>
+    </gml:FeatureCollection>
+  </om:featureOfInterest>
+  <om:result>
+    <swe:DataArray>
+      <swe:elementCount>
+        <swe:Count>
+          <swe:value>1</swe:value>
+        </swe:Count>
+      </swe:elementCount>
+      <swe:elementType name="Components">
+        <swe:DataRecord>
+          <swe:field name="Time">
+            <swe:Time definition="urn:ogc:data:time:iso8601"/>
+          </swe:field>
+          <swe:field name="feature">
+            <swe:Text definition="urn:ogc:data:feature"/>
+          </swe:field>
+          <swe:field name="water_gauge">
+            <swe:Quantity definition="water_gauge">
+              <swe:uom code="m"/>
+            </swe:Quantity>
+          </swe:field>
+        </swe:DataRecord>
+      </swe:elementType>
+      <swe:encoding>
+        <swe:TextBlock blockSeparator=";" decimalSeparator="." tokenSeparator=","/>
+      </swe:encoding>
+      <swe:values>2011-09-10T01:54:00.000+02:00,water_gauge,0.56;</swe:values>
+    </swe:DataArray>
+  </om:result>
+</xml-fragment>
+2016-03-04 10:31:49,244 [qtp149052735-22] DEBUG o.n.e.f.FilterInstantiationRepository$Instance: Found implementation: org.n52.epos.pattern.eml.FES20FilterInstantiation
+2016-03-04 10:31:49,245 [qtp149052735-22] DEBUG o.n.e.p.eml.EMLPatternFilter: initializing EMLPatternFilter controller
+2016-03-04 10:31:49,246 [qtp149052735-22] INFO  o.n52.epos.pattern.eml.EMLParser: parsing EML document
+2016-03-04 10:31:49,246 [qtp149052735-22] DEBUG o.n.e.p.eml.EMLPatternFilter: building listener for pattern defaultSimplePattern
+2016-03-04 10:31:49,248 [qtp149052735-22] DEBUG o.n.e.p.eml.EMLPatternFilter: Pattern defaultSimplePattern with statement: select * from input.win:length(1)  where SpatialMethods.bbox(SpatialMethods.fromWKT("POLYGON ((-179 -89, -179 89, 179 89, 179 -89, -179 -89))"), geometry)
+2016-03-04 10:31:49,248 [qtp149052735-22] DEBUG o.n.e.e.esper.EsperController: initializing esper controller
+2016-03-04 10:31:49,248 [qtp149052735-22] DEBUG o.n.e.e.esper.EsperController: building listener for pattern defaultSimplePattern
+2016-03-04 10:31:49,248 [qtp149052735-22] INFO  o.n.e.e.esper.EsperController: Statements:
+	defaultSimplePattern: select * from input.win:length(1)  where SpatialMethods.bbox(SpatialMethods.fromWKT("POLYGON ((-179 -89, -179 89, 179 89, 179 -89, -179 -89))"), geometry)
+--
+2016-03-04 10:31:49,366 [qtp149052735-22] DEBUG o.n.e.e.esper.EsperController: esper controller is ready
+2016-03-04 10:31:49,366 [qtp149052735-22] INFO  o.n.e.e.esper.EsperFilterEngine: Registering EML Controller for external input stream 'input'
+2016-03-04 10:31:49,366 [qtp149052735-22] DEBUG org.n52.epos.engine.EposEngine: Added new Rule: [RuleInstance] ActiveFilters: []; PassiveFilter: org.n52.epos.pattern.eml.EMLPatternFilter@37b578e7
