@@ -19,25 +19,32 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 import javax.inject.Inject;
+import javax.xml.namespace.QName;
 import org.apache.xmlbeans.XmlObject;
 import org.n52.iceland.coding.encode.Encoder;
 import org.n52.iceland.coding.encode.EncoderKey;
 import org.n52.iceland.coding.encode.EncoderRepository;
 import org.n52.iceland.coding.encode.OperationResponseEncoderKey;
 import org.n52.iceland.coding.encode.XmlEncoderKey;
+import org.n52.iceland.exception.ows.NoApplicableCodeException;
 import org.n52.iceland.exception.ows.OwsExceptionReport;
 import org.n52.iceland.exception.ows.concrete.NoEncoderForResponseException;
 import org.n52.iceland.exception.ows.concrete.UnsupportedEncoderInputException;
 import org.n52.iceland.ogc.ows.OWSConstants;
 import org.n52.iceland.response.AbstractServiceResponse;
 import org.n52.iceland.response.NoContentResponse;
+import org.n52.iceland.util.http.HTTPStatus;
 import org.n52.iceland.util.http.MediaType;
 import org.n52.iceland.util.http.MediaTypes;
 import org.n52.iceland.util.http.NoContent;
 import org.n52.iceland.w3c.soap.SoapResponse;
 import org.w3.x2003.x05.soapEnvelope.Body;
+import org.w3.x2003.x05.soapEnvelope.Detail;
 import org.w3.x2003.x05.soapEnvelope.Envelope;
 import org.w3.x2003.x05.soapEnvelope.EnvelopeDocument;
+import org.w3.x2003.x05.soapEnvelope.Fault;
+import org.w3.x2003.x05.soapEnvelope.FaultDocument;
+import org.w3.x2003.x05.soapEnvelope.Faultcode;
 
 /**
  *
@@ -70,7 +77,7 @@ public class SoapEnvelopeEncoder implements Encoder<Object, SoapResponse> {
 
         /*
         * Special case: NoContent
-        */
+         */
         if (bodyContent instanceof NoContentResponse) {
             return new NoContent();
         }
@@ -80,7 +87,12 @@ public class SoapEnvelopeEncoder implements Encoder<Object, SoapResponse> {
 
         Body body = env.addNewBody();
 
-        body.set(encodeBody(bodyContent));
+        if (bodyContent != null) {
+            body.set(encodeBody(bodyContent));
+        } else {
+            OwsExceptionReport exception = objectToEncode.getException();
+            body.set(encodeException(exception));
+        }
 
         return envDoc;
     }
@@ -104,7 +116,31 @@ public class SoapEnvelopeEncoder implements Encoder<Object, SoapResponse> {
             return (XmlObject) encoder.encode(bodyContent);
         }
 
-        throw new NoEncoderForResponseException().withMessage("No encoder found for key: "+key);
+        throw new NoEncoderForResponseException().withMessage("No encoder found for key: " + key);
+    }
+
+    private XmlObject encodeException(OwsExceptionReport exception) {
+        OwsExceptionReport targetException;
+        if (exception == null) {
+            targetException = new NoApplicableCodeException().withMessage("Unexpected error");
+        } else {
+            targetException = exception;
+        }
+
+        FaultDocument faultDoc = FaultDocument.Factory.newInstance();
+        Fault fault = faultDoc.addNewFault();
+        Faultcode code = fault.addNewCode();
+        code.setValue(new QName(EnvelopeDocument.type.getDocumentElementName().getNamespaceURI(),
+                determineCauser(targetException.getStatus())));
+
+        Detail detail = fault.addNewDetail();
+        detail.set(new OwsExceptionReportEncoder().encode(targetException));
+
+        return faultDoc;
+    }
+
+    private String determineCauser(HTTPStatus status) {
+        return status.isClientError() ? "Sender" : "Receiver";
     }
 
 }

@@ -102,7 +102,7 @@ public class SubscribeDecoder implements Decoder<AbstractServiceRequest, String>
             terminationTime = parseDateTime(subscribe.xgetInitialTerminationTime());
             if (terminationTime.isBeforeNow()) {
                 throw new UnacceptableInitialTerminationTimeFault(
-                        "The termination time must be in the futuer: "+terminationTime);
+                        "The termination time must be in the future: "+terminationTime);
             }
         }
 

@@ -32,7 +32,7 @@ public class DeliveryProviderRepository {
 
 
     public DeliveryProvider getProvider(Optional<DeliveryDefinition> deliveryDefinition) {
-        if (deliveryDefinition.isPresent()) {
+        if (deliveryDefinition.isPresent() && providers != null) {
             String id = deliveryDefinition.get().getIdentifier();
 
             for (DeliveryProvider provider : providers) {

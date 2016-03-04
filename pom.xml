@@ -287,6 +287,11 @@
                 <artifactId>52n-xml-wsrf-v12</artifactId>
                 <version>${common-xml.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.n52.sensorweb</groupId>
+                <artifactId>52n-xml-ows-v110</artifactId>
+                <version>${common-xml.version}</version>
+            </dependency>
             
             <dependency>
                 <groupId>joda-time</groupId>
