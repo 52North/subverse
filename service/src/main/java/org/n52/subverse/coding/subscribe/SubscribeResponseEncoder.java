@@ -17,10 +17,19 @@ package org.n52.subverse.coding.subscribe;
 
 import com.google.common.collect.Sets;
 import java.util.Collections;
+import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
+import javax.inject.Inject;
+import net.opengis.pubsub.x10.SubscriptionIdentifierDocument;
+import net.opengis.pubsub.x10.SubscriptionIdentifierType;
 import org.apache.xmlbeans.XmlCursor;
 import org.apache.xmlbeans.XmlObject;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
+import org.joda.time.format.DateTimeFormatter;
+import org.joda.time.format.ISODateTimeFormat;
 import org.n52.iceland.coding.encode.Encoder;
 import org.n52.iceland.coding.encode.EncoderKey;
 import org.n52.iceland.coding.encode.OperationResponseEncoderKey;
@@ -29,11 +38,14 @@ import org.n52.iceland.exception.ows.concrete.UnsupportedEncoderInputException;
 import org.n52.iceland.ogc.ows.OWSConstants;
 import org.n52.iceland.util.http.MediaType;
 import org.n52.iceland.util.http.MediaTypes;
+import org.n52.subverse.ServiceInstanceInformation;
 import org.n52.subverse.SubverseConstants;
 import org.n52.subverse.response.SubscribeResponse;
+import org.n52.subverse.subscription.Subscription;
 import org.oasisOpen.docs.wsn.b2.SubscribeResponseDocument;
 import org.w3.x2005.x08.addressing.AttributedURIType;
 import org.w3.x2005.x08.addressing.EndpointReferenceType;
+import org.w3.x2005.x08.addressing.ReferenceParametersType;
 
 /**
  *
@@ -51,6 +63,19 @@ public class SubscribeResponseEncoder implements Encoder<XmlObject, SubscribeRes
                     SubverseConstants.OPERATION_SUBSCRIBE,
                     MediaTypes.APPLICATION_XML));
 
+    private final DateTimeFormatter isoFormat = ISODateTimeFormat.dateTimeNoMillis();
+
+    private ServiceInstanceInformation serviceInfo;
+
+    public ServiceInstanceInformation getServiceInfo() {
+        return serviceInfo;
+    }
+
+    @Inject
+    public void setServiceInfo(ServiceInstanceInformation serviceInfo) {
+        this.serviceInfo = serviceInfo;
+    }
+
     @Override
     public XmlObject encode(SubscribeResponse objectToEncode) throws OwsExceptionReport, UnsupportedEncoderInputException {
         return encode(objectToEncode, Collections.emptyMap());
@@ -61,16 +86,29 @@ public class SubscribeResponseEncoder implements Encoder<XmlObject, SubscribeRes
         SubscribeResponseDocument result = SubscribeResponseDocument.Factory.newInstance();
         SubscribeResponseDocument.SubscribeResponse resp = result.addNewSubscribeResponse();
 
+        Subscription subscriptionObject = objectToEncode.getSubscription();
+
         /*
-        * TODO: implement details
+         * tiem stamps
+         */
+        resp.setCurrentTime(new DateTime(DateTimeZone.UTC).toCalendar(Locale.getDefault()));
+        Optional<DateTime> termTime = subscriptionObject.getOptions().getTerminationTime();
+        if (termTime.isPresent()) {
+            resp.setTerminationTime(termTime.get().toCalendar(Locale.getDefault()));
+        }
+
+        /*
+        * sub ID
         */
 
         EndpointReferenceType ref = resp.addNewSubscriptionReference();
         AttributedURIType add = ref.addNewAddress();
+        add.setStringValue(this.serviceInfo.getUrl());
 
-        XmlCursor cur = add.newCursor();
-        cur.toFirstContentToken();
-        cur.insertChars("test");
+        ReferenceParametersType refParams = ref.addNewReferenceParameters();
+        SubscriptionIdentifierDocument subIdDoc = SubscriptionIdentifierDocument.Factory.newInstance();
+        subIdDoc.setSubscriptionIdentifier(subscriptionObject.getId());
+        refParams.set(subIdDoc);
 
         return result;
     }

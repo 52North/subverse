@@ -25,6 +25,7 @@ public class Subscription {
         this.id = id;
         this.options = options;
         this.endpoint = endpoint;
+
     }
 
     public String getId() {
