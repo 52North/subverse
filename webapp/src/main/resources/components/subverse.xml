@@ -39,6 +39,7 @@
     <bean class="org.n52.svalbard.soap.SoapEnvelopeEncoder" />
     <bean class="org.n52.subverse.coding.subscribe.SubscribeResponseEncoder" />
     <bean class="org.n52.subverse.coding.notify.NoContentEncoder" />
+    <bean class="org.n52.svalbard.soap.OwsExceptionReportEncoder" />
 
     <!-- response writer -->
     <bean class="org.n52.subverse.writer.XmlBeansWriterFactory" />

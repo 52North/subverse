@@ -15,27 +15,55 @@
  */
 package org.n52.svalbard.soap;
 
+import java.util.Collections;
+import java.util.Map;
+import java.util.Set;
 import net.opengis.ows.x11.ExceptionReportDocument;
 import net.opengis.ows.x11.ExceptionType;
 import org.apache.xmlbeans.XmlObject;
+import org.n52.iceland.coding.encode.Encoder;
+import org.n52.iceland.coding.encode.EncoderKey;
+import org.n52.iceland.coding.encode.ExceptionEncoderKey;
 import org.n52.iceland.exception.ows.OwsExceptionReport;
+import org.n52.iceland.exception.ows.concrete.UnsupportedEncoderInputException;
+import org.n52.iceland.ogc.ows.OWSConstants;
+import org.n52.iceland.util.http.MediaType;
+import org.n52.iceland.util.http.MediaTypes;
 
 /**
  *
  * @author Matthes Rieke <m.rieke@52north.org>
  */
-public class OwsExceptionReportEncoder {
+public class OwsExceptionReportEncoder implements Encoder<XmlObject, OwsExceptionReport> {
+    
+    private static final EncoderKey KEY = new ExceptionEncoderKey(MediaTypes.APPLICATION_XML);
 
-    XmlObject encode(OwsExceptionReport targetException) {
+    @Override
+    public XmlObject encode(OwsExceptionReport objectToEncode) throws OwsExceptionReport, UnsupportedEncoderInputException {
+        return encode(objectToEncode, Collections.emptyMap());
+    }
+
+    @Override
+    public XmlObject encode(OwsExceptionReport objectToEncode, Map<OWSConstants.HelperValues, String> additionalValues) throws OwsExceptionReport, UnsupportedEncoderInputException {
         ExceptionReportDocument excRepDoc = ExceptionReportDocument.Factory.newInstance();
         ExceptionReportDocument.ExceptionReport excRep = excRepDoc.addNewExceptionReport();
 
         ExceptionType exception = excRep.addNewException();
-        exception.addExceptionText(targetException.getMessage());
+        exception.addExceptionText(objectToEncode.getMessage());
 
         exception.setExceptionCode(exception.getExceptionCode());
 
         return excRepDoc;
+    }
+
+    @Override
+    public MediaType getContentType() {
+        return MediaTypes.APPLICATION_XML;
+    }
+
+    @Override
+    public Set<EncoderKey> getKeys() {
+        return Collections.singleton(KEY);
     }
 
 }

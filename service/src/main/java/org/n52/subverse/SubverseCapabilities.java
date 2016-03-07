@@ -42,4 +42,28 @@ public class SubverseCapabilities extends OwsCapabilities {
         this.publications = ps;
     }
 
+    public FilterCapabilities getFilterCapabilities() {
+        return filterCapabilities;
+    }
+
+    public DeliveryCapabilities getDeliveryCapabilities() {
+        return deliveryCapabilities;
+    }
+
+    public Publications getPublications() {
+        return publications;
+    }
+
+    public boolean isSetFilterCapabilities() {
+        return filterCapabilities != null;
+    }
+
+    public boolean isSetDeliveryCapabilities() {
+        return deliveryCapabilities != null;
+    }
+
+    public boolean isSetPublications() {
+        return publications != null;
+    }
+    
 }

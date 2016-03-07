@@ -70,6 +70,7 @@ public class ServiceResponseWriter extends AbstractResponseWriter<AbstractServic
         try {
             encode = encoder.encode(asr);
         } catch (RuntimeException e) {
+            log.warn("Unexpected error", e);
             throw new NoApplicableCodeException().withMessage("Internal server error during encoding.").causedBy(e);
         }
         if (encode == null) {

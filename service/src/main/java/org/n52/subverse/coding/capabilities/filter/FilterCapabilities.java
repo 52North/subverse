@@ -56,6 +56,8 @@ public class FilterCapabilities {
         return doc;
     }
 
-
+    public List<FilterLanguage> getLanguages() {
+        return languages;
+    }
 
 }

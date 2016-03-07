@@ -39,4 +39,8 @@ public class DeliveryCapabilities {
         }
     }
 
+    public List<DeliveryMethod> getMethods() {
+        return methods;
+    }
+
 }
