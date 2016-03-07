@@ -47,13 +47,13 @@ public class GetCapabilitiesKvpDecoder extends KvpDecoder<GetCapabilitiesRequest
     @Override
     protected void decodeParameter(GetCapabilitiesRequest request, String name, String values) throws OwsExceptionReport {
         switch (name.toLowerCase()) {
-            case SubverseConstants.OperationParameter.service:
+            case SubverseConstants.Param.SERVICE:
                 request.setService(KvpHelper.checkParameterSingleValue(values, name));
                 break;
-            case SubverseConstants.OperationParameter.request:
+            case SubverseConstants.Param.REQUEST:
                 KvpHelper.checkParameterSingleValue(values, name);
                 break;
-            case SubverseConstants.GetCapabilitiesParameter.acceptversions:
+            case SubverseConstants.GetCapabilitiesParam.ACCCEPTVERSIONS:
                 if (values.isEmpty()) {
                     throw new MissingParameterValueException(name);
                 }

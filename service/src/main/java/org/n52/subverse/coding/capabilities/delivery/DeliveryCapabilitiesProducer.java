@@ -13,19 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.n52.subverse.delivery;
+package org.n52.subverse.coding.capabilities.delivery;
+
+import org.n52.iceland.util.Producer;
+import org.n52.subverse.delivery.DeliveryProviderRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+
 
 /**
  *
  * @author Matthes Rieke <m.rieke@52north.org>
  */
-public interface DeliveryProvider {
+public class DeliveryCapabilitiesProducer implements Producer<DeliveryCapabilities> {
 
-    boolean supportsDeliveryIdentifier(String id);
+    @Autowired
+    private DeliveryProviderRepository deliveryProviderRepository;
 
-    String getIdentifier();
+    @Override
+    public DeliveryCapabilities get() {
+        return new DeliveryCapabilities(this.deliveryProviderRepository.getProviders());
+    }
 
-    String getAbstract();
-
-    DeliveryEndpoint createDeliveryEndpoint(DeliveryDefinition def) throws UnsupportedDeliveryDefinitionException;
 }

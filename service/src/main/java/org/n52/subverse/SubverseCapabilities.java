@@ -16,11 +16,30 @@
 package org.n52.subverse;
 
 import org.n52.iceland.ogc.ows.OwsCapabilities;
+import org.n52.subverse.coding.capabilities.delivery.DeliveryCapabilities;
+import org.n52.subverse.coding.capabilities.filter.FilterCapabilities;
+import org.n52.subverse.coding.capabilities.publications.Publications;
 
 public class SubverseCapabilities extends OwsCapabilities {
 
+    private FilterCapabilities filterCapabilities;
+    private DeliveryCapabilities deliveryCapabilities;
+    private Publications publications;
+
     public SubverseCapabilities(String version) {
         super(SubverseConstants.SERVICE, version);
+    }
+
+    public void setFilterCapabilities(FilterCapabilities fc) {
+        this.filterCapabilities = fc;
+    }
+
+    public void setDeliveryCapabilities(DeliveryCapabilities dc) {
+        this.deliveryCapabilities = dc;
+    }
+
+    public void setPublications(Publications ps) {
+        this.publications = ps;
     }
 
 }

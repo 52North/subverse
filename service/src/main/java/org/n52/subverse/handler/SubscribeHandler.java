@@ -60,7 +60,9 @@ public class SubscribeHandler implements OperationHandler {
 
     @Override
     public OwsOperation getOperationsMetadata(String service, String version) throws OwsExceptionReport {
-        return new OwsOperation();
+        OwsOperation op = new OwsOperation();
+        op.setOperationName(getOperationName());
+        return op;
     }
 
     @Override

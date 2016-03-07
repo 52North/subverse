@@ -40,7 +40,9 @@ public class UnsubscribeHandler implements OperationHandler {
 
     @Override
     public OwsOperation getOperationsMetadata(String service, String version) throws OwsExceptionReport {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        OwsOperation op = new OwsOperation();
+        op.setOperationName(getOperationName());
+        return op;
     }
 
     @Override

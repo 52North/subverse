@@ -83,13 +83,13 @@
     "serviceIdentification.abstract" : {
       "type" : "multilingual",
       "value" : {
-        "eng" : "52North subverse Service"
+        "eng" : "52°North subverse Service"
       }
     },
     "serviceIdentification.title" : {
       "type" : "multilingual",
       "value" : {
-        "eng" : "TEST"
+        "eng" : "subverse"
       }
     },
     "serviceIdentification.keywords" : {
@@ -143,6 +143,10 @@
     "misc.includeOriginalRequest" : {
       "type" : "boolean",
       "value" : false
+    },
+    "subverse.publications" : {
+      "type" : "string",
+      "value" : "testData|Some test data"
     }
   }
 }

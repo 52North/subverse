@@ -7,4 +7,13 @@
         <property name="order" value="5.0" />
     </bean>
 
+    <bean class="org.n52.iceland.config.settings.StringSettingDefinition">
+        <property name="key" value="subverse.publications" />
+        <property name="title" value="Provided Publications" />
+        <property name="description" value="The publications provided by subverse. Format: [id],[abstract]|[id],[abstract]|..." />
+        <property name="order" value="33.1" />
+        <property name="group" ref="subverseSettingDefintionGroup" />
+        <property name="defaultValue" value="all|All data" />
+    </bean>
+
 </beans>

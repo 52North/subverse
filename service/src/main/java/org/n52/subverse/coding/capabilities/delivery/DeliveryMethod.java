@@ -13,14 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.n52.subverse;
+package org.n52.subverse.coding.capabilities.delivery;
 
 /**
  *
  * @author Matthes Rieke <m.rieke@52north.org>
  */
-public interface ServiceInstanceInformation {
+public class DeliveryMethod {
 
-    String getUrl();
+    private final String theAbstract;
+    private final String identifier;
+
+    public DeliveryMethod(String theAbstract, String identifier) {
+        this.theAbstract = theAbstract;
+        this.identifier = identifier;
+    }
+
+    public String getTheAbstract() {
+        return theAbstract;
+    }
+
+    public String getIdentifier() {
+        return identifier;
+    }
 
 }

@@ -13,19 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.n52.subverse.delivery;
+package org.n52.subverse.coding.capabilities.publications;
 
 /**
  *
  * @author Matthes Rieke <m.rieke@52north.org>
  */
-public interface DeliveryProvider {
+public class Publication {
 
-    boolean supportsDeliveryIdentifier(String id);
+    private final String theAbstract;
+    private final String identifier;
 
-    String getIdentifier();
+    public Publication(String theAbstract, String identifier) {
+        this.theAbstract = theAbstract;
+        this.identifier = identifier;
+    }
 
-    String getAbstract();
+    public String getTheAbstract() {
+        return theAbstract;
+    }
 
-    DeliveryEndpoint createDeliveryEndpoint(DeliveryDefinition def) throws UnsupportedDeliveryDefinitionException;
+    public String getIdentifier() {
+        return identifier;
+    }
+
 }

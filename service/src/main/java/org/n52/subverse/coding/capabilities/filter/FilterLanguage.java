@@ -13,23 +13,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.n52.subverse;
+package org.n52.subverse.coding.capabilities.filter;
 
 /**
  *
  * @author Matthes Rieke <m.rieke@52north.org>
  */
-public class ServiceInstanceInformationImpl implements ServiceInstanceInformation {
+public class FilterLanguage {
 
-    private String url = "http://localhost:8080/subverse-webapp/service";
+    private final String theAbstract;
+    private final String identifier;
+    private final Object supportedCapabilities;
 
-    @Override
-    public String getUrl() {
-        return url;
+    public FilterLanguage(String theAbstract, String identifier, Object supportedCapabilities) {
+        this.theAbstract = theAbstract;
+        this.identifier = identifier;
+        this.supportedCapabilities = supportedCapabilities;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
+    public String getTheAbstract() {
+        return theAbstract;
+    }
+
+    public String getIdentifier() {
+        return identifier;
+    }
+
+    public Object getSupportedCapabilities() {
+        return supportedCapabilities;
     }
 
 }

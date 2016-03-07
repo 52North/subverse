@@ -15,10 +15,9 @@
  */
 package org.n52.subverse;
 
-/**
- *
- * @author <a href="mailto:d.nuest@52north.org">Daniel Nüst</a>
- */
+import org.n52.iceland.exception.CodedException;
+import org.n52.iceland.exception.ows.InvalidParameterValueException;
+
 public interface SubverseConstants {
 
     String WS_N_NAMESPACE = "http://docs.oasis-open.org/wsn/b-2";
@@ -45,25 +44,48 @@ public interface SubverseConstants {
 
     }
 
-    interface OperationParameter {
+    interface Param {
 
-        String service = "service"; // OWSConstants.RequestParams.service.name().toLowerCase();
+        String SERVICE = "service";
+        String REQUEST = "request";
+        String VERSION = "version";
 
-        String version = "version"; // OWSConstants.RequestParams.version.name().toLowerCase();
-
-        String request = "request";
     }
 
-    interface GetCapabilitiesParameter {
+    interface GetCapabilitiesParam extends Param {
 
-        String acceptversions = "acceptversions";
-    }
+        String SECTIONS = "Sections";
+        String SECTIONS_LOWERCASE = "sections";
+        String UPDATE_SEQUENCE = "updateSequence";
+        String UPDATE_SEQUENCE_LOWERCASE = "updatesequence";
+        String ACCCEPTVERSIONS = "AcceptVersions";
+        String ACCCEPTVERSIONS_LOWERCASE = "acceptversions";
+        String ACCEPT_FORMATS = "acceptformats";
+        String ACCEPT_FORMATS_LOWERCASE = "AcceptFormats";
+        String LANGUAGE = "LANGUAGE";
+        String LANGUAGE_LOWERCASE = "language";
 
-    interface DemoParameter {
+        enum ServiceMetadataSections {
 
-        String one = "one";
+            All,
+            ServiceIdentification,
+            ServiceProvider,
+            OperationsMetadata,
+            FilterCapabilities,
+            DeliveryCapabilities,
+            Publications;
 
-        String two = "two";
+            public static ServiceMetadataSections lookup(String value) throws CodedException {
+                for (ServiceMetadataSections e : values()) {
+                    if (e.toString().equalsIgnoreCase(value)) {
+                        return e;
+                    }
+                }
+                throw new InvalidParameterValueException().at(GetCapabilitiesParam.SECTIONS)
+                        .withMessage("The requested section '%s' does not exist or is not supported!", value);
+            }
+
+        }
 
     }
 

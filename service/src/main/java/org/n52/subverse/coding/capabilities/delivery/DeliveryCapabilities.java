@@ -13,19 +13,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.n52.subverse.delivery;
+package org.n52.subverse.coding.capabilities.delivery;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Objects;
+import org.n52.subverse.delivery.DeliveryProvider;
 
 /**
  *
  * @author Matthes Rieke <m.rieke@52north.org>
  */
-public interface DeliveryProvider {
+public class DeliveryCapabilities {
 
-    boolean supportsDeliveryIdentifier(String id);
+    private List<DeliveryMethod> methods;
 
-    String getIdentifier();
+    DeliveryCapabilities(Collection<DeliveryProvider> providers) {
+        Objects.requireNonNull(providers);
+        this.methods = new ArrayList<>(providers.size());
 
-    String getAbstract();
+        for (DeliveryProvider provider : providers) {
+            this.methods.add(new DeliveryMethod(provider.getIdentifier(),
+            provider.getAbstract()));
+        }
+    }
 
-    DeliveryEndpoint createDeliveryEndpoint(DeliveryDefinition def) throws UnsupportedDeliveryDefinitionException;
 }

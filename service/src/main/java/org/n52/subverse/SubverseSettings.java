@@ -13,19 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.n52.subverse.delivery;
+package org.n52.subverse;
+
+import org.n52.iceland.service.ServiceSettings;
 
 /**
  *
  * @author Matthes Rieke <m.rieke@52north.org>
  */
-public interface DeliveryProvider {
+public interface SubverseSettings extends ServiceSettings {
 
-    boolean supportsDeliveryIdentifier(String id);
+    String PUBLICATIONS = "subverse.publications";
 
-    String getIdentifier();
-
-    String getAbstract();
-
-    DeliveryEndpoint createDeliveryEndpoint(DeliveryDefinition def) throws UnsupportedDeliveryDefinitionException;
 }

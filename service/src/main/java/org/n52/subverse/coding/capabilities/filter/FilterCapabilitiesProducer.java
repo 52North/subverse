@@ -13,19 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.n52.subverse.delivery;
+package org.n52.subverse.coding.capabilities.filter;
+
+import org.n52.iceland.util.Producer;
+
 
 /**
  *
  * @author Matthes Rieke <m.rieke@52north.org>
  */
-public interface DeliveryProvider {
+public class FilterCapabilitiesProducer implements Producer<FilterCapabilities> {
 
-    boolean supportsDeliveryIdentifier(String id);
+    @Override
+    public FilterCapabilities get() {
+        return new FilterCapabilities();
+    }
 
-    String getIdentifier();
-
-    String getAbstract();
-
-    DeliveryEndpoint createDeliveryEndpoint(DeliveryDefinition def) throws UnsupportedDeliveryDefinitionException;
 }

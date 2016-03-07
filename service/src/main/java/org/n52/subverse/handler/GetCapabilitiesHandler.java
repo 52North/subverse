@@ -15,8 +15,15 @@
  */
 package org.n52.subverse.handler;
 
+import org.n52.subverse.coding.capabilities.filter.FilterCapabilitiesProducer;
+import org.n52.subverse.coding.capabilities.publications.PublicationsProducer;
+import org.n52.subverse.coding.capabilities.delivery.DeliveryCapabilitiesProducer;
+import org.n52.subverse.coding.capabilities.publications.Publications;
+import org.n52.subverse.coding.capabilities.delivery.DeliveryCapabilities;
+import org.n52.subverse.coding.capabilities.filter.FilterCapabilities;
 import com.google.common.collect.Sets;
 import java.net.URI;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -24,10 +31,12 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.stream.Stream;
 import javax.inject.Inject;
 import org.n52.iceland.binding.Binding;
 import org.n52.iceland.binding.BindingRepository;
 import org.n52.iceland.coding.OperationKey;
+import org.n52.iceland.config.annotation.Configurable;
 import org.n52.iceland.config.annotation.Setting;
 import org.n52.iceland.ds.OperationHandler;
 import org.n52.iceland.ds.OperationHandlerKey;
@@ -39,9 +48,15 @@ import org.n52.iceland.i18n.I18NSettings;
 import org.n52.iceland.ogc.ows.Constraint;
 import org.n52.iceland.ogc.ows.DCP;
 import org.n52.iceland.ogc.ows.OWSConstants;
+import org.n52.iceland.ogc.ows.OwsExtendedCapabilities;
+import org.n52.iceland.ogc.ows.OwsExtendedCapabilitiesProvider;
+import org.n52.iceland.ogc.ows.OwsExtendedCapabilitiesProviderRepository;
 import org.n52.iceland.ogc.ows.OwsOperation;
 import org.n52.iceland.ogc.ows.OwsOperationsMetadata;
 import org.n52.iceland.ogc.ows.OwsParameterValuePossibleValues;
+import org.n52.iceland.ogc.ows.OwsServiceIdentification;
+import org.n52.iceland.ogc.ows.OwsServiceProvider;
+import org.n52.iceland.ogc.ows.ServiceMetadataRepository;
 import org.n52.iceland.request.GetCapabilitiesRequest;
 import org.n52.iceland.request.operator.RequestOperatorRepository;
 import org.n52.iceland.response.GetCapabilitiesResponse;
@@ -54,14 +69,22 @@ import org.n52.iceland.util.http.HTTPMethods;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.n52.subverse.SubverseConstants;
+import org.n52.subverse.SubverseConstants.GetCapabilitiesParam.ServiceMetadataSections;
+import org.n52.subverse.SubverseSettings;
+import org.springframework.beans.factory.annotation.Autowired;
 
+@Configurable
 public class GetCapabilitiesHandler implements OperationHandler {
 
     private static final Set<OperationHandlerKey> OPERATION_HANDLER_KEY
             = Collections.singleton(new OperationHandlerKey(SubverseConstants.SERVICE,
                             OWSConstants.Operations.GetCapabilities));
 
-    private static final Logger log = LoggerFactory.getLogger(GetCapabilitiesHandler.class);
+    private static final Logger LOG = LoggerFactory.getLogger(GetCapabilitiesHandler.class);
+
+    private ServiceMetadataRepository serviceMetadataRepository;
+
+    private OwsExtendedCapabilitiesProviderRepository extendedCapabilitiesRepository;
 
     private URI serviceURL;
 
@@ -70,6 +93,30 @@ public class GetCapabilitiesHandler implements OperationHandler {
     private RequestOperatorRepository requestOperatorRepository;
 
     private BindingRepository bindingRepository;
+
+    @Autowired
+    private FilterCapabilitiesProducer filterCapabilitiesProducer;
+    @Autowired
+    private DeliveryCapabilitiesProducer deliveryCapabilitiesProducer;
+    @Autowired
+    private PublicationsProducer publicationsProducer;
+
+    private String publicationsString;
+
+    @Setting(SubverseSettings.PUBLICATIONS)
+    public void setPublicationsString(String ps) {
+        this.publicationsString = ps;
+    }
+
+    @Inject
+    public void setServiceMetadataRepository(ServiceMetadataRepository repo) {
+        this.serviceMetadataRepository = repo;
+    }
+
+    @Inject
+    public void setExtendedCapabilitiesRepository(OwsExtendedCapabilitiesProviderRepository extendedCapabilitiesRepository) {
+        this.extendedCapabilitiesRepository = extendedCapabilitiesRepository;
+    }
 
     @Inject
     public void setRequestOperatorRepository(RequestOperatorRepository requestOperatorRepository) {
@@ -95,23 +142,62 @@ public class GetCapabilitiesHandler implements OperationHandler {
     public GetCapabilitiesResponse getCapabilities(
             GetCapabilitiesRequest request)
             throws OwsExceptionReport {
-        log.debug("Handling GetCapabilities request: {}", request);
+        LOG.debug("Handling GetCapabilities request: {}", request);
 
         GetCapabilitiesResponse capabilitiesResponse = request.getResponse();
         String version = request.getVersion();
-//        String service = request.getService();
+        String service = request.getService();
         String language = request.getRequestedLanguage();
 
         if (!language.isEmpty() && !language.equals(this.defaultLanguage)) {
-            log.debug("Requested language '{}' is different from default '{}'.", language, this.defaultLanguage);
-            log.warn("Unsupported language was requested, parameter is ignored: {}", language);
+            LOG.debug("Requested language '{}' is different from default '{}'.", language, this.defaultLanguage);
+            LOG.warn("Unsupported language was requested, parameter is ignored: {}", language);
         }
 
         SubverseCapabilities capabilities = new SubverseCapabilities(version);
 
         // TODO add section parameter handling
-//        HashSet<ServiceMetadataSections> requestedSections = getRequestedSections(request);
-//        log.debug("Returning {} sections: {}", requestedSections.size(), Arrays.toString(requestedSections.toArray()));
+        Set<ServiceMetadataSections> requestedSections = getRequestedSections(request);
+        LOG.debug("Returning {} sections: {}", requestedSections.size(), Arrays.toString(requestedSections.toArray()));
+
+        if (requestedSections.contains(ServiceMetadataSections.ServiceIdentification)) {
+            OwsServiceIdentification si = this.serviceMetadataRepository.getServiceIdentificationFactory(service).get();
+            capabilities.setServiceIdentification(si);
+        }
+
+        if (requestedSections.contains(ServiceMetadataSections.ServiceProvider)) {
+            OwsServiceProvider sp = this.serviceMetadataRepository.getServiceProviderFactory(service).get();
+            capabilities.setServiceProvider(sp);
+        }
+
+        if (requestedSections.contains(ServiceMetadataSections.OperationsMetadata)) {
+            OwsOperationsMetadata operationsMetadata = createOperationsMetadata(service, version);
+
+            OwsExtendedCapabilitiesProvider extProv = this.extendedCapabilitiesRepository.getExtendedCapabilitiesProvider(service, version);
+            if (extProv != null && extProv.hasExtendedCapabilitiesFor(request)) {
+                OwsExtendedCapabilities extendedCapabilities = extProv.getOwsExtendedCapabilities(request);
+                operationsMetadata.setExtendedCapabilities(extendedCapabilities);
+            }
+
+            capabilities.setOperationsMetadata(operationsMetadata);
+        }
+
+        if (requestedSections.contains(ServiceMetadataSections.FilterCapabilities)) {
+            FilterCapabilities fc = this.filterCapabilitiesProducer.get();
+            capabilities.setFilterCapabilities(fc);
+        }
+
+        if (requestedSections.contains(ServiceMetadataSections.DeliveryCapabilities)) {
+            DeliveryCapabilities dc = this.deliveryCapabilitiesProducer.get();
+            capabilities.setDeliveryCapabilities(dc);
+        }
+
+        if (requestedSections.contains(ServiceMetadataSections.Publications)) {
+            this.publicationsProducer.setPublicationsString(this.publicationsString);
+            Publications ps = this.publicationsProducer.get();
+            capabilities.setPublications(ps);
+        }
+
         capabilitiesResponse.setCapabilities(capabilities);
         return capabilitiesResponse;
     }
@@ -120,6 +206,31 @@ public class GetCapabilitiesHandler implements OperationHandler {
     public String getOperationName() {
         return OWSConstants.Operations.GetCapabilities.name();
     }
+
+    private Set<ServiceMetadataSections> getRequestedSections(GetCapabilitiesRequest request) throws OwsExceptionReport {
+        Set<ServiceMetadataSections> sections = Sets.newHashSet();
+        if (!request.isSetSections()) {
+            Stream.of(ServiceMetadataSections.values()).forEach(sections::add);
+        } else {
+            for (final String sectionString : request.getSections()) {
+                if (sectionString.isEmpty()) {
+                    LOG.warn("A section element is empty!");
+                    continue;
+                }
+
+                ServiceMetadataSections sms = ServiceMetadataSections.lookup(sectionString);
+
+                if (sms.equals(ServiceMetadataSections.All)) {
+                    Stream.of(ServiceMetadataSections.values()).forEach(sections::add);
+                    break;
+                } else {
+                    sections.add(sms);
+                }
+            }
+        }
+        return sections;
+    }
+
 
     @SuppressWarnings("ThrowableResultIgnored")
     private OwsOperationsMetadata createOperationsMetadata(String service, String version) throws CompositeOwsException {
@@ -151,11 +262,11 @@ public class GetCapabilitiesHandler implements OperationHandler {
                 .forEach(operationsMetadata::addOperation);
 
         // add common query parameters
-        operationsMetadata.addCommonValue(SubverseConstants.OperationParameter.service,
+        operationsMetadata.addCommonValue(SubverseConstants.Param.SERVICE,
                 new OwsParameterValuePossibleValues(SubverseConstants.SERVICE));
-        operationsMetadata.addCommonValue(SubverseConstants.OperationParameter.version,
+        operationsMetadata.addCommonValue(SubverseConstants.Param.VERSION,
                 new OwsParameterValuePossibleValues(SubverseConstants.VERSION));
-        operationsMetadata.addCommonValue(SubverseConstants.OperationParameter.request,
+        operationsMetadata.addCommonValue(SubverseConstants.Param.REQUEST,
                 new OwsParameterValuePossibleValues(Sets.newHashSet(OWSConstants.Operations.GetCapabilities.name(),
                                 SubverseConstants.OPERATION_GET_CAPABILITIES)));
 
@@ -206,7 +317,7 @@ public class GetCapabilitiesHandler implements OperationHandler {
                 }
             }
 
-            log.trace("Created DCPs for {}: {}", operationKey, dcps);
+            LOG.trace("Created DCPs for {}: {}", operationKey, dcps);
         } catch (HTTPException e) {
             throw new NoApplicableCodeException().withMessage("Encoder for {} does not support a method", operationKey).causedBy(e);
         }
@@ -220,7 +331,7 @@ public class GetCapabilitiesHandler implements OperationHandler {
         OwsOperation op = new OwsOperation();
         op.setOperationName(getOperationName());
 
-        op.addPossibleValuesParameter(SubverseConstants.GetCapabilitiesParameter.acceptversions, SubverseConstants.VERSION);
+        op.addPossibleValuesParameter(SubverseConstants.GetCapabilitiesParam.ACCCEPTVERSIONS, SubverseConstants.VERSION);
         // TODO add sections
 
         return op;

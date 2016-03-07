@@ -13,19 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.n52.subverse.delivery;
+package org.n52.subverse.coding.capabilities.publications;
+
+import org.n52.iceland.config.annotation.Configurable;
+import org.n52.iceland.util.Producer;
+
 
 /**
  *
  * @author Matthes Rieke <m.rieke@52north.org>
  */
-public interface DeliveryProvider {
+@Configurable
+public class PublicationsProducer implements Producer<Publications>{
 
-    boolean supportsDeliveryIdentifier(String id);
+    private String publicationsString;
 
-    String getIdentifier();
+//    @Setting(SubverseSettings.PUBLICATIONS)
+    public void setPublicationsString(String ps) {
+        this.publicationsString = ps;
+    }
 
-    String getAbstract();
+    @Override
+    public Publications get() {
+        return new Publications(this.publicationsString);
+    }
 
-    DeliveryEndpoint createDeliveryEndpoint(DeliveryDefinition def) throws UnsupportedDeliveryDefinitionException;
 }
