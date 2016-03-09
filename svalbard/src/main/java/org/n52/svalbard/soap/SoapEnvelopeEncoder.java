@@ -38,6 +38,7 @@ import org.n52.iceland.util.http.MediaType;
 import org.n52.iceland.util.http.MediaTypes;
 import org.n52.iceland.util.http.NoContent;
 import org.n52.iceland.w3c.soap.SoapResponse;
+import org.slf4j.LoggerFactory;
 import org.w3.x2003.x05.soapEnvelope.Body;
 import org.w3.x2003.x05.soapEnvelope.Detail;
 import org.w3.x2003.x05.soapEnvelope.Envelope;
@@ -51,6 +52,8 @@ import org.w3.x2003.x05.soapEnvelope.Faultcode;
  * @author Matthes Rieke <m.rieke@52north.org>
  */
 public class SoapEnvelopeEncoder implements Encoder<Object, SoapResponse> {
+
+    private static final org.slf4j.Logger LOG = LoggerFactory.getLogger(SoapEnvelopeEncoder.class);
 
     private static final EncoderKey KEY = new XmlEncoderKey(Envelope.type.getName().getNamespaceURI(),
             SoapResponse.class);
@@ -134,7 +137,11 @@ public class SoapEnvelopeEncoder implements Encoder<Object, SoapResponse> {
                 determineCauser(targetException.getStatus())));
 
         Detail detail = fault.addNewDetail();
-        detail.set(new OwsExceptionReportEncoder().encode(targetException));
+        try {
+            detail.set(new OwsExceptionReportEncoder().encode(targetException));
+        } catch (OwsExceptionReport ex) {
+            LOG.warn("Error encoding OwsExceptionReport", ex);
+        }
 
         return faultDoc;
     }

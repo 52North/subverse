@@ -15,11 +15,28 @@
  */
 package org.n52.subverse.delivery.wsn;
 
+import com.mashape.unirest.http.Unirest;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Optional;
+import org.apache.xmlbeans.CDataBookmark;
+import org.apache.xmlbeans.XmlAnySimpleType;
+import org.apache.xmlbeans.XmlCursor;
+import org.apache.xmlbeans.XmlObject;
+import org.apache.xmlbeans.XmlOptions;
 import org.n52.subverse.delivery.DeliveryEndpoint;
+import org.n52.subverse.delivery.Streamable;
+import org.n52.subverse.delivery.streamable.StringStreamable;
+import org.oasisOpen.docs.wsn.b2.NotificationMessageHolderType;
+import org.oasisOpen.docs.wsn.b2.NotifyDocument;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.w3.x2003.x05.soapEnvelope.Body;
+import org.w3.x2003.x05.soapEnvelope.Envelope;
+import org.w3.x2003.x05.soapEnvelope.EnvelopeDocument;
 
 /**
  *
@@ -29,14 +46,95 @@ public class WsnConsumerEndpoint implements DeliveryEndpoint {
 
     private static final Logger LOG = LoggerFactory.getLogger(WsnConsumerEndpoint.class);
     private final URL targetUrl;
+    private final boolean useRawOutput;
 
     public WsnConsumerEndpoint(String location) throws MalformedURLException {
+        this(location, false);
+    }
+
+    public WsnConsumerEndpoint(String location, boolean useRawOutput) throws MalformedURLException {
         this.targetUrl = new URL(location);
+        this.useRawOutput = useRawOutput;
     }
 
     @Override
-    public void deliver(Object o) {
-        LOG.info("Should delivery this object to {}: {}", targetUrl, o);
+    public void deliver(Optional<Streamable> o) {
+        LOG.debug("Delivering object to '{}': {}", targetUrl, o);
+
+        if (o.isPresent()) {
+            try {
+                byte[] payload = createPayload(o.get());
+
+                sendPayload(o, payload);
+            }
+            catch (IOException e) {
+                LOG.warn("Could not delivery streamable {}", o, e);
+            }
+        }
+        else {
+            LOG.warn("Got null object, cannot deliver");
+        }
+    }
+
+    protected void sendPayload(Optional<Streamable> o, byte[] payload) {
+        Unirest.post(this.targetUrl.toString())
+                .header("Content-Type", this.useRawOutput ? o.get().getContentType() : "application/soap+xml")
+                .header("Content-Length", Integer.toString(payload.length))
+                .body(payload);
+    }
+
+    private byte[] createPayload(Streamable o) throws IOException {
+        if (this.useRawOutput) {
+            return streamToByteArray(o.asStream());
+        }
+        else {
+            EnvelopeDocument envDoc = EnvelopeDocument.Factory.newInstance();
+            Envelope env = envDoc.addNewEnvelope();
+            Body body = env.addNewBody();
+            NotifyDocument notifyDoc = NotifyDocument.Factory.newInstance();
+            NotifyDocument.Notify notify = notifyDoc.addNewNotify();
+
+            NotificationMessageHolderType msg = notify.addNewNotificationMessage();
+
+            NotificationMessageHolderType.Message message = msg.addNewMessage();
+            createMessageContent(message, o);
+
+            body.set(notifyDoc);
+            return envDoc.xmlText(new XmlOptions().setSavePrettyPrint().setUseCDataBookmarks()).getBytes();
+        }
+    }
+
+    private byte[] streamToByteArray(InputStream is) throws IOException {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        while (is.available() > 0) {
+            baos.write(is.read());
+        }
+
+        return baos.toByteArray();
+    }
+
+    private void createMessageContent(NotificationMessageHolderType.Message msg, Streamable o) throws IOException {
+        if (o.originalObject() instanceof XmlObject) {
+            msg.set((XmlObject) o.originalObject());
+        }
+        else {
+            StringBuilder sb = new StringBuilder();
+            createStringFromStreamable(sb, o);
+            XmlAnySimpleType any = XmlAnySimpleType.Factory.newInstance();
+            any.setStringValue(sb.toString());
+            XmlCursor cur = any.newCursor();
+            cur.toFirstContentToken();
+            cur.setBookmark(CDataBookmark.CDATA_BOOKMARK);
+            cur.dispose();
+            msg.set(any);
+        }
+    }
+
+    private void createStringFromStreamable(StringBuilder sb, Streamable o) throws IOException {
+        InputStream is = o.asStream();
+        while (is.available() > 0) {
+            sb.append((char) is.read());
+        }
     }
 
 }

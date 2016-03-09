@@ -35,7 +35,7 @@ import org.n52.iceland.util.http.MediaTypes;
  * @author Matthes Rieke <m.rieke@52north.org>
  */
 public class OwsExceptionReportEncoder implements Encoder<XmlObject, OwsExceptionReport> {
-    
+
     private static final EncoderKey KEY = new ExceptionEncoderKey(MediaTypes.APPLICATION_XML);
 
     @Override

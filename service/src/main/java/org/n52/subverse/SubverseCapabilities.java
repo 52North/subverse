@@ -65,5 +65,5 @@ public class SubverseCapabilities extends OwsCapabilities {
     public boolean isSetPublications() {
         return publications != null;
     }
-    
+
 }

@@ -77,7 +77,7 @@ import org.slf4j.LoggerFactory;
 @Configurable
 public class CapabilitiesEncoder implements
         Encoder<XmlObject, GetCapabilitiesResponse> {
-    
+
     private static final org.slf4j.Logger LOG = LoggerFactory.getLogger(CapabilitiesEncoder.class);
 
     private static final Set<EncoderKey> ENCODER_KEYS = Sets.<EncoderKey>newHashSet(
@@ -102,66 +102,66 @@ public class CapabilitiesEncoder implements
         PublisherCapabilitiesType publisherCaps = rootDoc.addNewPublisherCapabilities();
 
         SubverseCapabilities capsObject = (SubverseCapabilities) resp.getCapabilities();
-        
+
         if (capsObject.isSetServiceIdentification()) {
             createServiceIdentification(publisherCaps, capsObject);
         }
-        
+
         if (capsObject.isSetServiceProvider()) {
             createServiceProvider(publisherCaps, capsObject);
         }
-        
+
         if (capsObject.isSetOperationsMetadata()) {
             createOperationsMetadata(publisherCaps, capsObject.getOperationsMetadata());
         }
-        
+
         if (capsObject.isSetFilterCapabilities()) {
             createFilterCapabilites(publisherCaps, capsObject.getFilterCapabilities());
         }
-        
+
         if (capsObject.isSetDeliveryCapabilities()) {
             createDeliveryCapabilites(publisherCaps, capsObject.getDeliveryCapabilities());
         }
-        
+
         if (capsObject.isSetPublications()) {
             createPublications(publisherCaps, capsObject.getPublications());
         }
-        
+
         return rootDoc;
     }
 
     private void createServiceIdentification(PublisherCapabilitiesType publisherCaps, OwsCapabilities capsObject) {
         ServiceIdentificationDocument.ServiceIdentification serviceIdent = publisherCaps.addNewServiceIdentification();
         OwsServiceIdentification identObject = capsObject.getServiceIdentification();
-        
+
         Locale defaultLocale = Locale.forLanguageTag("eng");
-        
+
         LanguageStringType title = serviceIdent.addNewTitle();
         title.setStringValue(identObject.getTitle().getLocalization(defaultLocale).get().getText());
-        
+
         LanguageStringType abs = serviceIdent.addNewAbstract();
         abs.setStringValue(identObject.getAbstract().getLocalization(defaultLocale).get().getText());
-        
+
         CodeType st = serviceIdent.addNewServiceType();
         st.setStringValue(identObject.getServiceType());
         st.setCodeSpace(identObject.getServiceTypeCodeSpace());
-        
+
         identObject.getVersions().stream().forEach((version) -> {
             serviceIdent.addNewServiceTypeVersion().setStringValue(version);
         });
-        
+
         serviceIdent.setFees(identObject.getFees());
         identObject.getAccessConstraints().stream().forEach((accessConstraint) -> {
             serviceIdent.addAccessConstraints(accessConstraint);
         });
-        
+
     }
-    
+
     private void createServiceProvider(PublisherCapabilitiesType publisherCaps, OwsCapabilities capsObject) {
         ServiceProviderDocument.ServiceProvider serviceProvider = publisherCaps.addNewServiceProvider();
-        
+
         OwsServiceProvider serviceObj = capsObject.getServiceProvider();
-        
+
         serviceProvider.setProviderName(serviceObj.getName());
         serviceProvider.addNewProviderSite().setHref(serviceObj.getSite());
         ResponsiblePartySubsetType contact = serviceProvider.addNewServiceContact();
@@ -236,8 +236,8 @@ public class CapabilitiesEncoder implements
             //TODO implements extended capabilities
         }
     }
-    
-    
+
+
     private Set<String> addEntryToOperation(Map.Entry<String, List<OwsParameterValue>> entry, DomainType xml_parameter) {
         Set<String> namespacesCollectedFromValues = Sets.newHashSet();
 
@@ -292,7 +292,7 @@ public class CapabilitiesEncoder implements
 
     private void createFilterCapabilites(PublisherCapabilitiesType publisherCaps, FilterCapabilities filterObject) {
         FilterCapabilitiesType filterCaps = publisherCaps.addNewFilterCapabilities();
-        
+
         filterObject.getLanguages().stream().forEach((language) -> {
             FilterLanguageType lang = filterCaps.addNewFilterLanguage();
             lang.setIdentifier(language.getIdentifier());
@@ -307,7 +307,7 @@ public class CapabilitiesEncoder implements
 
     private void createDeliveryCapabilites(PublisherCapabilitiesType publisherCaps, DeliveryCapabilities deliveryObject) {
         DeliveryCapabilitiesType delivery = publisherCaps.addNewDeliveryCapabilities();
-        
+
         deliveryObject.getMethods().stream().forEach((method) -> {
             DeliveryMethodType deliveryMethod = delivery.addNewDeliveryMethod();
             deliveryMethod.setIdentifier(method.getIdentifier());
@@ -317,7 +317,7 @@ public class CapabilitiesEncoder implements
 
     private void createPublications(PublisherCapabilitiesType publisherCaps, Publications pubObject) {
         PublicationsType publications = publisherCaps.addNewPublications();
-        
+
         pubObject.getPublicationList().stream().forEach((publication) -> {
             PublicationType pub = publications.addNewPublication();
             pub.setIdentifier(publication.getIdentifier());

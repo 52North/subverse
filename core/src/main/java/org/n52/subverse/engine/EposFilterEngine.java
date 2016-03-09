@@ -15,10 +15,12 @@
  */
 package org.n52.subverse.engine;
 
+import java.io.InputStream;
 import java.util.Optional;
 import net.opengis.fes.x20.FilterDocument;
 import net.opengis.fes.x20.FilterType;
 import org.apache.xmlbeans.XmlObject;
+import org.apache.xmlbeans.XmlOptions;
 import org.n52.epos.engine.EposEngine;
 import org.n52.epos.engine.rules.RuleInstance;
 import org.n52.epos.event.EposEvent;
@@ -32,6 +34,9 @@ import org.n52.epos.rules.RuleListener;
 import org.n52.epos.transform.TransformationException;
 import org.n52.epos.transform.TransformationRepository;
 import org.n52.subverse.delivery.DeliveryEndpoint;
+import org.n52.subverse.delivery.Streamable;
+import org.n52.subverse.delivery.streamable.GenericStreamable;
+import org.n52.subverse.delivery.streamable.StringStreamable;
 import org.n52.subverse.subscription.Subscription;
 import org.slf4j.LoggerFactory;
 
@@ -97,6 +102,22 @@ public class EposFilterEngine implements FilterEngine {
         return obj;
     }
 
+    private Streamable createStreamable(Object o) {
+        /*
+         * TODO outsource to module
+         */
+        if (o instanceof String) {
+            return new StringStreamable((String) o);
+        }
+        else if (o instanceof XmlObject) {
+            String xml = ((XmlObject) o).xmlText(new XmlOptions().setSavePrettyPrint());
+            InputStream s = new StringStreamable(xml).asStream();
+            return new GenericStreamable(s, "application/xml", xml.length());
+        }
+
+        return null;
+    }
+
     private class LocalRuleListener implements RuleListener {
 
         private final DeliveryEndpoint endpoint;
@@ -107,12 +128,12 @@ public class EposFilterEngine implements FilterEngine {
 
         @Override
         public void onMatchingEvent(EposEvent event) {
-            this.endpoint.deliver(event.getOriginalObject());
+            this.endpoint.deliver(Optional.ofNullable(createStreamable(event.getOriginalObject())));
         }
 
         @Override
         public void onMatchingEvent(EposEvent event, Object desiredOutputToConsumer) {
-            this.endpoint.deliver(desiredOutputToConsumer);
+            this.endpoint.deliver(Optional.ofNullable(createStreamable(desiredOutputToConsumer)));
         }
 
         @Override

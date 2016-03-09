@@ -15,14 +15,20 @@
  */
 package org.n52.subverse.delivery;
 
-import java.util.Optional;
+import java.io.InputStream;
 
 /**
  *
  * @author Matthes Rieke <m.rieke@52north.org>
  */
-public interface DeliveryEndpoint {
+public interface Streamable {
 
-    void deliver(Optional<Streamable> o);
+    InputStream asStream();
+
+    String getContentType();
+
+    int getContentLength();
+
+    Object originalObject();
 
 }
