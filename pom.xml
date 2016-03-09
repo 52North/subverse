@@ -55,6 +55,7 @@
         <module>delivery</module>
         <module>delivery-amqp</module>
         <module>delivery-wsn</module>
+        <module>consumer-mqtt</module>
         <module>service</module>
         <module>webapp</module>
         <module>svalbard</module>
@@ -103,6 +104,16 @@
             <dependency>
                 <groupId>${project.groupId}</groupId>
                 <artifactId>delivery-amqp</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>consumer-wsn</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>consumer-mqtt</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
@@ -156,6 +167,11 @@
                 <artifactId>mockito-all</artifactId>
                 <version>${version.mockito}</version>
                 <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.mashape.unirest</groupId>
+                <artifactId>unirest-java</artifactId>
+                <version>1.4.8</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.qpid</groupId>
@@ -292,7 +308,11 @@
                 <artifactId>52n-xml-ows-v110</artifactId>
                 <version>${common-xml.version}</version>
             </dependency>
-            
+            <dependency>
+                <groupId>org.eclipse.paho</groupId>
+                <artifactId>org.eclipse.paho.client.mqttv3</artifactId>
+                <version>1.0.2</version>
+            </dependency>
             <dependency>
                 <groupId>joda-time</groupId>
                 <artifactId>joda-time</artifactId>
