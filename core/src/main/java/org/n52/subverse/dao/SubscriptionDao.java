@@ -17,6 +17,7 @@ package org.n52.subverse.dao;
 
 import java.util.Optional;
 import java.util.stream.Stream;
+import org.n52.subverse.subscription.UnknownSubscriptionException;
 import org.n52.subverse.subscription.Subscription;
 
 /**
@@ -31,6 +32,6 @@ public interface SubscriptionDao {
 
     Optional<Subscription> getSubscription(String id);
 
-    void deleteSubscription(String subscriptionId);
+    void deleteSubscription(String subscriptionId) throws UnknownSubscriptionException;
 
 }

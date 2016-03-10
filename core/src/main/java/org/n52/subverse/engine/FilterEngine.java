@@ -15,6 +15,7 @@
  */
 package org.n52.subverse.engine;
 
+import org.n52.subverse.subscription.UnknownSubscriptionException;
 import org.n52.subverse.delivery.DeliveryEndpoint;
 import org.n52.subverse.subscription.Subscription;
 

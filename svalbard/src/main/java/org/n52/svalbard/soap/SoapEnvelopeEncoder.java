@@ -152,6 +152,10 @@ public class SoapEnvelopeEncoder implements Encoder<Object, SoapResponse> {
     }
 
     private String determineCauser(HTTPStatus status) {
+        if (status == null) {
+            return "Sender";
+        }
+        
         return status.isClientError() ? "Sender" : "Receiver";
     }
 

@@ -29,6 +29,7 @@ import org.joda.time.DateTimeZone;
 import org.n52.iceland.coding.encode.Encoder;
 import org.n52.iceland.coding.encode.EncoderKey;
 import org.n52.iceland.coding.encode.OperationResponseEncoderKey;
+import org.n52.iceland.config.annotation.Configurable;
 import org.n52.iceland.config.annotation.Setting;
 import org.n52.iceland.exception.ows.OwsExceptionReport;
 import org.n52.iceland.exception.ows.concrete.UnsupportedEncoderInputException;
@@ -48,6 +49,7 @@ import org.w3.x2005.x08.addressing.ReferenceParametersType;
  *
  * @author Matthes Rieke <m.rieke@52north.org>
  */
+@Configurable
 public class SubscribeResponseEncoder implements Encoder<XmlObject, SubscribeResponse> {
 
     private static final Set<EncoderKey> ENCODER_KEYS = Sets.<EncoderKey>newHashSet(

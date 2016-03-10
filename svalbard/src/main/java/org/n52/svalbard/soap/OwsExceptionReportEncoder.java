@@ -38,6 +38,17 @@ public class OwsExceptionReportEncoder implements Encoder<XmlObject, OwsExceptio
 
     private static final EncoderKey KEY = new ExceptionEncoderKey(MediaTypes.APPLICATION_XML);
 
+    private final boolean encodeStackTraces;
+
+    public OwsExceptionReportEncoder() {
+        this(false);
+    }
+    
+    public OwsExceptionReportEncoder(boolean encodeStackTraces) {
+        this.encodeStackTraces = encodeStackTraces;
+    }
+    
+    
     @Override
     public XmlObject encode(OwsExceptionReport objectToEncode) throws OwsExceptionReport, UnsupportedEncoderInputException {
         return encode(objectToEncode, Collections.emptyMap());
@@ -49,7 +60,7 @@ public class OwsExceptionReportEncoder implements Encoder<XmlObject, OwsExceptio
         ExceptionReportDocument.ExceptionReport excRep = excRepDoc.addNewExceptionReport();
 
         ExceptionType exception = excRep.addNewException();
-        exception.addExceptionText(objectToEncode.getMessage());
+        exception.addExceptionText(createExceptionText(objectToEncode));
 
         exception.setExceptionCode(exception.getExceptionCode());
 
@@ -64,6 +75,32 @@ public class OwsExceptionReportEncoder implements Encoder<XmlObject, OwsExceptio
     @Override
     public Set<EncoderKey> getKeys() {
         return Collections.singleton(KEY);
+    }
+
+    private String createExceptionText(OwsExceptionReport ex) {
+        String msg = ex.getMessage();
+        
+        StringBuilder sb = new StringBuilder();
+        if (msg != null) {
+            sb.append(msg);
+        }
+        
+        Throwable cause = ex.getCause();
+        if (cause != null) {
+            sb.append(System.getProperty("line.separator"));
+            sb.append(cause.getMessage());
+            
+            StackTraceElement[] stack = cause.getStackTrace();
+            
+            if (this.encodeStackTraces && stack != null) {
+                for (StackTraceElement ste : stack) {
+                    sb.append(System.getProperty("line.separator"));
+                    sb.append(ste.toString());
+                }                
+            }
+        }
+        
+        return sb.toString();
     }
 
 }

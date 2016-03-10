@@ -15,6 +15,7 @@
  */
 package org.n52.subverse.engine;
 
+import org.n52.subverse.subscription.UnknownSubscriptionException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;

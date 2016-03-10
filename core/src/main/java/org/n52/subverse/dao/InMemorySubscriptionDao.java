@@ -21,6 +21,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
 import org.n52.subverse.subscription.Subscription;
+import org.n52.subverse.subscription.UnknownSubscriptionException;
 
 /**
  *
@@ -46,7 +47,11 @@ public class InMemorySubscriptionDao implements SubscriptionDao {
     }
 
     @Override
-    public synchronized void deleteSubscription(String subscriptionId) {
+    public synchronized void deleteSubscription(String subscriptionId) throws UnknownSubscriptionException {
+        if (!this.storage.containsKey(subscriptionId)) {
+            throw new UnknownSubscriptionException("Unknown Subscription id: "+subscriptionId);
+        }
+        
         this.storage.remove(subscriptionId);
     }
 
