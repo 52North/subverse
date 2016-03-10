@@ -14,6 +14,7 @@
     <packaging>pom</packaging>
     <name>52°North subverse</name>
     <description>52°North subverse - an OGC PubSub 1.0 Service implementation</description>
+    <inceptionYear>2016</inceptionYear>
     <organization>
         <name>52°North</name>
         <url>http://52north.org/</url>
@@ -21,10 +22,9 @@
   
     <licenses>
         <license>
-            <name>The Apache Software License, Version 2.0</name>
-            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <name>GNU General Public License, version 2</name>
+            <url>http://www.gnu.org/licenses/gpl-2.0.txt</url>
             <distribution>repo</distribution>
-            <comments>A business-friendly OSS license</comments>
         </license>
     </licenses>
     
@@ -150,11 +150,23 @@
                 <groupId>org.n52.epos</groupId>
                 <artifactId>epos-pattern-eml</artifactId>
                 <version>${epos.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>java3d</groupId>
+                        <artifactId>vecmath</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.n52.epos</groupId>
                 <artifactId>epos-transform-aixm-xpath</artifactId>
                 <version>${epos.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>java3d</groupId>
+                        <artifactId>vecmath</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.n52.epos</groupId>
@@ -408,6 +420,45 @@
                         <phase>initialize</phase>
                         <goals>
                             <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            
+            <plugin>
+                <groupId>com.mycila</groupId>
+                <artifactId>license-maven-plugin</artifactId>
+                <inherited>false</inherited>
+                <configuration>
+                    <aggregate>true</aggregate>
+                    <header>etc/license_header.txt</header>
+                    <excludes>
+                        <exclude>**/log4j*</exclude>
+                        <exclude>**/*.xml</exclude>
+                        <exclude>**/*.html</exclude>
+                        <exclude>**/webapp/static/lib/*</exclude>
+                        <exclude>**/webapp/WEB-INF/web.xml</exclude>
+                        <exclude>**/buildNumber.properties</exclude>
+                    </excludes>
+                    <includes>
+                        <include>**/*.java</include>
+                        <include>**/*.jsp</include>
+                        <include>**/*.js</include>
+                        <include>**/*.xsl</include>
+                        <include>**/*.sql</include>
+                    </includes>
+                    <strictCheck>true</strictCheck>
+                    <properties>
+                        <inceptionYear>${project.inceptionYear}</inceptionYear>
+                        <latestYearOfContribution>2016</latestYearOfContribution>
+                    </properties>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>check-license</id>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>format</goal>
                         </goals>
                     </execution>
                 </executions>

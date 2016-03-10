@@ -5,4 +5,4 @@ is currently in development phase.
 
 # License
 
-subverse is licensed under the Apache 2.0 license.
+subverse is licensed under the GNU General Public License, Version 2.0
