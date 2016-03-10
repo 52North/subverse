@@ -439,6 +439,7 @@
                         <exclude>**/webapp/static/lib/*</exclude>
                         <exclude>**/webapp/WEB-INF/web.xml</exclude>
                         <exclude>**/buildNumber.properties</exclude>
+                        <exclude>**/svalbard/**/*.java</exclude>
                     </excludes>
                     <includes>
                         <include>**/*.java</include>
