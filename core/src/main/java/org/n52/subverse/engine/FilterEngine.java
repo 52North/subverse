@@ -29,4 +29,6 @@ public interface FilterEngine {
     void register(Subscription result, DeliveryEndpoint deliveryEndpoint)
             throws SubscriptionRegistrationException;
 
+    void removeSubscription(String subscriptionId) throws UnknownSubscriptionException;
+
 }

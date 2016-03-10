@@ -17,11 +17,15 @@ package org.n52.subverse.operator;
 
 import java.util.Collections;
 import java.util.Set;
+import org.n52.iceland.exception.ows.InvalidParameterValueException;
 import org.n52.iceland.exception.ows.OwsExceptionReport;
 import org.n52.iceland.request.AbstractServiceRequest;
 import org.n52.iceland.request.operator.RequestOperatorKey;
 import org.n52.iceland.response.AbstractServiceResponse;
 import org.n52.subverse.SubverseConstants;
+import org.n52.subverse.handler.UnsubscribeHandler;
+import org.n52.subverse.request.UnsubscribeRequest;
+import org.n52.subverse.response.UnsubscribeResponse;
 
 /**
  *
@@ -36,7 +40,19 @@ public class UnsubscribeOperator extends AbstractOperator {
 
     @Override
     public AbstractServiceResponse receiveRequest(AbstractServiceRequest<?> request) throws OwsExceptionReport {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (request instanceof UnsubscribeRequest) {
+            UnsubscribeHandler handler = getUnsubscribeHandler(request);
+            UnsubscribeResponse result = handler.unsubscribe(((UnsubscribeRequest) request).getSubscriptionId());
+            result.setService(request.getService());
+            result.setVersion(request.getVersion());
+            return result;
+        }
+
+        throw new InvalidParameterValueException().withMessage("Invalid Unsubscribe request received");
+    }
+
+    private UnsubscribeHandler getUnsubscribeHandler(AbstractServiceRequest<?> request) {
+        return (UnsubscribeHandler) getHandler(request);
     }
 
     @Override

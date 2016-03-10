@@ -16,15 +16,23 @@
 package org.n52.subverse.coding.subscribe;
 
 import org.n52.iceland.exception.ows.InvalidParameterValueException;
+import org.n52.svalbard.soap.SoapFault;
 
 /**
  *
  * @author Matthes Rieke <m.rieke@52north.org>
  */
-public class UnacceptableInitialTerminationTimeFault extends InvalidParameterValueException {
+public class UnacceptableInitialTerminationTimeFault extends InvalidParameterValueException implements SoapFault {
 
     public UnacceptableInitialTerminationTimeFault(String string) {
         withMessage(string);
     }
+
+    @Override
+    public String getReason() {
+        return "UnacceptableInitialTerminationTimeFault";
+    }
+
+
 
 }

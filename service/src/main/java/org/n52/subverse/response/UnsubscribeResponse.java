@@ -13,24 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.n52.subverse.dao;
+package org.n52.subverse.response;
 
-import java.util.Optional;
-import java.util.stream.Stream;
-import org.n52.subverse.subscription.Subscription;
+import org.n52.iceland.response.AbstractServiceResponse;
+import org.n52.subverse.SubverseConstants;
 
-/**
- *
- * @author Matthes Rieke <m.rieke@52north.org>
- */
-public interface SubscriptionDao {
+public class UnsubscribeResponse extends AbstractServiceResponse {
 
-    void storeSubscription(Subscription sub);
+    private final String subscriptionId;
 
-    Stream<Subscription> getAllSubscriptions();
+    public UnsubscribeResponse(String ref) {
+        this.subscriptionId = ref;
+    }
 
-    Optional<Subscription> getSubscription(String id);
+    @Override
+    public String getOperationName() {
+        return SubverseConstants.OPERATION_UNSUBSCRIBE;
+    }
 
-    void deleteSubscription(String subscriptionId);
+    public String getSubscriptionId() {
+        return subscriptionId;
+    }
 
 }

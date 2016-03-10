@@ -17,11 +17,18 @@ package org.n52.subverse.handler;
 
 import java.util.Collections;
 import java.util.Set;
+import javax.inject.Inject;
 import org.n52.iceland.ds.OperationHandler;
 import org.n52.iceland.ds.OperationHandlerKey;
+import org.n52.iceland.exception.ows.InvalidParameterValueException;
 import org.n52.iceland.exception.ows.OwsExceptionReport;
 import org.n52.iceland.ogc.ows.OwsOperation;
 import org.n52.subverse.SubverseConstants;
+import org.n52.subverse.response.UnsubscribeResponse;
+import org.n52.subverse.subscription.SubscriptionManager;
+import org.n52.subverse.subscription.UnsubscribeFailedException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -29,9 +36,21 @@ import org.n52.subverse.SubverseConstants;
  */
 public class UnsubscribeHandler implements OperationHandler {
 
+    private static final Logger LOG = LoggerFactory.getLogger(UnsubscribeHandler.class);
     private static final OperationHandlerKey KEY
             = new OperationHandlerKey(SubverseConstants.SERVICE,
                     SubverseConstants.OPERATION_UNSUBSCRIBE);
+
+    private SubscriptionManager manager;
+
+    public SubscriptionManager getManager() {
+        return manager;
+    }
+
+    @Inject
+    public void setManager(SubscriptionManager manager) {
+        this.manager = manager;
+    }
 
     @Override
     public String getOperationName() {
@@ -48,6 +67,16 @@ public class UnsubscribeHandler implements OperationHandler {
     @Override
     public Set<OperationHandlerKey> getKeys() {
         return Collections.singleton(KEY);
+    }
+
+    public UnsubscribeResponse unsubscribe(String subscriptionId) throws OwsExceptionReport {
+        try {
+            this.manager.unsubscribe(subscriptionId);
+            return new UnsubscribeResponse(subscriptionId);
+        } catch (UnsubscribeFailedException ex) {
+            LOG.warn("Unsubscribe failed", ex);
+            throw new InvalidParameterValueException().causedBy(ex);
+        }
     }
 
 

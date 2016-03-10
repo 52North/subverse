@@ -23,6 +23,7 @@ import org.n52.subverse.delivery.DeliveryProviderRepository;
 import org.n52.subverse.delivery.UnsupportedDeliveryDefinitionException;
 import org.n52.subverse.engine.FilterEngine;
 import org.n52.subverse.engine.SubscriptionRegistrationException;
+import org.n52.subverse.engine.UnknownSubscriptionException;
 import org.slf4j.LoggerFactory;
 
 public class SubscriptionManagerImpl implements SubscriptionManager {
@@ -82,6 +83,16 @@ public class SubscriptionManagerImpl implements SubscriptionManager {
         return result;
     }
 
+    @Override
+    public void unsubscribe(String subscriptionId) throws UnsubscribeFailedException {
+        try {
+            this.filterEngine.removeSubscription(subscriptionId);
+        } catch (UnknownSubscriptionException ex) {
+            throw new UnsubscribeFailedException("Could not remove subscription", ex);
+        }
+        this.dao.deleteSubscription(subscriptionId);
+    }
+
     private SubscriptionEndpoint createEndpoint(SubscribeOptions options) throws UnsupportedDeliveryDefinitionException {
         DeliveryProvider provider = this.deliveryProviderRepository.getProvider(options.getDeliveryDefinition());
 
@@ -92,5 +103,7 @@ public class SubscriptionManagerImpl implements SubscriptionManager {
 
         return new SubscriptionEndpoint(provider.createDeliveryEndpoint(options.getDeliveryDefinition().get()));
     }
+
+
 
 }

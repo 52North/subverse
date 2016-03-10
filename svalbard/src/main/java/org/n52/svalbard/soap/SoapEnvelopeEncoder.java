@@ -136,6 +136,11 @@ public class SoapEnvelopeEncoder implements Encoder<Object, SoapResponse> {
         code.setValue(new QName(EnvelopeDocument.type.getDocumentElementName().getNamespaceURI(),
                 determineCauser(targetException.getStatus())));
 
+        if (targetException instanceof SoapFault) {
+            fault.addNewReason().addNewText().setStringValue(
+                    ((SoapFault) targetException).getReason());
+        }
+
         Detail detail = fault.addNewDetail();
         try {
             detail.set(new OwsExceptionReportEncoder().encode(targetException));

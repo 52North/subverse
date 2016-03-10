@@ -13,24 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.n52.subverse.dao;
+package org.n52.subverse.coding.unsubscribe;
 
-import java.util.Optional;
-import java.util.stream.Stream;
-import org.n52.subverse.subscription.Subscription;
+import org.n52.iceland.exception.ows.InvalidParameterValueException;
+import org.n52.svalbard.soap.SoapFault;
 
 /**
  *
  * @author Matthes Rieke <m.rieke@52north.org>
  */
-public interface SubscriptionDao {
+public class ResourceUnknownFault extends InvalidParameterValueException implements SoapFault {
 
-    void storeSubscription(Subscription sub);
+    public ResourceUnknownFault(String msg) {
+        withMessage(msg);
+    }
 
-    Stream<Subscription> getAllSubscriptions();
-
-    Optional<Subscription> getSubscription(String id);
-
-    void deleteSubscription(String subscriptionId);
+    @Override
+    public String getReason() {
+        return "ResourceUnknownFault";
+    }
 
 }

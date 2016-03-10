@@ -16,6 +16,8 @@
 package org.n52.subverse.engine;
 
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 import net.opengis.fes.x20.FilterDocument;
 import net.opengis.fes.x20.FilterType;
@@ -50,6 +52,8 @@ public class EposFilterEngine implements FilterEngine {
 
     private final EposEngine engine = EposEngine.getInstance();
 
+    private Map<String, Rule> rules = new HashMap<>();
+
     @Override
     public void filterMessage(Object message) {
         try {
@@ -61,16 +65,25 @@ public class EposFilterEngine implements FilterEngine {
     }
 
     @Override
-    public void register(Subscription result, DeliveryEndpoint deliveryEndpoint)
+    public synchronized void register(Subscription result, DeliveryEndpoint deliveryEndpoint)
             throws SubscriptionRegistrationException {
         try {
             Optional<XmlObject> filter = result.getOptions().getFilter();
             Rule rule = createRule(filter, deliveryEndpoint);
             this.engine.registerRule(rule);
+            this.rules.put(result.getId(), rule);
         } catch (FilterInstantiationException ex) {
             LOG.warn("Could not instantiate rule", ex);
             throw new SubscriptionRegistrationException("Could not instantiate rule", ex);
         }
+    }
+
+    @Override
+    public synchronized void removeSubscription(String subscriptionId) throws UnknownSubscriptionException {
+        if (!this.rules.containsKey(subscriptionId)) {
+            throw new UnknownSubscriptionException("Subscription unknown: "+subscriptionId);
+        }
+        this.engine.unregisterRule(this.rules.get(subscriptionId));
     }
 
     private Rule createRule(Optional<XmlObject> filter, DeliveryEndpoint endpoint)
@@ -117,6 +130,7 @@ public class EposFilterEngine implements FilterEngine {
 
         return null;
     }
+
 
     private class LocalRuleListener implements RuleListener {
 

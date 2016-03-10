@@ -23,4 +23,6 @@ public interface SubscriptionManager {
     public Subscription subscribe(SubscribeOptions aThis) throws UnsupportedDeliveryDefinitionException,
             SubscriptionRegistrationException;
 
+    public void unsubscribe(String subscriptionId) throws UnsubscribeFailedException;
+
 }

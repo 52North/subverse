@@ -45,4 +45,9 @@ public class InMemorySubscriptionDao implements SubscriptionDao {
         return Optional.ofNullable(this.storage.get(id));
     }
 
+    @Override
+    public synchronized void deleteSubscription(String subscriptionId) {
+        this.storage.remove(subscriptionId);
+    }
+
 }

@@ -13,24 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.n52.subverse.dao;
-
-import java.util.Optional;
-import java.util.stream.Stream;
-import org.n52.subverse.subscription.Subscription;
+package org.n52.subverse.subscription;
 
 /**
  *
  * @author Matthes Rieke <m.rieke@52north.org>
  */
-public interface SubscriptionDao {
+public class UnsubscribeFailedException extends Exception {
 
-    void storeSubscription(Subscription sub);
+    public UnsubscribeFailedException(String message) {
+        super(message);
+    }
 
-    Stream<Subscription> getAllSubscriptions();
-
-    Optional<Subscription> getSubscription(String id);
-
-    void deleteSubscription(String subscriptionId);
+    public UnsubscribeFailedException(String message, Throwable cause) {
+        super(message, cause);
+    }
 
 }
