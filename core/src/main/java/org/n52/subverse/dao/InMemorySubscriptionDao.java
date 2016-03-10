@@ -51,7 +51,7 @@ public class InMemorySubscriptionDao implements SubscriptionDao {
         if (!this.storage.containsKey(subscriptionId)) {
             throw new UnknownSubscriptionException("Unknown Subscription id: "+subscriptionId);
         }
-        
+
         this.storage.remove(subscriptionId);
     }
 

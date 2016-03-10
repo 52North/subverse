@@ -108,7 +108,7 @@
             </dependency>
             <dependency>
                 <groupId>${project.groupId}</groupId>
-                <artifactId>consumer-wsn</artifactId>
+                <artifactId>delivery-wsn</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
@@ -157,6 +157,11 @@
                 <version>${epos.version}</version>
             </dependency>
             <dependency>
+                <groupId>org.n52.epos</groupId>
+                <artifactId>epos-transform-om</artifactId>
+                <version>${epos.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>junit</groupId>
                 <artifactId>junit</artifactId>
                 <version>${junit-version}</version>
@@ -169,9 +174,9 @@
                 <scope>test</scope>
             </dependency>
             <dependency>
-                <groupId>com.mashape.unirest</groupId>
-                <artifactId>unirest-java</artifactId>
-                <version>1.4.8</version>
+                <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>httpclient</artifactId>
+                <version>4.5.2</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.qpid</groupId>

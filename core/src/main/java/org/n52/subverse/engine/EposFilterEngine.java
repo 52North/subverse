@@ -126,7 +126,7 @@ public class EposFilterEngine implements FilterEngine {
         else if (o instanceof XmlObject) {
             String xml = ((XmlObject) o).xmlText(new XmlOptions().setSavePrettyPrint());
             InputStream s = new StringStreamable(xml).asStream();
-            return new GenericStreamable(s, "application/xml", xml.length());
+            return new GenericStreamable(s, "application/xml", xml.length(), o);
         }
 
         return null;

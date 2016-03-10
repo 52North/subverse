@@ -15,13 +15,17 @@
  */
 package org.n52.subverse.delivery.wsn;
 
-import com.mashape.unirest.http.Unirest;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Optional;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ByteArrayEntity;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
 import org.apache.xmlbeans.CDataBookmark;
 import org.apache.xmlbeans.XmlAnySimpleType;
 import org.apache.xmlbeans.XmlCursor;
@@ -29,7 +33,6 @@ import org.apache.xmlbeans.XmlObject;
 import org.apache.xmlbeans.XmlOptions;
 import org.n52.subverse.delivery.DeliveryEndpoint;
 import org.n52.subverse.delivery.Streamable;
-import org.n52.subverse.delivery.streamable.StringStreamable;
 import org.oasisOpen.docs.wsn.b2.NotificationMessageHolderType;
 import org.oasisOpen.docs.wsn.b2.NotifyDocument;
 import org.slf4j.Logger;
@@ -77,10 +80,17 @@ public class WsnConsumerEndpoint implements DeliveryEndpoint {
     }
 
     protected void sendPayload(Optional<Streamable> o, byte[] payload) {
-        Unirest.post(this.targetUrl.toString())
-                .header("Content-Type", this.useRawOutput ? o.get().getContentType() : "application/soap+xml")
-                .header("Content-Length", Integer.toString(payload.length))
-                .body(payload);
+        try (CloseableHttpClient
+                client = HttpClients.createDefault()) {
+            HttpPost post = new HttpPost(this.targetUrl.toURI());
+            post.setEntity(new ByteArrayEntity(payload));
+            post.addHeader("Content-Type", this.useRawOutput ? o.get().getContentType() : "application/soap+xml");
+//            post.addHeader("Content-Length", Integer.toString(payload.length));
+            client.execute(post);
+        }
+        catch (IOException | URISyntaxException ex) {
+            LOG.warn("could not send request", ex);
+        }
     }
 
     private byte[] createPayload(Streamable o) throws IOException {

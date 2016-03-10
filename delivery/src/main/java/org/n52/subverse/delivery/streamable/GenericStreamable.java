@@ -27,11 +27,14 @@ public class GenericStreamable implements Streamable {
     private final InputStream stream;
     private final String contentType;
     private final int contentLength;
+    private final Object originalObject;
 
-    public GenericStreamable(InputStream stream, String contentType, int contentLength) {
-        this.stream = stream;
-        this.contentType = contentType;
-        this.contentLength = contentLength;
+
+    public GenericStreamable(InputStream s, String ct, int length, Object o) {
+        this.stream = s;
+        this.contentType = ct;
+        this.contentLength = length;
+        this.originalObject = o;
     }
 
     @Override
@@ -51,7 +54,7 @@ public class GenericStreamable implements Streamable {
 
     @Override
     public Object originalObject() {
-        return this.stream;
+        return this.originalObject;
     }
 
 }

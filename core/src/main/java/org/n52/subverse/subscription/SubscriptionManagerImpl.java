@@ -90,7 +90,7 @@ public class SubscriptionManagerImpl implements SubscriptionManager {
         } catch (UnknownSubscriptionException ex) {
             throw new UnsubscribeFailedException("Unknown subscription id: "+subscriptionId, ex);
         }
-        
+
     }
 
     private SubscriptionEndpoint createEndpoint(SubscribeOptions options) throws UnsupportedDeliveryDefinitionException {

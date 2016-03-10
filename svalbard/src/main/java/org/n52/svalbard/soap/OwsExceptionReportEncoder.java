@@ -43,12 +43,12 @@ public class OwsExceptionReportEncoder implements Encoder<XmlObject, OwsExceptio
     public OwsExceptionReportEncoder() {
         this(false);
     }
-    
+
     public OwsExceptionReportEncoder(boolean encodeStackTraces) {
         this.encodeStackTraces = encodeStackTraces;
     }
-    
-    
+
+
     @Override
     public XmlObject encode(OwsExceptionReport objectToEncode) throws OwsExceptionReport, UnsupportedEncoderInputException {
         return encode(objectToEncode, Collections.emptyMap());
@@ -79,27 +79,27 @@ public class OwsExceptionReportEncoder implements Encoder<XmlObject, OwsExceptio
 
     private String createExceptionText(OwsExceptionReport ex) {
         String msg = ex.getMessage();
-        
+
         StringBuilder sb = new StringBuilder();
         if (msg != null) {
             sb.append(msg);
         }
-        
+
         Throwable cause = ex.getCause();
         if (cause != null) {
             sb.append(System.getProperty("line.separator"));
             sb.append(cause.getMessage());
-            
+
             StackTraceElement[] stack = cause.getStackTrace();
-            
+
             if (this.encodeStackTraces && stack != null) {
                 for (StackTraceElement ste : stack) {
                     sb.append(System.getProperty("line.separator"));
                     sb.append(ste.toString());
-                }                
+                }
             }
         }
-        
+
         return sb.toString();
     }
 

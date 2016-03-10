@@ -31,7 +31,7 @@ public class WsnDeliveryProvider implements DeliveryProvider {
 
     private static final String IDENTIFIER = "http://docs.oasis-open.org/wsn/b-2/NotificationConsumer";
     private static final String ABSTRACT = "WS-BaseNotification allows a NotificationConsumer to receive a Notification in one of two forms:\n" +
-            "\n 1. The NotificationConsumer MAY simply receive the “raw” Notification (i.e. the application-specific content).\n" +
+            "\n 1. The NotificationConsumer MAY simply receive the \"raw\" Notification (i.e. the application-specific content).\n" +
             "\n 2. The NotificationConsumer MAY receive the Notification data as a Notify message as described below.";
 
     @Override

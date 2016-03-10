@@ -3,3 +3,5 @@ target
 .project
 .settings
 **/subverse.log
+**/subverse/*.log
+

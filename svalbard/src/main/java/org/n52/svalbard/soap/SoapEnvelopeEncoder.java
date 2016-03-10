@@ -155,7 +155,7 @@ public class SoapEnvelopeEncoder implements Encoder<Object, SoapResponse> {
         if (status == null) {
             return "Sender";
         }
-        
+
         return status.isClientError() ? "Sender" : "Receiver";
     }
 
