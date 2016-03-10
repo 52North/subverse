@@ -128,4 +128,12 @@ public class SubscribeResponseEncoder implements Encoder<XmlObject, SubscribeRes
         return ENCODER_KEYS;
     }
 
+    @Override
+    public void addNamespacePrefixToMap(Map<String, String> prefixMap) {
+        prefixMap.put(SubverseConstants.PUB_SUB_NAMESPACE, "pubsub");
+        prefixMap.put(SubverseConstants.WS_N_NAMESPACE, "wsn");
+    }
+
+    
+    
 }

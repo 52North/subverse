@@ -92,6 +92,8 @@ public class SubscriptionManagerImpl implements SubscriptionManager {
 
         this.filterEngine.register(result, endpoint.getDeliveryEndpoint());
 
+        LOG.info("Registered subscription '{}'", result.getId());
+        
         return result;
     }
 
@@ -100,6 +102,7 @@ public class SubscriptionManagerImpl implements SubscriptionManager {
         try {
             this.dao.deleteSubscription(subscriptionId);
             this.filterEngine.removeSubscription(subscriptionId);
+            LOG.info("Removed subscription '{}'", subscriptionId);
         } catch (UnknownSubscriptionException ex) {
             throw new UnsubscribeFailedException("Unknown subscription id: "+subscriptionId, ex);
         }

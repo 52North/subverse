@@ -31,7 +31,7 @@
 * To change this template file, choose Tools | Templates
 * and open the template in the editor.
 */
-package org.n52.subverse.util;
+package org.n52.svalbard.xml;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -39,8 +39,6 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import org.apache.xmlbeans.XmlOptions;
 import org.n52.iceland.coding.CodingRepository;
-import org.n52.subverse.SubverseConstants;
-import org.n52.svalbard.xml.XmlOptionsHelper;
 import org.springframework.stereotype.Component;
 
 /**
@@ -79,8 +77,6 @@ public class XmlOptionsHelperImpl implements XmlOptionsHelper {
 
     private Map<String, String> getPrefixMap() {
         final Map<String, String> prefixMap = new HashMap<>();
-        prefixMap.put(SubverseConstants.PUB_SUB_NAMESPACE, "pubsub");
-        prefixMap.put(SubverseConstants.WS_N_NAMESPACE, "wsn");
         CodingRepository.getInstance().getEncoders().stream().forEach((encoder) -> {
             encoder.addNamespacePrefixToMap(prefixMap);
         });
