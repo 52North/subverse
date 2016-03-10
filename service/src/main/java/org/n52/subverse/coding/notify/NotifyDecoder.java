@@ -30,6 +30,7 @@ package org.n52.subverse.coding.notify;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -38,10 +39,12 @@ import org.apache.xmlbeans.XmlException;
 import org.apache.xmlbeans.XmlObject;
 import org.n52.iceland.coding.decode.Decoder;
 import org.n52.iceland.coding.decode.DecoderKey;
+import org.n52.iceland.coding.decode.OperationDecoderKey;
 import org.n52.iceland.coding.decode.XmlNamespaceOperationDecoderKey;
 import org.n52.iceland.exception.ows.OwsExceptionReport;
 import org.n52.iceland.exception.ows.concrete.UnsupportedDecoderInputException;
 import org.n52.iceland.request.AbstractServiceRequest;
+import org.n52.iceland.util.http.MediaTypes;
 import org.n52.subverse.SubverseConstants;
 import org.n52.subverse.notify.NotificationMessage;
 import org.n52.subverse.request.NotifyRequest;
@@ -59,6 +62,8 @@ public class NotifyDecoder implements Decoder<AbstractServiceRequest, String> {
     private static final org.slf4j.Logger LOG = LoggerFactory.getLogger(NotifyDecoder.class);
     private static final DecoderKey KEY = new XmlNamespaceOperationDecoderKey(SubverseConstants.WS_N_NAMESPACE,
         SubverseConstants.OPERATION_NOTIFY);
+    private static final DecoderKey DCP_KEY = new OperationDecoderKey(SubverseConstants.SERVICE,
+            SubverseConstants.VERSION, SubverseConstants.OPERATION_NOTIFY, MediaTypes.APPLICATION_XML);
 
     private static final String SIMPLE_TOPIC_DIALECT = "http://docs.oasis-open.org/wsn/t-1/TopicExpression/Simple";
 
@@ -115,7 +120,10 @@ public class NotifyDecoder implements Decoder<AbstractServiceRequest, String> {
 
     @Override
     public Set<DecoderKey> getKeys() {
-        return Collections.singleton(KEY);
+        Set<DecoderKey> keys = new HashSet<>();
+        keys.add(DCP_KEY);
+        keys.add(KEY);
+        return keys;
     }
 
 }

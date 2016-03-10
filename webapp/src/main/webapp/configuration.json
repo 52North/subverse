@@ -6,7 +6,7 @@
     },
     "serviceProvider.name" : {
       "type" : "string",
-      "value" : "52North"
+      "value" : "52°North"
     },
     "serviceProvider.file" : {
       "type" : "file",
@@ -18,7 +18,7 @@
     },
     "serviceProvider.individualName" : {
       "type" : "string",
-      "value" : "TBA"
+      "value" : "Matthes Rieke"
     },
     "serviceProvider.phone" : {
       "type" : "string",
@@ -54,7 +54,7 @@
     },
     "serviceProvider.positionName" : {
       "type" : "string",
-      "value" : "TBA"
+      "value" : "Software Architect"
     },
     "serviceProvider.hoursOfService" : {
       "type" : "string",

@@ -39,6 +39,7 @@ import org.n52.iceland.coding.encode.ResponseWriter;
 import org.n52.iceland.coding.encode.ResponseWriterFactory;
 import org.n52.iceland.coding.encode.ResponseWriterKey;
 import org.n52.iceland.coding.encode.ResponseWriterRepository;
+import org.n52.svalbard.xml.XmlOptionsHelper;
 
 /**
  * @author Christian Autermann
@@ -51,6 +52,13 @@ public class XmlBeansWriterFactory
     private ResponseWriterRepository responseWriterRepository;
     private EncoderRepository encoderRepository;
 
+    private XmlOptionsHelper xmlOptions;
+
+    @Inject
+    public void setXmlOptions(XmlOptionsHelper xmlOptions) {
+        this.xmlOptions = xmlOptions;
+    }
+    
     @Inject
     public void setEncoderRepository(EncoderRepository encoderRepository) {
         this.encoderRepository = encoderRepository;
@@ -69,7 +77,7 @@ public class XmlBeansWriterFactory
 
     @Override
     public ResponseWriter<?> create(ResponseWriterKey key) {
-        return new XmlBeansWriter();
+        return new XmlBeansWriter(this.xmlOptions);
     }
 
 

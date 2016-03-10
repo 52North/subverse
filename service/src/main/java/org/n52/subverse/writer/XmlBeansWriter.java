@@ -63,14 +63,11 @@ public class XmlBeansWriter implements ResponseWriter<XmlObject> {
 
     private MediaType contentType;
 
-    private XmlOptionsHelper xmlOptions;
+    private final XmlOptionsHelper xmlOptions;
 
-    @Inject
-    public void setXmlOptions(XmlOptionsHelper xmlOptions) {
-        this.xmlOptions = xmlOptions;
-    }
     
-    public XmlBeansWriter() {
+    public XmlBeansWriter(XmlOptionsHelper xo) {
+        this.xmlOptions = xo;
     }
 
     @Override

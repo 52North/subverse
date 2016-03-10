@@ -36,7 +36,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.SortedSet;
+import net.opengis.ows.x11.AddressType;
 import net.opengis.ows.x11.CodeType;
+import net.opengis.ows.x11.ContactType;
 import net.opengis.ows.x11.DomainType;
 import net.opengis.ows.x11.HTTPDocument;
 import net.opengis.ows.x11.LanguageStringType;
@@ -46,6 +48,7 @@ import net.opengis.ows.x11.RequestMethodType;
 import net.opengis.ows.x11.ResponsiblePartySubsetType;
 import net.opengis.ows.x11.ServiceIdentificationDocument;
 import net.opengis.ows.x11.ServiceProviderDocument;
+import net.opengis.ows.x11.TelephoneType;
 import net.opengis.pubsub.x10.DeliveryCapabilitiesType;
 import net.opengis.pubsub.x10.DeliveryMethodType;
 import net.opengis.pubsub.x10.FilterCapabilitiesType;
@@ -61,6 +64,7 @@ import org.n52.iceland.coding.encode.OperationRequestEncoderKey;
 import org.n52.iceland.config.annotation.Configurable;
 import org.n52.iceland.exception.ows.OwsExceptionReport;
 import org.n52.iceland.exception.ows.concrete.UnsupportedEncoderInputException;
+import org.n52.iceland.i18n.MultilingualString;
 import org.n52.iceland.ogc.ows.Constraint;
 import org.n52.iceland.ogc.ows.DCP;
 import org.n52.iceland.ogc.ows.OWSConstants;
@@ -102,7 +106,6 @@ public class CapabilitiesEncoder implements
                     SubverseConstants.VERSION,
                     SubverseConstants.OPERATION_GET_CAPABILITIES,
                     MediaTypes.APPLICATION_XML));
-
 
     @Override
     public XmlObject encode(GetCapabilitiesResponse objectToEncode) throws OwsExceptionReport, UnsupportedEncoderInputException {
@@ -147,13 +150,18 @@ public class CapabilitiesEncoder implements
         ServiceIdentificationDocument.ServiceIdentification serviceIdent = publisherCaps.addNewServiceIdentification();
         OwsServiceIdentification identObject = capsObject.getServiceIdentification();
 
-        Locale defaultLocale = Locale.forLanguageTag("eng");
-
+        MultilingualString titleObj = identObject.getTitle();
+        Locale defaultLocale = titleObj.getLocales().stream().filter(
+                l -> "eng".equals(l.getLanguage())).findFirst()
+                .orElse(titleObj.getLocales().stream().findFirst().get());
+        
         LanguageStringType title = serviceIdent.addNewTitle();
-        title.setStringValue(identObject.getTitle().getLocalization(defaultLocale).get().getText());
+        title.setStringValue(titleObj.getLocalization(defaultLocale).get().getText());
+        title.setLang(defaultLocale.getLanguage());
 
         LanguageStringType abs = serviceIdent.addNewAbstract();
         abs.setStringValue(identObject.getAbstract().getLocalization(defaultLocale).get().getText());
+        abs.setLang(defaultLocale.getLanguage());
 
         CodeType st = serviceIdent.addNewServiceType();
         st.setStringValue(identObject.getServiceType());
@@ -178,8 +186,24 @@ public class CapabilitiesEncoder implements
         serviceProvider.setProviderName(serviceObj.getName());
         serviceProvider.addNewProviderSite().setHref(serviceObj.getSite());
         ResponsiblePartySubsetType contact = serviceProvider.addNewServiceContact();
-        contact.setIndividualName("TBA");
-        contact.setPositionName("TBA");
+        contact.setIndividualName(serviceObj.getIndividualName());
+        contact.setPositionName(serviceObj.getPositionName());
+        
+        ContactType ci = contact.addNewContactInfo();
+        TelephoneType phone = ci.addNewPhone();
+        phone.addNewVoice().setStringValue(serviceObj.getPhone());
+        String fax = serviceObj.getFacsimile();
+        if (fax != null && !fax.isEmpty()) {
+            phone.addNewFacsimile().setStringValue(fax);
+        }
+        
+        AddressType address = ci.addNewAddress();
+        address.addDeliveryPoint(serviceObj.getDeliveryPoint());
+        address.setCity(serviceObj.getCity());
+        address.setAdministrativeArea(serviceObj.getAdministrativeArea());
+        address.setPostalCode(serviceObj.getPostalCode());
+        address.setCountry(serviceObj.getCountry());
+        address.addElectronicMailAddress(serviceObj.getMailAddress());
     }
 
     @Override
@@ -338,5 +362,9 @@ public class CapabilitiesEncoder implements
         });
     }
 
+    @Override
+    public void addNamespacePrefixToMap(Map<String, String> nameSpacePrefixMap) {
+        nameSpacePrefixMap.put("http://www.opengis.net/ows/1.1", "ows");
+    }
 
 }

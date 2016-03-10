@@ -29,6 +29,7 @@
 package org.n52.subverse.coding.subscribe;
 
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 import javax.xml.namespace.QName;
@@ -44,12 +45,14 @@ import org.joda.time.format.ISOPeriodFormat;
 import org.joda.time.format.PeriodFormatter;
 import org.n52.iceland.coding.decode.Decoder;
 import org.n52.iceland.coding.decode.DecoderKey;
+import org.n52.iceland.coding.decode.OperationDecoderKey;
 import org.n52.iceland.coding.decode.XmlNamespaceOperationDecoderKey;
 import org.n52.iceland.exception.CodedException;
 import org.n52.iceland.exception.ows.OwsExceptionReport;
 import org.n52.iceland.exception.ows.concrete.UnsupportedDecoderInputException;
 import org.n52.iceland.request.AbstractServiceRequest;
 import org.n52.iceland.util.DateTimeHelper;
+import org.n52.iceland.util.http.MediaTypes;
 import org.n52.subverse.SubverseConstants;
 import org.n52.subverse.coding.XmlBeansHelper;
 import org.n52.subverse.delivery.DeliveryDefinition;
@@ -69,6 +72,8 @@ public class SubscribeDecoder implements Decoder<AbstractServiceRequest, String>
     private static final Logger LOG = LoggerFactory.getLogger(SubscribeDecoder.class);
     private static final DecoderKey KEY = new XmlNamespaceOperationDecoderKey(SubverseConstants.WS_N_NAMESPACE,
             SubverseConstants.OPERATION_SUBSCRIBE);
+    private static final DecoderKey DCP_KEY = new OperationDecoderKey(SubverseConstants.SERVICE,
+            SubverseConstants.VERSION, SubverseConstants.OPERATION_SUBSCRIBE, MediaTypes.APPLICATION_XML);
 
     private static final QName PUBLICATION_ID_QN = PublicationIdentifierDocument.type.getDocumentElementName();
     private static final QName DELIVERY_METHOD_QN = DeliveryMethodDocument.type.getDocumentElementName();
@@ -149,7 +154,10 @@ public class SubscribeDecoder implements Decoder<AbstractServiceRequest, String>
 
     @Override
     public Set<DecoderKey> getKeys() {
-        return Collections.singleton(KEY);
+        Set<DecoderKey> keys = new HashSet<>();
+        keys.add(DCP_KEY);
+        keys.add(KEY);
+        return keys;
     }
 
     protected DateTime parseDateTime(AbsoluteOrRelativeTimeType time) throws CodedException {
