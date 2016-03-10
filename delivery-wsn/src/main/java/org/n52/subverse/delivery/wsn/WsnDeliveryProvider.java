@@ -29,10 +29,12 @@
 package org.n52.subverse.delivery.wsn;
 
 import java.net.MalformedURLException;
+import javax.inject.Inject;
 import org.n52.subverse.delivery.DeliveryDefinition;
 import org.n52.subverse.delivery.DeliveryEndpoint;
 import org.n52.subverse.delivery.DeliveryProvider;
 import org.n52.subverse.delivery.UnsupportedDeliveryDefinitionException;
+import org.n52.svalbard.xml.XmlOptionsHelper;
 import org.springframework.stereotype.Component;
 
 /**
@@ -47,10 +49,17 @@ public class WsnDeliveryProvider implements DeliveryProvider {
             "\n 1. The NotificationConsumer MAY simply receive the \"raw\" Notification (i.e. the application-specific content).\n" +
             "\n 2. The NotificationConsumer MAY receive the Notification data as a Notify message as described below.";
 
+    private XmlOptionsHelper xmlOptions;
+
+    @Inject
+    public void setXmlOptions(XmlOptionsHelper xmlOptions) {
+        this.xmlOptions = xmlOptions;
+    }
+    
     @Override
     public DeliveryEndpoint createDeliveryEndpoint(DeliveryDefinition def) throws UnsupportedDeliveryDefinitionException {
         try {
-            return new WsnConsumerEndpoint(def.getLocation());
+            return new WsnConsumerEndpoint(def.getLocation(), this.xmlOptions.create());
         } catch (MalformedURLException ex) {
             throw new UnsupportedDeliveryDefinitionException("Illegal URL provided", ex);
         }

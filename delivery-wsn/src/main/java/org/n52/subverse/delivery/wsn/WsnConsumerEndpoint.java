@@ -63,14 +63,16 @@ public class WsnConsumerEndpoint implements DeliveryEndpoint {
     private static final Logger LOG = LoggerFactory.getLogger(WsnConsumerEndpoint.class);
     private final URL targetUrl;
     private final boolean useRawOutput;
+    private final XmlOptions xmlOptions;
 
-    public WsnConsumerEndpoint(String location) throws MalformedURLException {
-        this(location, false);
+    public WsnConsumerEndpoint(String location, XmlOptions xo) throws MalformedURLException {
+        this(location, false, xo);
     }
 
-    public WsnConsumerEndpoint(String location, boolean useRawOutput) throws MalformedURLException {
+    public WsnConsumerEndpoint(String location, boolean useRawOutput, XmlOptions xo) throws MalformedURLException {
         this.targetUrl = new URL(location);
         this.useRawOutput = useRawOutput;
+        this.xmlOptions = xo;
     }
 
     @Override
@@ -123,7 +125,7 @@ public class WsnConsumerEndpoint implements DeliveryEndpoint {
             createMessageContent(message, o);
 
             body.set(notifyDoc);
-            return envDoc.xmlText(new XmlOptions().setSavePrettyPrint().setUseCDataBookmarks()).getBytes();
+            return envDoc.xmlText(this.xmlOptions.setUseCDataBookmarks()).getBytes();
         }
     }
 

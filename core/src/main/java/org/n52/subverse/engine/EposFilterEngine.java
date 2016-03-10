@@ -33,6 +33,7 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import javax.inject.Inject;
 import net.opengis.fes.x20.FilterDocument;
 import net.opengis.fes.x20.FilterType;
 import org.apache.xmlbeans.XmlObject;
@@ -54,6 +55,7 @@ import org.n52.subverse.delivery.Streamable;
 import org.n52.subverse.delivery.streamable.GenericStreamable;
 import org.n52.subverse.delivery.streamable.StringStreamable;
 import org.n52.subverse.subscription.Subscription;
+import org.n52.svalbard.xml.XmlOptionsHelper;
 import org.slf4j.LoggerFactory;
 
 /**
@@ -67,6 +69,13 @@ public class EposFilterEngine implements FilterEngine {
     private final EposEngine engine = EposEngine.getInstance();
 
     private Map<String, Rule> rules = new HashMap<>();
+
+    private XmlOptionsHelper xmlOptions;
+
+    @Inject
+    public void setXmlOptions(XmlOptionsHelper xmlOptions) {
+        this.xmlOptions = xmlOptions;
+    }
 
     @Override
     public void filterMessage(Object message) {
@@ -137,9 +146,26 @@ public class EposFilterEngine implements FilterEngine {
             return new StringStreamable((String) o);
         }
         else if (o instanceof XmlObject) {
-            String xml = ((XmlObject) o).xmlText(new XmlOptions().setSavePrettyPrint());
-            InputStream s = new StringStreamable(xml).asStream();
-            return new GenericStreamable(s, "application/xml", xml.length(), o);
+            return new GenericStreamable("application/xml", o) {
+                private String xml;
+                
+                @Override
+                public InputStream asStream() {
+                    return new StringStreamable(getXml()).asStream();
+                }
+
+                public synchronized String getXml() {
+                    if (this.xml == null) {
+                        this.xml = ((XmlObject) o).xmlText(xmlOptions.create());
+                    }
+                    return xml;
+                }
+
+                @Override
+                public int getContentLength() {
+                    return getXml().length();
+                }
+            };
         }
 
         return null;

@@ -7,6 +7,6 @@
     <bean class="org.n52.subverse.coding.capabilities.delivery.DeliveryCapabilitiesProducer" />
     <bean class="org.n52.subverse.coding.capabilities.filter.FilterCapabilitiesProducer" />
     <bean class="org.n52.subverse.coding.capabilities.publications.PublicationsProducer" />
-
-
+    <bean class="org.n52.subverse.util.XmlOptionsHelperImpl" />
+    
 </beans>

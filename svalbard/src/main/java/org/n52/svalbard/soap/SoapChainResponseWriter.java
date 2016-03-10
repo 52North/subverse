@@ -19,8 +19,8 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Collections;
 import java.util.Set;
+import javax.inject.Inject;
 import org.apache.xmlbeans.XmlObject;
-import org.apache.xmlbeans.XmlOptions;
 import org.n52.iceland.coding.encode.AbstractResponseWriter;
 import org.n52.iceland.coding.encode.Encoder;
 import org.n52.iceland.coding.encode.EncoderKey;
@@ -32,9 +32,9 @@ import org.n52.iceland.exception.ows.OwsExceptionReport;
 import org.n52.iceland.exception.ows.concrete.NoEncoderForKeyException;
 import org.n52.iceland.response.NoContentResponse;
 import org.n52.iceland.util.http.HTTPStatus;
-import org.n52.iceland.util.http.NoContent;
 import org.n52.iceland.w3c.soap.SoapChain;
 import org.n52.iceland.w3c.soap.SoapResponse;
+import org.n52.svalbard.xml.XmlOptionsHelper;
 
 /**
  *
@@ -44,9 +44,11 @@ public class SoapChainResponseWriter extends AbstractResponseWriter<SoapChain> {
 
     public static final ResponseWriterKey KEY = new ResponseWriterKey(SoapChain.class);
     private final EncoderRepository encoderRepository;
+    private final XmlOptionsHelper xmlOptions;
 
-    SoapChainResponseWriter(EncoderRepository encoderRepository) {
+    SoapChainResponseWriter(EncoderRepository encoderRepository, XmlOptionsHelper xmlOptions) {
         this.encoderRepository = encoderRepository;
+        this.xmlOptions = xmlOptions;
     }
 
     @Override
@@ -54,7 +56,7 @@ public class SoapChainResponseWriter extends AbstractResponseWriter<SoapChain> {
         Object o = encodeSoapResponse(chain);
         if (o != null) {
             if (o instanceof XmlObject) {
-                ((XmlObject) o).save(out, new XmlOptions().setSavePrettyPrint());
+                ((XmlObject) o).save(out, this.xmlOptions.create());
             }
         }
     }

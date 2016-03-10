@@ -35,25 +35,19 @@ import org.n52.subverse.delivery.Streamable;
  *
  * @author Matthes Rieke <m.rieke@52north.org>
  */
-public class GenericStreamable implements Streamable {
+public abstract class GenericStreamable implements Streamable {
 
-    private final InputStream stream;
     private final String contentType;
-    private final int contentLength;
     private final Object originalObject;
 
 
-    public GenericStreamable(InputStream s, String ct, int length, Object o) {
-        this.stream = s;
+    public GenericStreamable(String ct, Object o) {
         this.contentType = ct;
-        this.contentLength = length;
         this.originalObject = o;
     }
 
     @Override
-    public InputStream asStream() {
-        return this.stream;
-    }
+    public abstract InputStream asStream();
 
     @Override
     public String getContentType() {
@@ -61,9 +55,7 @@ public class GenericStreamable implements Streamable {
     }
 
     @Override
-    public int getContentLength() {
-        return this.contentLength;
-    }
+    public abstract int getContentLength();
 
     @Override
     public Object originalObject() {

@@ -22,6 +22,7 @@ import org.n52.iceland.coding.encode.EncoderRepository;
 import org.n52.iceland.coding.encode.ResponseWriter;
 import org.n52.iceland.coding.encode.ResponseWriterFactory;
 import org.n52.iceland.coding.encode.ResponseWriterKey;
+import org.n52.svalbard.xml.XmlOptionsHelper;
 
 /**
  *
@@ -31,6 +32,13 @@ public class SoapChainResponseWriterFactory implements ResponseWriterFactory {
 
     private EncoderRepository encoderRepository;
 
+    private XmlOptionsHelper xmlOptions;
+
+    @Inject
+    public void setXmlOptions(XmlOptionsHelper xmlOptions) {
+        this.xmlOptions = xmlOptions;
+    }
+    
     public EncoderRepository getEncoderRepository() {
         return encoderRepository;
     }
@@ -47,7 +55,7 @@ public class SoapChainResponseWriterFactory implements ResponseWriterFactory {
 
     @Override
     public ResponseWriter<?> create(ResponseWriterKey key) {
-        return new SoapChainResponseWriter(this.encoderRepository);
+        return new SoapChainResponseWriter(this.encoderRepository, this.xmlOptions);
     }
 
 }

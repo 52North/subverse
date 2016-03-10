@@ -159,4 +159,11 @@ public class SoapEnvelopeEncoder implements Encoder<Object, SoapResponse> {
         return status.isClientError() ? "Sender" : "Receiver";
     }
 
+    @Override
+    public void addNamespacePrefixToMap(Map<String, String> nameSpacePrefixMap) {
+        nameSpacePrefixMap.put(EnvelopeDocument.type.getDocumentElementName().getNamespaceURI(), "soap12");
+    }
+
+
+
 }

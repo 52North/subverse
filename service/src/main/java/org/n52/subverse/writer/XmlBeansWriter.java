@@ -47,13 +47,14 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Collections;
 import java.util.Set;
+import javax.inject.Inject;
 import org.apache.xmlbeans.XmlObject;
-import org.apache.xmlbeans.XmlOptions;
 
 import org.n52.iceland.coding.encode.ResponseProxy;
 import org.n52.iceland.coding.encode.ResponseWriter;
 import org.n52.iceland.coding.encode.ResponseWriterKey;
 import org.n52.iceland.util.http.MediaType;
+import org.n52.svalbard.xml.XmlOptionsHelper;
 
 public class XmlBeansWriter implements ResponseWriter<XmlObject> {
 
@@ -62,6 +63,13 @@ public class XmlBeansWriter implements ResponseWriter<XmlObject> {
 
     private MediaType contentType;
 
+    private XmlOptionsHelper xmlOptions;
+
+    @Inject
+    public void setXmlOptions(XmlOptionsHelper xmlOptions) {
+        this.xmlOptions = xmlOptions;
+    }
+    
     public XmlBeansWriter() {
     }
 
@@ -74,7 +82,7 @@ public class XmlBeansWriter implements ResponseWriter<XmlObject> {
     public void write(XmlObject xml, OutputStream out,
             ResponseProxy responseProxy)
             throws IOException {
-        xml.save(out, new XmlOptions().setSavePrettyPrint());
+        xml.save(out, xmlOptions.create());
     }
 
     @Override

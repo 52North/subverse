@@ -32,6 +32,7 @@ import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import org.apache.xmlbeans.XmlOptions;
 import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
 import org.junit.Test;
@@ -49,7 +50,7 @@ public class WsnConsumerEndpointTest {
 
     @Test
     public void testDelivery() throws MalformedURLException {
-        WsnConsumerEndpoint c = new WsnConsumerEndpoint("http://test.test");
+        WsnConsumerEndpoint c = new WsnConsumerEndpoint("http://test.test", new XmlOptions());
         WsnConsumerEndpoint spied = Mockito.spy(c);
 
         List<String> result = new ArrayList<>(1);
