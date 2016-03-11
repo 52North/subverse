@@ -154,7 +154,7 @@ public class CapabilitiesEncoder implements
         Locale defaultLocale = titleObj.getLocales().stream().filter(
                 l -> "eng".equals(l.getLanguage())).findFirst()
                 .orElse(titleObj.getLocales().stream().findFirst().get());
-        
+
         LanguageStringType title = serviceIdent.addNewTitle();
         title.setStringValue(titleObj.getLocalization(defaultLocale).get().getText());
         title.setLang(defaultLocale.getLanguage());
@@ -188,7 +188,7 @@ public class CapabilitiesEncoder implements
         ResponsiblePartySubsetType contact = serviceProvider.addNewServiceContact();
         contact.setIndividualName(serviceObj.getIndividualName());
         contact.setPositionName(serviceObj.getPositionName());
-        
+
         ContactType ci = contact.addNewContactInfo();
         TelephoneType phone = ci.addNewPhone();
         phone.addNewVoice().setStringValue(serviceObj.getPhone());
@@ -196,7 +196,7 @@ public class CapabilitiesEncoder implements
         if (fax != null && !fax.isEmpty()) {
             phone.addNewFacsimile().setStringValue(fax);
         }
-        
+
         AddressType address = ci.addNewAddress();
         address.addDeliveryPoint(serviceObj.getDeliveryPoint());
         address.setCity(serviceObj.getCity());

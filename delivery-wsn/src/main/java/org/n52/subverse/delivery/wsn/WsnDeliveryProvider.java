@@ -55,7 +55,7 @@ public class WsnDeliveryProvider implements DeliveryProvider {
     public void setXmlOptions(XmlOptionsHelper xmlOptions) {
         this.xmlOptions = xmlOptions;
     }
-    
+
     @Override
     public DeliveryEndpoint createDeliveryEndpoint(DeliveryDefinition def) throws UnsupportedDeliveryDefinitionException {
         try {

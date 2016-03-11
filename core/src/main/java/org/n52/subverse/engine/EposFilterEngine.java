@@ -148,7 +148,7 @@ public class EposFilterEngine implements FilterEngine {
         else if (o instanceof XmlObject) {
             return new GenericStreamable("application/xml", o) {
                 private String xml;
-                
+
                 @Override
                 public InputStream asStream() {
                     return new StringStreamable(getXml()).asStream();

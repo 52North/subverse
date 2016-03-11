@@ -28,23 +28,38 @@
  */
 package org.n52.subverse.core.amqp;
 
+import org.n52.subverse.delivery.amqp.AmqpDeliveryEndpoint;
+import java.util.Optional;
 import org.junit.Test;
-import org.springframework.amqp.core.AmqpTemplate;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.n52.subverse.delivery.DeliveryDefinition;
+import org.n52.subverse.delivery.streamable.StringStreamable;
 
 /**
  *
  */
 public class AmqpProducerTestDisabled {
 
-    @Test
-    public void testProducer() {
-        ApplicationContext context = new ClassPathXmlApplicationContext("/META-INF/spring/producer-amqp-context.xml");
-        AmqpTemplate aTemplate = (AmqpTemplate) context.getBean("cloudamqpTemplate");
-        for (int i = 1; i < 6; i++) {
-            aTemplate.convertAndSend("my.routingkey", "Hello CloudAMQP, Message # " +i);
-        }
+    public static void main(String[] args) throws InterruptedException {
+        new AmqpProducerTestDisabled().testProducer();
     }
+
+    @Test
+    public void testProducer() throws InterruptedException {
+        AmqpDeliveryEndpoint ade = new AmqpDeliveryEndpoint(createDef(), "localhost");
+
+        while (true) {
+            ade.deliver(Optional.of(new StringStreamable("hahaha")));
+            Thread.sleep(1000);
+        }
+
+    }
+
+    private DeliveryDefinition createDef() {
+        DeliveryDefinition def = new DeliveryDefinition("test", "127.0.0.1");
+        def.addParameter("amqp.subject", "test");
+        def.addParameter("amqp.topic", "testTopic");
+        return def;
+    }
+
 
 }

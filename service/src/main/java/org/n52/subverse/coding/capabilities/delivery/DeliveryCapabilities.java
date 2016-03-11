@@ -46,10 +46,10 @@ public class DeliveryCapabilities {
         Objects.requireNonNull(providers);
         this.methods = new ArrayList<>(providers.size());
 
-        for (DeliveryProvider provider : providers) {
+        providers.stream().forEach((provider) -> {
             this.methods.add(new DeliveryMethod(provider.getIdentifier(),
-            provider.getAbstract()));
-        }
+                    provider.getAbstract()));
+        });
     }
 
     public List<DeliveryMethod> getMethods() {

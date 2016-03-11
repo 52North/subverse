@@ -29,6 +29,9 @@
 package org.n52.subverse.delivery;
 
 import com.google.common.base.MoreObjects;
+import com.google.common.collect.Maps;
+import java.util.Map;
+import java.util.Optional;
 
 /**
  *
@@ -38,6 +41,7 @@ public class DeliveryDefinition {
 
     private final String identifier;
     private final String location;
+    private final Map<String, String> parameters = Maps.newConcurrentMap();
 
     public DeliveryDefinition(String identifier, String location) {
         this.identifier = identifier;
@@ -52,12 +56,20 @@ public class DeliveryDefinition {
         return location;
     }
 
+    public void addParameter(String key, String value) {
+        this.parameters.put(key, value);
+    }
+
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(this)
                .add("identifier", identifier)
                .add("location", location)
                .toString();
+    }
+
+    public Optional<String> getParameter(String key) {
+        return Optional.ofNullable(this.parameters.get(key));
     }
 
 }

@@ -65,7 +65,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.build.timestamp.format>yyyyMMdd-HHmm</maven.build.timestamp.format>
         <junit-version>4.12</junit-version>
-        <activemq-version>5.13.0</activemq-version>
+        <activemq-version>5.13.2</activemq-version>
         <qpid-version>0.32</qpid-version>
         <slf4j-version>1.7.12</slf4j-version>
         <version.java>1.8</version.java>

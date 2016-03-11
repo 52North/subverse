@@ -134,6 +134,6 @@ public class SubscribeResponseEncoder implements Encoder<XmlObject, SubscribeRes
         prefixMap.put(SubverseConstants.WS_N_NAMESPACE, "wsn");
     }
 
-    
-    
+
+
 }

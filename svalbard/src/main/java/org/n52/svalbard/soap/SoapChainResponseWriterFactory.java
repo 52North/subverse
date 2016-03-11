@@ -38,7 +38,7 @@ public class SoapChainResponseWriterFactory implements ResponseWriterFactory {
     public void setXmlOptions(XmlOptionsHelper xmlOptions) {
         this.xmlOptions = xmlOptions;
     }
-    
+
     public EncoderRepository getEncoderRepository() {
         return encoderRepository;
     }

@@ -26,24 +26,18 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
  * Public License for more details.
  */
-package org.n52.subverse.core.jms;
+package org.n52.subverse.delivery.jms;
 
-import org.n52.subverse.delivery.jms.BasicMessageProducer;
-import javax.jms.JMSException;
-import org.junit.Test;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import javax.jms.Destination;
+import org.apache.activemq.command.ActiveMQQueue;
 
 /**
  *
  */
-public class JMSProducerTestDisabled {
+public class ActiveMQQueueDestinationFactory implements DestinationFactory {
 
-    @Test
-    public void testProcuder() throws JMSException {
-    	ApplicationContext context = new ClassPathXmlApplicationContext("/META-INF/spring/producer-jms-context.xml", JMSProducerTestDisabled.class);
-        BasicMessageProducer producer = (BasicMessageProducer) context.getBean("messageProducer");
-        producer.sendMessages();
+    public Destination createDestination(String name) {
+        return new ActiveMQQueue(name);
     }
 
 }

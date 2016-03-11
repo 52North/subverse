@@ -58,7 +58,7 @@ public class XmlBeansWriterFactory
     public void setXmlOptions(XmlOptionsHelper xmlOptions) {
         this.xmlOptions = xmlOptions;
     }
-    
+
     @Inject
     public void setEncoderRepository(EncoderRepository encoderRepository) {
         this.encoderRepository = encoderRepository;

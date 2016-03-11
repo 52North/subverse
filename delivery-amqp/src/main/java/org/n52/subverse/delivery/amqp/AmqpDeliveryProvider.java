@@ -26,29 +26,46 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
  * Public License for more details.
  */
-package org.n52.subverse.core.jms;
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package org.n52.subverse.delivery.amqp;
 
-import javax.jms.JMSException;
-import javax.jms.Message;
-import javax.jms.MessageListener;
-import javax.jms.TextMessage;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.n52.subverse.delivery.DeliveryDefinition;
+import org.n52.subverse.delivery.DeliveryEndpoint;
+import org.n52.subverse.delivery.DeliveryProvider;
+import org.n52.subverse.delivery.UnsupportedDeliveryDefinitionException;
+import org.springframework.stereotype.Component;
 
 /**
  *
+ * @author Matthes Rieke <m.rieke@52north.org>
  */
-public class ConsumerMessageListener implements MessageListener {
+@Component
+public class AmqpDeliveryProvider implements DeliveryProvider {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ConsumerMessageListener.class);
+    private static final String IDENTIFIER = "amqp";
 
-    public void onMessage(Message message) {
-        try {
-            TextMessage msg = (TextMessage) message;
-            LOG.info("Consumed message: " + msg.getText());
-        } catch (JMSException e) {
-            LOG.warn(e.getMessage(), e);
-        }
+    @Override
+    public boolean supportsDeliveryIdentifier(String id) {
+        return IDENTIFIER.equals(id);
+    }
+
+    @Override
+    public String getIdentifier() {
+        return IDENTIFIER;
+    }
+
+    @Override
+    public String getAbstract() {
+        return "Advanced Message Queuing Protocol 1.0";
+    }
+
+    @Override
+    public DeliveryEndpoint createDeliveryEndpoint(DeliveryDefinition def) throws UnsupportedDeliveryDefinitionException {
+        return new AmqpDeliveryEndpoint(def, "localhost");
     }
 
 }

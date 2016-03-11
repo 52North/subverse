@@ -93,7 +93,7 @@ public class SubscriptionManagerImpl implements SubscriptionManager {
         this.filterEngine.register(result, endpoint.getDeliveryEndpoint());
 
         LOG.info("Registered subscription '{}'", result.getId());
-        
+
         return result;
     }
 

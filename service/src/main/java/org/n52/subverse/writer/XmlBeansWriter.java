@@ -65,7 +65,7 @@ public class XmlBeansWriter implements ResponseWriter<XmlObject> {
 
     private final XmlOptionsHelper xmlOptions;
 
-    
+
     public XmlBeansWriter(XmlOptionsHelper xo) {
         this.xmlOptions = xo;
     }

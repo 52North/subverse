@@ -26,7 +26,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
  * Public License for more details.
  */
-package org.n52.subverse.core.jms;
+package org.n52.subverse.delivery.jms;
 
 import java.util.Date;
 import javax.jms.ConnectionFactory;
