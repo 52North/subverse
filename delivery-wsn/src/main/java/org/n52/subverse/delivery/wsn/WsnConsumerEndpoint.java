@@ -162,4 +162,11 @@ public class WsnConsumerEndpoint implements DeliveryEndpoint {
         }
     }
 
+    @Override
+    public String getEffectiveLocation() {
+        return this.targetUrl.toString();
+    }
+
+
+
 }

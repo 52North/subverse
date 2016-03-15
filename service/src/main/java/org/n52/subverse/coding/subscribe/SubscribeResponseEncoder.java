@@ -36,6 +36,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import net.opengis.pubsub.x10.SubscriptionIdentifierDocument;
+import org.apache.xmlbeans.XmlCursor;
 import org.apache.xmlbeans.XmlObject;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
@@ -51,8 +52,10 @@ import org.n52.iceland.service.ServiceSettings;
 import org.n52.iceland.util.http.MediaType;
 import org.n52.iceland.util.http.MediaTypes;
 import org.n52.subverse.SubverseConstants;
+import org.n52.subverse.coding.XmlBeansHelper;
 import org.n52.subverse.response.SubscribeResponse;
 import org.n52.subverse.subscription.Subscription;
+import org.oasisOpen.docs.wsn.b2.ConsumerReferenceDocument;
 import org.oasisOpen.docs.wsn.b2.SubscribeResponseDocument;
 import org.w3.x2005.x08.addressing.AttributedURIType;
 import org.w3.x2005.x08.addressing.EndpointReferenceType;
@@ -113,7 +116,13 @@ public class SubscribeResponseEncoder implements Encoder<XmlObject, SubscribeRes
         ReferenceParametersType refParams = ref.addNewReferenceParameters();
         SubscriptionIdentifierDocument subIdDoc = SubscriptionIdentifierDocument.Factory.newInstance();
         subIdDoc.setSubscriptionIdentifier(subscriptionObject.getId());
-        refParams.set(subIdDoc);
+
+        ConsumerReferenceDocument conRefDoc = ConsumerReferenceDocument.Factory.newInstance();
+        EndpointReferenceType conRef = conRefDoc.addNewConsumerReference();
+        conRef.addNewAddress().setStringValue(subscriptionObject.getEndpoint().getDeliveryEndpoint().getEffectiveLocation());
+
+        XmlBeansHelper.insertChild(refParams, subIdDoc);
+        XmlBeansHelper.insertChild(refParams, conRefDoc);
 
         return result;
     }

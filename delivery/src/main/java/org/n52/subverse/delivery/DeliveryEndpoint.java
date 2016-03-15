@@ -38,4 +38,6 @@ public interface DeliveryEndpoint {
 
     void deliver(Optional<Streamable> o);
 
+    String getEffectiveLocation();
+
 }

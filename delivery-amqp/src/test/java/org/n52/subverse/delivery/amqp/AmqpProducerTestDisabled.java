@@ -26,24 +26,40 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
  * Public License for more details.
  */
-package org.n52.subverse.core.jms;
+package org.n52.subverse.delivery.amqp;
 
-import org.n52.subverse.delivery.jms.BasicMessageProducer;
-import javax.jms.JMSException;
+import org.n52.subverse.delivery.amqp.AmqpDeliveryEndpoint;
+import java.util.Optional;
 import org.junit.Test;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.n52.subverse.delivery.DeliveryDefinition;
+import org.n52.subverse.delivery.streamable.StringStreamable;
 
 /**
  *
  */
-public class JMSProducerTestDisabled {
+public class AmqpProducerTestDisabled {
+
+    public static void main(String[] args) throws InterruptedException {
+        new AmqpProducerTestDisabled().testProducer();
+    }
 
     @Test
-    public void testProcuder() throws JMSException {
-    	ApplicationContext context = new ClassPathXmlApplicationContext("/META-INF/spring/producer-jms-context.xml", JMSProducerTestDisabled.class);
-        BasicMessageProducer producer = (BasicMessageProducer) context.getBean("messageProducer");
-        producer.sendMessages();
+    public void testProducer() throws InterruptedException {
+        AmqpDeliveryEndpoint ade = new AmqpDeliveryEndpoint(createDef(), "localhost");
+
+        while (true) {
+            ade.deliver(Optional.of(new StringStreamable("hahaha")));
+            Thread.sleep(1000);
+        }
+
     }
+
+    private DeliveryDefinition createDef() {
+        DeliveryDefinition def = new DeliveryDefinition("test", "127.0.0.1", "test-pub");
+        def.addParameter("amqp.subject", "test");
+        def.addParameter("amqp.topic", "testTopic");
+        return def;
+    }
+
 
 }

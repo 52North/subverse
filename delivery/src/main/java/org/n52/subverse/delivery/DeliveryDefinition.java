@@ -41,11 +41,13 @@ public class DeliveryDefinition {
 
     private final String identifier;
     private final String location;
+    private final String publicationId;
     private final Map<String, String> parameters = Maps.newConcurrentMap();
 
-    public DeliveryDefinition(String identifier, String location) {
+    public DeliveryDefinition(String identifier, String location, String publicationId) {
         this.identifier = identifier;
         this.location = location;
+        this.publicationId = publicationId;
     }
 
     public String getIdentifier() {
@@ -54,6 +56,10 @@ public class DeliveryDefinition {
 
     public String getLocation() {
         return location;
+    }
+
+    public String getPublicationId() {
+        return publicationId;
     }
 
     public void addParameter(String key, String value) {

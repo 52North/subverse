@@ -26,40 +26,21 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
  * Public License for more details.
  */
-package org.n52.subverse.core.amqp;
+package org.n52.subverse.delivery.jms;
 
-import org.n52.subverse.delivery.amqp.AmqpDeliveryEndpoint;
-import java.util.Optional;
 import org.junit.Test;
-import org.n52.subverse.delivery.DeliveryDefinition;
-import org.n52.subverse.delivery.streamable.StringStreamable;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
  *
  */
-public class AmqpProducerTestDisabled {
-
-    public static void main(String[] args) throws InterruptedException {
-        new AmqpProducerTestDisabled().testProducer();
-    }
+public class JMSConsumerTestDisabled {
 
     @Test
-    public void testProducer() throws InterruptedException {
-        AmqpDeliveryEndpoint ade = new AmqpDeliveryEndpoint(createDef(), "localhost");
+    public void testConsumer() {
+        new ClassPathXmlApplicationContext("/META-INF/spring/consumer-jms-context.xml", JMSConsumerTestDisabled.class);
 
-        while (true) {
-            ade.deliver(Optional.of(new StringStreamable("hahaha")));
-            Thread.sleep(1000);
-        }
-
+        while(true);
     }
-
-    private DeliveryDefinition createDef() {
-        DeliveryDefinition def = new DeliveryDefinition("test", "127.0.0.1");
-        def.addParameter("amqp.subject", "test");
-        def.addParameter("amqp.topic", "testTopic");
-        return def;
-    }
-
 
 }

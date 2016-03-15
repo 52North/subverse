@@ -35,7 +35,6 @@ import java.util.stream.Stream;
 import javax.xml.namespace.QName;
 import org.apache.xmlbeans.XmlCursor;
 import org.apache.xmlbeans.XmlObject;
-import org.oasisOpen.docs.wsn.b2.QueryExpressionType;
 
 /**
  *
@@ -71,6 +70,16 @@ public class XmlBeansHelper {
         }
 
         return Optional.ofNullable(result);
+    }
+
+    public static void insertChild(XmlObject refParams, XmlObject subIdDoc) {
+        XmlCursor cur = refParams.newCursor();
+        cur.toFirstContentToken();
+        XmlCursor tmpCur = subIdDoc.newCursor();
+        tmpCur.toFirstChild();
+        tmpCur.copyXml(cur);
+        tmpCur.dispose();
+        cur.dispose();
     }
 
 }

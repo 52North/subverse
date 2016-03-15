@@ -28,39 +28,38 @@
  */
 package org.n52.subverse.delivery.amqp;
 
+import org.hamcrest.CoreMatchers;
+import org.junit.Assert;
+import org.junit.Test;
 import org.n52.subverse.delivery.DeliveryDefinition;
-import org.n52.subverse.delivery.DeliveryEndpoint;
-import org.n52.subverse.delivery.DeliveryProvider;
-import org.n52.subverse.delivery.UnsupportedDeliveryDefinitionException;
-import org.springframework.stereotype.Component;
 
 /**
  *
  * @author Matthes Rieke <m.rieke@52north.org>
  */
-@Component
-public class AmqpDeliveryProvider implements DeliveryProvider {
+public class AmqpDeliveryEndpointTest {
 
-    private static final String IDENTIFIER = "amqp10";
+    @Test
+    public void testLocationWithTopic() {
+        AmqpDeliveryEndpoint ep = new AmqpDeliveryEndpoint(new DeliveryDefinition("amqp10", "localhost", "pubId"),
+                "localhoster");
+        Assert.assertThat(ep.getEffectiveLocation(), CoreMatchers.startsWith("amqp://localhost/subverse.pubId."));
 
-    @Override
-    public boolean supportsDeliveryIdentifier(String id) {
-        return IDENTIFIER.equals(id);
-    }
+        ep = new AmqpDeliveryEndpoint(new DeliveryDefinition("amqp10", null, "pubId2"),
+                "localhoster");
+        Assert.assertThat(ep.getEffectiveLocation(), CoreMatchers.startsWith("amqp://localhoster/subverse.pubId2."));
 
-    @Override
-    public String getIdentifier() {
-        return IDENTIFIER;
-    }
+        ep = new AmqpDeliveryEndpoint(new DeliveryDefinition("amqp10", "localhost/topic", "pubId2"),
+                "localhoster");
+        Assert.assertThat(ep.getEffectiveLocation(), CoreMatchers.is("amqp://localhost/topic"));
 
-    @Override
-    public String getAbstract() {
-        return "Advanced Message Queuing Protocol 1.0";
-    }
+        ep = new AmqpDeliveryEndpoint(new DeliveryDefinition("amqp10", "amqp://localhost/topic", "pubId2"),
+                "localhoster");
+        Assert.assertThat(ep.getEffectiveLocation(), CoreMatchers.is("amqp://localhost/topic"));
 
-    @Override
-    public DeliveryEndpoint createDeliveryEndpoint(DeliveryDefinition def) throws UnsupportedDeliveryDefinitionException {
-        return new AmqpDeliveryEndpoint(def, "localhost");
+        ep = new AmqpDeliveryEndpoint(new DeliveryDefinition("amqp10", "topic://localhost/", "pubId2"),
+                "localhoster");
+        Assert.assertThat(ep.getEffectiveLocation(), CoreMatchers.startsWith("topic://localhost/subverse.pubId2."));
     }
 
 }

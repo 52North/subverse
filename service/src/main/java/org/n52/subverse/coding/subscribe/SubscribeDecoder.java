@@ -110,7 +110,7 @@ public class SubscribeDecoder implements Decoder<AbstractServiceRequest, String>
          * delivery location
          */
         AttributedURIType consumer = subscribe.getConsumerReference().getAddress();
-        deliveryDef = new DeliveryDefinition(deliveryIdentifier, consumer.getStringValue());
+        deliveryDef = new DeliveryDefinition(deliveryIdentifier, consumer.getStringValue(), pubId.get());
 
         /*
         * termination time
