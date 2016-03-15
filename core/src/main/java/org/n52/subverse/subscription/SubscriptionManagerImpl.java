@@ -128,5 +128,5 @@ public class SubscriptionManagerImpl implements SubscriptionManager, Destroyable
         });
     }
 
-    
+
 }

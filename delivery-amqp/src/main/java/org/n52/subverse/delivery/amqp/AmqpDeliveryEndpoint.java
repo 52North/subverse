@@ -78,15 +78,15 @@ public class AmqpDeliveryEndpoint implements DeliveryEndpoint {
             LOG.warn("Cannot delivery null object");
             return;
         }
-        
+
         synchronized (this) {
             if (this.messenger == null) {
                 this.messenger = Messenger.Factory.create();
                 this.messenger.setBlocking(false);
-            }    
+            }
         }
-        
-        
+
+
         try {
             synchronized (this) {
                 if (this.messenger.stopped()) {
@@ -100,7 +100,7 @@ public class AmqpDeliveryEndpoint implements DeliveryEndpoint {
             msg.setBody(new AmqpValue(prepareBody(o.get())));
 
             LOG.info("sending message to {}...", this.address);
-            
+
             this.messenger.put(msg);
             this.messenger.send();
             LOG.info("...message sended to {}!", this.address);

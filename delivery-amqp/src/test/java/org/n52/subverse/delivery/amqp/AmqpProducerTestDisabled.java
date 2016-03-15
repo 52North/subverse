@@ -39,7 +39,7 @@ import org.slf4j.LoggerFactory;
  *
  */
 public class AmqpProducerTestDisabled {
-    
+
     private static final Logger LOG = LoggerFactory.getLogger(AmqpProducerTestDisabled.class);
 
     public static void main(String[] args) throws InterruptedException {

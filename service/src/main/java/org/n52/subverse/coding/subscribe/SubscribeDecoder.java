@@ -85,7 +85,6 @@ public class SubscribeDecoder implements Decoder<AbstractServiceRequest, String>
     private static final QName PUBLICATION_ID_QN = PublicationIdentifierDocument.type.getDocumentElementName();
     private static final QName DELIVERY_METHOD_QN = DeliveryMethodDocument.type.getDocumentElementName();
 
-    private String publicationsString;
     private PublicationsProducer publicationsProducer;
 
     @Inject
@@ -93,11 +92,6 @@ public class SubscribeDecoder implements Decoder<AbstractServiceRequest, String>
         this.publicationsProducer = publicationsProducer;
     }
 
-    @Setting(SubverseSettings.PUBLICATIONS)
-    public void setPublicationsString(String ps) {
-        this.publicationsString = ps;
-    }
-    
     @Override
     public AbstractServiceRequest decode(String objectToDecode) throws OwsExceptionReport, UnsupportedDecoderInputException {
         SubscribeDocument subDoc;
@@ -123,7 +117,7 @@ public class SubscribeDecoder implements Decoder<AbstractServiceRequest, String>
                     String.format("Publication identifier '%s' is not registered with this service",
                             pubId.get()));
         }
-        
+
         /*
         * delivery method id
         */

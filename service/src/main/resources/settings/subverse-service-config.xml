@@ -5,5 +5,5 @@
 
     <!-- components implementations -->
     <bean class="org.n52.svalbard.xml.XmlOptionsHelperImpl" />
-    
+
 </beans>

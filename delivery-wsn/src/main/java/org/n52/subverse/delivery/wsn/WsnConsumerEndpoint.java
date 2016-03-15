@@ -170,6 +170,6 @@ public class WsnConsumerEndpoint implements DeliveryEndpoint {
     @Override
     public void destroy() {
     }
-    
+
 
 }

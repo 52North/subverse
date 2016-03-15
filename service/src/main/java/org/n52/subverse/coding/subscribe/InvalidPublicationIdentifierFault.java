@@ -45,5 +45,5 @@ public class InvalidPublicationIdentifierFault extends InvalidParameterValueExce
     public String getReason() {
         return "InvalidPublicationIdentifierFault";
     }
-    
+
 }

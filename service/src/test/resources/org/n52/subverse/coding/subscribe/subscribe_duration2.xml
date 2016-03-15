@@ -25,7 +25,7 @@
         <!--wsn:UseRaw/-->
     </wsn:SubscriptionPolicy>
     <!-- Required for subscription creation -->
-    <pubsub:PublicationIdentifier>http://host.org/pubsub/publication/aircraft</pubsub:PublicationIdentifier>
+    <pubsub:PublicationIdentifier>testdata</pubsub:PublicationIdentifier>
     <pubsub:DeliveryMethod>
         <pubsub:Identifier>http://docs.oasis-open.org/wsn/b-2/NotificationConsumer</pubsub:Identifier>
     </pubsub:DeliveryMethod>
