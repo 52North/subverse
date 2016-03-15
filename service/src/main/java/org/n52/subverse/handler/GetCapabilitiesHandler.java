@@ -206,7 +206,7 @@ public class GetCapabilitiesHandler implements OperationHandler {
         }
 
         if (requestedSections.contains(ServiceMetadataSections.Publications)) {
-            this.publicationsProducer.setPublicationsString(this.publicationsString);
+//            this.publicationsProducer.setPublicationsString(this.publicationsString);
             Publications ps = this.publicationsProducer.get();
             capabilities.setPublications(ps);
         }

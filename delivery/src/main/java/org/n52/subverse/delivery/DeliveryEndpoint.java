@@ -40,4 +40,6 @@ public interface DeliveryEndpoint {
 
     String getEffectiveLocation();
 
+    void destroy();
+    
 }

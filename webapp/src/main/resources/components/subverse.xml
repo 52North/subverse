@@ -48,4 +48,12 @@
     <bean class="org.n52.subverse.writer.ServiceResponseWriterFactory" />
     <bean class="org.n52.svalbard.soap.SoapChainResponseWriterFactory" />
 
+    <!-- specification components -->
+    <bean class="org.n52.subverse.coding.capabilities.delivery.DeliveryCapabilitiesProducer" />
+    <bean class="org.n52.subverse.coding.capabilities.filter.FilterCapabilitiesProducer" />
+    <bean class="org.n52.subverse.coding.capabilities.publications.PublicationsProducer" />
+
+    <!-- core components -->
+    <bean class="org.n52.subverse.subscription.SubscriptionManagerImpl" />
+
 </beans>

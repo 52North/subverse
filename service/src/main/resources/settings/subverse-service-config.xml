@@ -4,8 +4,6 @@
                            http://www.springframework.org/schema/beans/spring-beans-4.1.xsd">
 
     <!-- components implementations -->
-    <bean class="org.n52.subverse.coding.capabilities.delivery.DeliveryCapabilitiesProducer" />
-    <bean class="org.n52.subverse.coding.capabilities.filter.FilterCapabilitiesProducer" />
-    <bean class="org.n52.subverse.coding.capabilities.publications.PublicationsProducer" />
     <bean class="org.n52.svalbard.xml.XmlOptionsHelperImpl" />
+    
 </beans>

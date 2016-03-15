@@ -26,15 +26,24 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
  * Public License for more details.
  */
-package org.n52.subverse.delivery.jms;
+package org.n52.subverse.coding.subscribe;
 
-import javax.jms.Destination;
+import org.n52.iceland.exception.ows.InvalidParameterValueException;
+import org.n52.svalbard.soap.SoapFault;
 
 /**
  *
+ * @author Matthes Rieke <m.rieke@52north.org>
  */
-public interface DestinationFactory {
+public class InvalidPublicationIdentifierFault extends InvalidParameterValueException implements SoapFault {
 
-    Destination createDestination(String name);
+    public InvalidPublicationIdentifierFault(String format) {
+        withMessage(format);
+    }
 
+    @Override
+    public String getReason() {
+        return "InvalidPublicationIdentifierFault";
+    }
+    
 }

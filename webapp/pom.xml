@@ -66,6 +66,8 @@
                 <groupId>org.eclipse.jetty</groupId>
                 <artifactId>jetty-maven-plugin</artifactId>
                 <configuration>
+                    <stopKey>C</stopKey>
+                    <stopPort>34343</stopPort>
                     <scanIntervalSeconds>3</scanIntervalSeconds>
                     <webAppConfig>
                         <contextPath>/${project.build.finalName}</contextPath>

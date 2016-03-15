@@ -29,7 +29,10 @@
 package org.n52.subverse.coding.capabilities.publications;
 
 import org.n52.iceland.config.annotation.Configurable;
+import org.n52.iceland.config.annotation.Setting;
 import org.n52.iceland.util.Producer;
+import org.n52.subverse.SubverseSettings;
+import org.springframework.stereotype.Component;
 
 
 /**
@@ -37,13 +40,15 @@ import org.n52.iceland.util.Producer;
  * @author Matthes Rieke <m.rieke@52north.org>
  */
 @Configurable
-public class PublicationsProducer implements Producer<Publications>{
+@Component
+public class PublicationsProducer implements Producer<Publications> {
 
     private String publicationsString;
 
-//    @Setting(SubverseSettings.PUBLICATIONS)
-    public void setPublicationsString(String ps) {
+    @Setting(SubverseSettings.PUBLICATIONS)
+    public PublicationsProducer setPublicationsString(String ps) {
         this.publicationsString = ps;
+        return this;
     }
 
     @Override

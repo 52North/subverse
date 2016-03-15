@@ -38,4 +38,6 @@ public interface SubscriptionManager {
 
     public void unsubscribe(String subscriptionId) throws UnsubscribeFailedException;
 
+    void destroy();
+    
 }

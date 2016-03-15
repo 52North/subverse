@@ -10,7 +10,7 @@ parser.add_option("-p", "--password", help="password for private key file")
 opts, args = parser.parse_args()
 
 if not args:
-  args = ["amqp://127.0.0.1/adsb"]
+  args = ["topic://ows.dev.52north.org/adsb2"]
 
 mng = Messenger()
 mng.certificate=opts.certificate
@@ -23,8 +23,10 @@ for a in args:
 
 msg = Message()
 while True:
+  print "recv()"
   mng.recv()
   while mng.incoming:
+    print "mgn.get()"
     try:
       mng.get(msg)
     except Exception, e:

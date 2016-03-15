@@ -58,6 +58,7 @@ public class AmqpDeliveryEndpoint implements DeliveryEndpoint {
     private final Optional<String> topic;
     private final String address;
     private final String parentPublicationId;
+    private Messenger messenger;
 
 
     public AmqpDeliveryEndpoint(DeliveryDefinition def, String defaultBroker) {
@@ -77,18 +78,32 @@ public class AmqpDeliveryEndpoint implements DeliveryEndpoint {
             LOG.warn("Cannot delivery null object");
             return;
         }
-
+        
+        synchronized (this) {
+            if (this.messenger == null) {
+                this.messenger = Messenger.Factory.create();
+                this.messenger.setBlocking(false);
+            }    
+        }
+        
+        
         try {
+            synchronized (this) {
+                if (this.messenger.stopped()) {
+                    this.messenger.start();
+                }
+            }
+
             Message msg = Message.Factory.create();
             msg.setAddress(address);
             msg.setSubject(subject.orElse("subverse"));
             msg.setBody(new AmqpValue(prepareBody(o.get())));
 
-            Messenger mng = Messenger.Factory.create();
-            mng.start();
-            mng.put(msg);
-            mng.send();
-            mng.stop();
+            LOG.info("sending message to {}...", this.address);
+            
+            this.messenger.put(msg);
+            this.messenger.send();
+            LOG.info("...message sended to {}!", this.address);
         } catch (IOException ex) {
             LOG.warn("Could not delivery amqp message", ex);
         }
@@ -168,6 +183,14 @@ public class AmqpDeliveryEndpoint implements DeliveryEndpoint {
         }
 
         return add;
+    }
+
+    @Override
+    public void destroy() {
+        if (this.messenger != null) {
+            this.messenger.stop();
+            LOG.info("Messenger for {} stopped.", this.address);
+        }
     }
 
     private static class ShortId {

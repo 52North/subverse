@@ -32,6 +32,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
+import javax.inject.Inject;
 import javax.xml.namespace.QName;
 import net.opengis.pubsub.x10.DeliveryMethodDocument;
 import net.opengis.pubsub.x10.DeliveryMethodType;
@@ -47,6 +48,8 @@ import org.n52.iceland.coding.decode.Decoder;
 import org.n52.iceland.coding.decode.DecoderKey;
 import org.n52.iceland.coding.decode.OperationDecoderKey;
 import org.n52.iceland.coding.decode.XmlNamespaceOperationDecoderKey;
+import org.n52.iceland.config.annotation.Configurable;
+import org.n52.iceland.config.annotation.Setting;
 import org.n52.iceland.exception.CodedException;
 import org.n52.iceland.exception.ows.OwsExceptionReport;
 import org.n52.iceland.exception.ows.concrete.UnsupportedDecoderInputException;
@@ -54,7 +57,10 @@ import org.n52.iceland.request.AbstractServiceRequest;
 import org.n52.iceland.util.DateTimeHelper;
 import org.n52.iceland.util.http.MediaTypes;
 import org.n52.subverse.SubverseConstants;
+import org.n52.subverse.SubverseSettings;
 import org.n52.subverse.coding.XmlBeansHelper;
+import org.n52.subverse.coding.capabilities.publications.Publications;
+import org.n52.subverse.coding.capabilities.publications.PublicationsProducer;
 import org.n52.subverse.delivery.DeliveryDefinition;
 import org.n52.subverse.request.SubscribeRequest;
 import org.n52.subverse.subscription.SubscribeOptions;
@@ -67,6 +73,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3.x2005.x08.addressing.AttributedURIType;
 
+@Configurable
 public class SubscribeDecoder implements Decoder<AbstractServiceRequest, String> {
 
     private static final Logger LOG = LoggerFactory.getLogger(SubscribeDecoder.class);
@@ -78,6 +85,19 @@ public class SubscribeDecoder implements Decoder<AbstractServiceRequest, String>
     private static final QName PUBLICATION_ID_QN = PublicationIdentifierDocument.type.getDocumentElementName();
     private static final QName DELIVERY_METHOD_QN = DeliveryMethodDocument.type.getDocumentElementName();
 
+    private String publicationsString;
+    private PublicationsProducer publicationsProducer;
+
+    @Inject
+    public void setPublicationsProducer(PublicationsProducer publicationsProducer) {
+        this.publicationsProducer = publicationsProducer;
+    }
+
+    @Setting(SubverseSettings.PUBLICATIONS)
+    public void setPublicationsString(String ps) {
+        this.publicationsString = ps;
+    }
+    
     @Override
     public AbstractServiceRequest decode(String objectToDecode) throws OwsExceptionReport, UnsupportedDecoderInputException {
         SubscribeDocument subDoc;
@@ -95,6 +115,15 @@ public class SubscribeDecoder implements Decoder<AbstractServiceRequest, String>
         Optional<String> pubId = XmlBeansHelper.findFirstChild(PUBLICATION_ID_QN, subscribe)
                 .map(c -> XmlBeansHelper.extractStringContent(c));
 
+        //check if this publication is defined
+        Publications pubs = this.publicationsProducer.get();
+        long matching = pubs.getPublicationList().stream().filter(p -> p.getIdentifier().equals(pubId.get())).count();
+        if (matching == 0) {
+            throw new InvalidPublicationIdentifierFault(
+                    String.format("Publication identifier '%s' is not registered with this service",
+                            pubId.get()));
+        }
+        
         /*
         * delivery method id
         */

@@ -167,6 +167,9 @@ public class WsnConsumerEndpoint implements DeliveryEndpoint {
         return this.targetUrl.toString();
     }
 
-
+    @Override
+    public void destroy() {
+    }
+    
 
 }

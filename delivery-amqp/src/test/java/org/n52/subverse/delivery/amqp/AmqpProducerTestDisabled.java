@@ -28,16 +28,19 @@
  */
 package org.n52.subverse.delivery.amqp;
 
-import org.n52.subverse.delivery.amqp.AmqpDeliveryEndpoint;
 import java.util.Optional;
 import org.junit.Test;
 import org.n52.subverse.delivery.DeliveryDefinition;
 import org.n52.subverse.delivery.streamable.StringStreamable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
  */
 public class AmqpProducerTestDisabled {
+    
+    private static final Logger LOG = LoggerFactory.getLogger(AmqpProducerTestDisabled.class);
 
     public static void main(String[] args) throws InterruptedException {
         new AmqpProducerTestDisabled().testProducer();
@@ -47,17 +50,18 @@ public class AmqpProducerTestDisabled {
     public void testProducer() throws InterruptedException {
         AmqpDeliveryEndpoint ade = new AmqpDeliveryEndpoint(createDef(), "localhost");
 
-        while (true) {
-            ade.deliver(Optional.of(new StringStreamable("hahaha")));
-            Thread.sleep(1000);
+        int i = 0;
+        while (i++ < 10) {
+            LOG.info("Sending message... "+i);
+            ade.deliver(Optional.of(new StringStreamable("hahaha "+i)));
+            Thread.sleep(10000);
         }
 
     }
 
     private DeliveryDefinition createDef() {
-        DeliveryDefinition def = new DeliveryDefinition("test", "127.0.0.1", "test-pub");
+        DeliveryDefinition def = new DeliveryDefinition("test", "topic://ows.dev.52north.org/adsb2", "test-pub");
         def.addParameter("amqp.subject", "test");
-        def.addParameter("amqp.topic", "testTopic");
         return def;
     }
 

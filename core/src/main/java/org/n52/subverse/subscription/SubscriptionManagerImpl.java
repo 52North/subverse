@@ -30,6 +30,7 @@ package org.n52.subverse.subscription;
 
 import org.n52.subverse.IdProvider;
 import javax.inject.Inject;
+import org.n52.iceland.lifecycle.Destroyable;
 import org.n52.subverse.dao.SubscriptionDao;
 import org.n52.subverse.delivery.DeliveryProvider;
 import org.n52.subverse.delivery.DeliveryProviderRepository;
@@ -38,7 +39,7 @@ import org.n52.subverse.engine.FilterEngine;
 import org.n52.subverse.engine.SubscriptionRegistrationException;
 import org.slf4j.LoggerFactory;
 
-public class SubscriptionManagerImpl implements SubscriptionManager {
+public class SubscriptionManagerImpl implements SubscriptionManager, Destroyable {
 
     private static final org.slf4j.Logger LOG = LoggerFactory.getLogger(SubscriptionManagerImpl.class);
     private SubscriptionDao dao;
@@ -120,6 +121,12 @@ public class SubscriptionManagerImpl implements SubscriptionManager {
         return new SubscriptionEndpoint(provider.createDeliveryEndpoint(options.getDeliveryDefinition().get()));
     }
 
+    @Override
+    public void destroy() {
+        this.dao.getAllSubscriptions().forEach(sub -> {
+            sub.getEndpoint().getDeliveryEndpoint().destroy();
+        });
+    }
 
-
+    
 }

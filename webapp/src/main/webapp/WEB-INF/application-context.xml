@@ -30,10 +30,9 @@
         <property name="configLocationProvider" ref="configLocationProvider"/>
     </bean>
 
-    <import resource="classpath:settings/*.xml" />
-
     <!-- every module is allowed to define its own beans -->
     <import resource="classpath:settings/subverse-core-config.xml" />
     <import resource="classpath:settings/subverse-service-config.xml" />
+    <import resource="classpath:settings/*.xml" />
 
 </beans>
