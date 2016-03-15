@@ -34,6 +34,10 @@
             <artifactId>delivery-amqp</artifactId>
         </dependency>
         <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>consumer-mqtt</artifactId>
+        </dependency>
+        <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
         </dependency>
@@ -79,6 +83,7 @@
                         <scanTarget>../delivery/target/classes</scanTarget>
                         <scanTarget>../delivery-amqp/target/classes</scanTarget>
                         <scanTarget>../delivery-wsn/target/classes</scanTarget>
+                        <scanTarget>../consumer-mqtt/target/classes</scanTarget>
                         <scanTarget>../service/target/classes</scanTarget>
                         <scanTarget>../svalbard/target/classes</scanTarget>
                     </scanTargets>
