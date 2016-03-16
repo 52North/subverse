@@ -9,7 +9,8 @@
 
     <bean id="kvpBinding" class="org.n52.iceland.binding.kvp.KvpBinding"/>
     <bean id="poxBinding" class="org.n52.iceland.binding.pox.PoxBinding"/>
-    <bean id="soapBinding" class="org.n52.iceland.binding.soap.SoapBinding"/>
+<!--    <bean id="soapBinding" class="org.n52.iceland.binding.soap.SoapBinding"/>-->
+    <bean id="soapBinding" class="org.n52.subverse.binding.PubSubSoapBinding"/>
 
     <bean id="serviceMetadataRepository" class="org.n52.iceland.ogc.ows.ServiceMetadataRepositoryImpl"/>
 

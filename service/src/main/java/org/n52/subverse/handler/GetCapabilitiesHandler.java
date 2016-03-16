@@ -84,6 +84,7 @@ import org.slf4j.LoggerFactory;
 import org.n52.subverse.SubverseConstants;
 import org.n52.subverse.SubverseConstants.GetCapabilitiesParam.ServiceMetadataSections;
 import org.n52.subverse.SubverseSettings;
+import org.n52.subverse.binding.PubSubSoapMediaType;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @Configurable
@@ -302,11 +303,34 @@ public class GetCapabilitiesHandler implements OperationHandler {
                 // common constraints
                 if (binding.getSupportedEncodings() != null
                         && !binding.getSupportedEncodings().isEmpty()) {
-                    SortedSet<String> set = binding.getSupportedEncodings().stream()
+                    /*
+                     * default soap stuff
+                     */
+                    SortedSet<String> set = binding.getSupportedEncodings()
+                            .stream()
+                            .filter(enc -> {
+                                return !(enc instanceof PubSubSoapMediaType);
+                            })
                             .map(String::valueOf).collect(TreeSet::new, Set::add, Set::addAll);
                     Constraint constraint = new Constraint(HTTPHeaders.CONTENT_TYPE,
                             new OwsParameterValuePossibleValues(set));
                     constraints.add(constraint);
+                    
+                    /*
+                     * PubSub PostEncoding = SOAP
+                     */
+                    set = binding.getSupportedEncodings()
+                            .stream()
+                            .filter(enc -> {
+                                return enc instanceof PubSubSoapMediaType;
+                            })
+                            .map(String::valueOf).collect(TreeSet::new, Set::add, Set::addAll);
+                    if (!set.isEmpty()) {
+                        constraint = new Constraint("PostEncoding",
+                            new OwsParameterValuePossibleValues(set));
+                        constraints.add(constraint);
+                    }
+                    
                 }
 
                 // common parameters (none yet)

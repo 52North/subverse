@@ -37,6 +37,7 @@ import java.util.Set;
 import java.util.SortedMap;
 import java.util.SortedSet;
 import net.opengis.ows.x11.AddressType;
+import net.opengis.ows.x11.AllowedValuesDocument;
 import net.opengis.ows.x11.CodeType;
 import net.opengis.ows.x11.ContactType;
 import net.opengis.ows.x11.DomainType;
@@ -49,6 +50,7 @@ import net.opengis.ows.x11.ResponsiblePartySubsetType;
 import net.opengis.ows.x11.ServiceIdentificationDocument;
 import net.opengis.ows.x11.ServiceProviderDocument;
 import net.opengis.ows.x11.TelephoneType;
+import net.opengis.ows.x11.ValueType;
 import net.opengis.pubsub.x10.DeliveryCapabilitiesType;
 import net.opengis.pubsub.x10.DeliveryMethodType;
 import net.opengis.pubsub.x10.FilterCapabilitiesType;
@@ -304,8 +306,12 @@ public class CapabilitiesEncoder implements
 
         constr.getValues().stream().forEach((parameterValue) -> {
             if (parameterValue instanceof OwsParameterValuePossibleValues) {
+                AllowedValuesDocument.AllowedValues xml_allowed = xml_constraint.addNewAllowedValues();
+                
                 OwsParameterValuePossibleValues possibleValues = (OwsParameterValuePossibleValues) parameterValue;
-                possibleValues.getValues().forEach(xml_constraint::setName);
+                possibleValues.getValues().forEach(val -> {
+                    xml_allowed.addNewValue().setStringValue(val);
+                });
             } else {
                 LOG.warn("Unsupported OwsParameterValue type: {}",
                         parameterValue == null ? null : parameterValue.getClass());
