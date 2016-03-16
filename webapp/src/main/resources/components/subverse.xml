@@ -60,7 +60,9 @@
 
     <!-- core components -->
     <bean class="org.n52.subverse.subscription.SubscriptionManagerImpl" />
-    <bean class="org.n52.subverse.consume.ConfigurableConsumerRepository" />
+<!--    <bean class="org.n52.subverse.consume.ConfigurableConsumerRepository" />-->
     <bean class="org.n52.subverse.consume.mqtt.PahoMqttConsumerFactory" />
+    <bean class="org.n52.subverse.delivery.amqp.AmqpDeliveryProvider" />
+    <bean class="org.n52.subverse.delivery.DeliveryProviderRepository" />
 
 </beans>

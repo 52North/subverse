@@ -38,7 +38,6 @@ import org.springframework.stereotype.Component;
  *
  * @author Matthes Rieke <m.rieke@52north.org>
  */
-@Component
 public class PubSubSoapBinding extends SoapBinding {
 
     @Override

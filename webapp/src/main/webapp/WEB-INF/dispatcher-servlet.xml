@@ -27,6 +27,6 @@
     <mvc:resources mapping="/" location="/static/index.html" />
 
     <!-- additional endpoints -->
-    <bean id="extraEndpoint" class="org.n52.subverse.JsonEndpoint" />
+    <!--<bean id="extraEndpoint" class="org.n52.subverse.JsonEndpoint" />-->
 
 </beans>

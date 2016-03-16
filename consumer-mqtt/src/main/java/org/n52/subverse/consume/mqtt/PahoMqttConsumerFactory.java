@@ -31,18 +31,17 @@ package org.n52.subverse.consume.mqtt;
 import java.util.UUID;
 import javax.inject.Inject;
 import org.eclipse.paho.client.mqttv3.MqttException;
-import org.n52.subverse.consume.ConfigurableConsumerFactory;
+import org.n52.iceland.lifecycle.Constructable;
+import org.n52.iceland.lifecycle.Destroyable;
 import org.n52.subverse.engine.FilterEngine;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
 
 /**
  *
  * @author Matthes Rieke <m.rieke@52north.org>
  */
-@Component
-public class PahoMqttConsumerFactory implements ConfigurableConsumerFactory {
+public class PahoMqttConsumerFactory implements Constructable, Destroyable {
 
     private static final Logger LOG = LoggerFactory.getLogger(PahoMqttConsumerFactory.class);
     private PahoMqttConsumer consumer;
@@ -58,7 +57,7 @@ public class PahoMqttConsumerFactory implements ConfigurableConsumerFactory {
     }
 
     @Override
-    public void create() {
+    public void init() {
         try {
             String host = "ows.dev.52north.org";
             String topic = "n52.adsb";
@@ -69,7 +68,7 @@ public class PahoMqttConsumerFactory implements ConfigurableConsumerFactory {
             this.consumer.connect();
             this.consumer.subscribe(topic, PahoMqttConsumer.QualityOfService.EXACTLY_ONCE);
 
-            LOG.info("listing for messages on topic'{}' of MQTT host", topic, host);
+            LOG.info("listening for messages on topic '{}' of MQTT host {}", topic, host);
         } catch (MqttException ex) {
             LOG.warn("Could not start MQTT consumer", ex);
         }

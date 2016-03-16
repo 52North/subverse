@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-    <property name="logFile" value="subverse" />
+    <property name="logFile" value="${catalina.base:-.}/logs/subverse" />
     <appender name="subversefile"
                   class="ch.qos.logback.core.rolling.RollingFileAppender">
         <!--See http://logback.qos.ch/manual/appenders.html#RollingFileAppender -->

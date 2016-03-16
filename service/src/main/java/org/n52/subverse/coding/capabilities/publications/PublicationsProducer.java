@@ -32,7 +32,6 @@ import org.n52.iceland.config.annotation.Configurable;
 import org.n52.iceland.config.annotation.Setting;
 import org.n52.iceland.util.Producer;
 import org.n52.subverse.SubverseSettings;
-import org.springframework.stereotype.Component;
 
 
 /**
@@ -40,7 +39,6 @@ import org.springframework.stereotype.Component;
  * @author Matthes Rieke <m.rieke@52north.org>
  */
 @Configurable
-@Component
 public class PublicationsProducer implements Producer<Publications> {
 
     private String publicationsString;

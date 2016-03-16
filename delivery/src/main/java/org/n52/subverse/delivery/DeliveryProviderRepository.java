@@ -32,18 +32,19 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 /**
  *
  * @author Matthes Rieke <m.rieke@52north.org>
  */
-@Component
 public class DeliveryProviderRepository {
 
-    @Autowired(required = false)
     private Collection<DeliveryProvider> providers;
 
+    @Autowired
+    public void setProviders(Collection<DeliveryProvider> providers) {
+        this.providers = providers;
+    }
 
     public DeliveryProvider getProvider(Optional<DeliveryDefinition> deliveryDefinition) {
         if (deliveryDefinition.isPresent() && providers != null) {

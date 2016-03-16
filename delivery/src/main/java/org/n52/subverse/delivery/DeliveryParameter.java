@@ -26,16 +26,50 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
  * Public License for more details.
  */
-package org.n52.subverse;
+package org.n52.subverse.delivery;
 
-import org.n52.iceland.service.ServiceSettings;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
  * @author Matthes Rieke <m.rieke@52north.org>
  */
-public interface SubverseSettings extends ServiceSettings {
+public class DeliveryParameter {
 
-    String PUBLICATIONS = "subverse.publications";
+    private final String namespace;
+    private final String elementName;
+    private final String value;
+    private final List<DeliveryParameter> children = new ArrayList<>();
+
+    public DeliveryParameter(String namespace, String elementName, String value) {
+        this.namespace = namespace;
+        this.elementName = elementName;
+        this.value = value;
+    }
+
+    public String getNamespace() {
+        return namespace;
+    }
+
+    public String getElementName() {
+        return elementName;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public void addChildren(DeliveryParameter p) {
+        children.add(p);
+    }
+
+    public List<DeliveryParameter> getChildren() {
+        return children;
+    }
+
+    public boolean hasChildren() {
+        return !children.isEmpty();
+    }
 
 }

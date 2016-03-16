@@ -26,44 +26,18 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
  * Public License for more details.
  */
-package org.n52.subverse.consume;
+package org.n52.subverse;
 
-import java.util.Collection;
-import org.n52.iceland.lifecycle.Constructable;
-import org.n52.iceland.lifecycle.Destroyable;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.n52.iceland.service.ServiceSettings;
 
 /**
  *
  * @author Matthes Rieke <m.rieke@52north.org>
  */
-@Component
-public class ConfigurableConsumerRepository implements Destroyable, Constructable {
+public interface SubverseSettings extends ServiceSettings {
 
-    @Autowired
-    Collection<ConfigurableConsumerFactory> consumerFactories;
+    String PUBLICATIONS = "subverse.publications";
 
-    public void startConsumers() {
-        if (this.consumerFactories != null) {
-            this.consumerFactories.stream().forEach(cf -> {
-                cf.create();
-            });
-        }
-    }
-
-    @Override
-    public void destroy() {
-        if (this.consumerFactories != null) {
-            this.consumerFactories.stream().forEach(cf -> {
-                cf.destroy();
-            });
-        }
-    }
-
-    @Override
-    public void init() {
-        startConsumers();
-    }
+    String AMQP_DEFAULT_HOST = "subverse.amqp.defaultHost";
 
 }

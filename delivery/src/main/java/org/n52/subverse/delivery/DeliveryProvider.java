@@ -41,4 +41,8 @@ public interface DeliveryProvider {
     String getAbstract();
 
     DeliveryEndpoint createDeliveryEndpoint(DeliveryDefinition def) throws UnsupportedDeliveryDefinitionException;
+
+    default DeliveryParameter[] getParameters() {
+        return new DeliveryParameter[0];
+    }
 }

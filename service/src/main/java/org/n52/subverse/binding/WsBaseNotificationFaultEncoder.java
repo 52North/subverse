@@ -61,7 +61,6 @@ import org.springframework.stereotype.Component;
  *
  * @author Matthes Rieke <m.rieke@52north.org>
  */
-@Component
 public class WsBaseNotificationFaultEncoder implements Encoder<XmlObject, OwsExceptionReport> {
 
     private static final EncoderKey KEY = new ExceptionEncoderKey(MediaTypes.APPLICATION_SOAP_XML);

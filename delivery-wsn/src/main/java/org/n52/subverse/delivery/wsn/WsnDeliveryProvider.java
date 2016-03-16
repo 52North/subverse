@@ -41,7 +41,6 @@ import org.springframework.stereotype.Component;
  *
  * @author Matthes Rieke <m.rieke@52north.org>
  */
-@Component
 public class WsnDeliveryProvider implements DeliveryProvider {
 
     private static final String IDENTIFIER = "http://docs.oasis-open.org/wsn/b-2/NotificationConsumer";

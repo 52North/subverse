@@ -42,13 +42,13 @@ public class DeliveryCapabilities {
 
     private List<DeliveryMethod> methods;
 
-    DeliveryCapabilities(Collection<DeliveryProvider> providers) {
+    public DeliveryCapabilities(Collection<DeliveryProvider> providers) {
         Objects.requireNonNull(providers);
         this.methods = new ArrayList<>(providers.size());
 
         providers.stream().forEach((provider) -> {
             this.methods.add(new DeliveryMethod(provider.getIdentifier(),
-                    provider.getAbstract()));
+                    provider.getAbstract(), provider.getParameters()));
         });
     }
 

@@ -147,6 +147,10 @@
     "subverse.publications" : {
       "type" : "string",
       "value" : "testData|Some test data"
+    },
+    "subverse.amqp.defaultHost" : {
+      "type" : "string",
+      "value" : "localhost"
     }
   }
 }

@@ -28,6 +28,11 @@
  */
 package org.n52.subverse.coding.capabilities.delivery;
 
+import org.n52.subverse.delivery.DeliveryParameter;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 /**
  *
  * @author Matthes Rieke <m.rieke@52north.org>
@@ -36,10 +41,12 @@ public class DeliveryMethod {
 
     private final String theAbstract;
     private final String identifier;
+    private final List<DeliveryParameter> parameters = new ArrayList<>();
 
-    public DeliveryMethod(String theAbstract, String identifier) {
+    public DeliveryMethod(String theAbstract, String identifier, DeliveryParameter... params) {
         this.theAbstract = theAbstract;
         this.identifier = identifier;
+        this.parameters.addAll(Arrays.asList(params));
     }
 
     public String getTheAbstract() {
@@ -48,6 +55,10 @@ public class DeliveryMethod {
 
     public String getIdentifier() {
         return identifier;
+    }
+
+    public List<DeliveryParameter> getParameters() {
+        return parameters;
     }
 
 }

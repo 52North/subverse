@@ -36,6 +36,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.SortedSet;
+import javax.inject.Inject;
+import javax.xml.namespace.QName;
 import net.opengis.ows.x11.AddressType;
 import net.opengis.ows.x11.AllowedValuesDocument;
 import net.opengis.ows.x11.CodeType;
@@ -50,7 +52,6 @@ import net.opengis.ows.x11.ResponsiblePartySubsetType;
 import net.opengis.ows.x11.ServiceIdentificationDocument;
 import net.opengis.ows.x11.ServiceProviderDocument;
 import net.opengis.ows.x11.TelephoneType;
-import net.opengis.ows.x11.ValueType;
 import net.opengis.pubsub.x10.DeliveryCapabilitiesType;
 import net.opengis.pubsub.x10.DeliveryMethodType;
 import net.opengis.pubsub.x10.FilterCapabilitiesType;
@@ -59,6 +60,7 @@ import net.opengis.pubsub.x10.PublicationType;
 import net.opengis.pubsub.x10.PublicationsType;
 import net.opengis.pubsub.x10.PublisherCapabilitiesDocument;
 import net.opengis.pubsub.x10.PublisherCapabilitiesType;
+import org.apache.xmlbeans.XmlCursor;
 import org.apache.xmlbeans.XmlObject;
 import org.n52.iceland.coding.encode.Encoder;
 import org.n52.iceland.coding.encode.EncoderKey;
@@ -85,8 +87,11 @@ import org.n52.iceland.util.http.MediaTypes;
 import org.n52.subverse.SubverseCapabilities;
 import org.n52.subverse.SubverseConstants;
 import org.n52.subverse.coding.capabilities.delivery.DeliveryCapabilities;
+import org.n52.subverse.delivery.DeliveryParameter;
 import org.n52.subverse.coding.capabilities.filter.FilterCapabilities;
 import org.n52.subverse.coding.capabilities.publications.Publications;
+import org.n52.subverse.delivery.DeliveryProvider;
+import org.n52.subverse.delivery.DeliveryProviderRepository;
 import org.slf4j.LoggerFactory;
 
 /**
@@ -348,15 +353,49 @@ public class CapabilitiesEncoder implements
         });
     }
 
-    private void createDeliveryCapabilites(PublisherCapabilitiesType publisherCaps, DeliveryCapabilities deliveryObject) {
+    protected void createDeliveryCapabilites(PublisherCapabilitiesType publisherCaps, DeliveryCapabilities deliveryObject) {
         DeliveryCapabilitiesType delivery = publisherCaps.addNewDeliveryCapabilities();
 
         deliveryObject.getMethods().stream().forEach((method) -> {
             DeliveryMethodType deliveryMethod = delivery.addNewDeliveryMethod();
             deliveryMethod.setIdentifier(method.getIdentifier());
             deliveryMethod.addNewAbstract().setStringValue(method.getTheAbstract());
+            List<DeliveryParameter> params = method.getParameters();
+            if (params != null && !params.isEmpty()) {
+                deliveryMethod.addNewExtension().set(createDeliveryParameters(params));
+            }
         });
     }
+
+    private XmlObject createDeliveryParameters(List<DeliveryParameter> parameters) {
+        XmlObject xo = XmlObject.Factory.newInstance();
+        XmlCursor cur = xo.newCursor();
+        cur.toNextToken();
+
+        parameters.forEach(param -> {
+            createElement(cur, param);
+        });
+
+        cur.dispose();
+
+        return xo;
+    }
+
+    private void createElement(XmlCursor cur, DeliveryParameter param) {
+        cur.beginElement(new QName(param.getNamespace(), param.getElementName()));
+
+        if (!param.hasChildren()) {
+            cur.insertChars(param.getValue());
+        }
+        else {
+            param.getChildren().forEach(child -> {
+                createElement(cur, child);
+            });
+        }
+
+        cur.toEndDoc();
+    }
+
 
     private void createPublications(PublisherCapabilitiesType publisherCaps, Publications pubObject) {
         PublicationsType publications = publisherCaps.addNewPublications();
@@ -372,5 +411,6 @@ public class CapabilitiesEncoder implements
     public void addNamespacePrefixToMap(Map<String, String> nameSpacePrefixMap) {
         nameSpacePrefixMap.put("http://www.opengis.net/ows/1.1", "ows");
     }
+
 
 }

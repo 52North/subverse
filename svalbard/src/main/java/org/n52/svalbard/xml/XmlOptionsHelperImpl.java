@@ -39,13 +39,11 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import org.apache.xmlbeans.XmlOptions;
 import org.n52.iceland.coding.CodingRepository;
-import org.springframework.stereotype.Component;
 
 /**
  *
  * @author Matthes Rieke <m.rieke@52north.org>
  */
-@Component
 public class XmlOptionsHelperImpl implements XmlOptionsHelper {
 
     private static final String CHARACTER_ENCODING = "UTF-8";
