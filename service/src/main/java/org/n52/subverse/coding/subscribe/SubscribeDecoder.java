@@ -45,12 +45,15 @@ import org.n52.iceland.coding.decode.DecoderKey;
 import org.n52.iceland.coding.decode.OperationDecoderKey;
 import org.n52.iceland.coding.decode.XmlNamespaceOperationDecoderKey;
 import org.n52.iceland.config.annotation.Configurable;
+import org.n52.iceland.exception.ows.InvalidParameterValueException;
 import org.n52.iceland.exception.ows.OwsExceptionReport;
 import org.n52.iceland.exception.ows.concrete.UnsupportedDecoderInputException;
 import org.n52.iceland.request.AbstractServiceRequest;
 import org.n52.iceland.util.http.MediaTypes;
 import org.n52.subverse.SubverseConstants;
 import org.n52.subverse.coding.XmlBeansHelper;
+import org.n52.subverse.coding.capabilities.filter.FilterCapabilities;
+import org.n52.subverse.coding.capabilities.filter.FilterCapabilitiesProducer;
 import org.n52.subverse.coding.capabilities.publications.Publications;
 import org.n52.subverse.coding.capabilities.publications.PublicationsProducer;
 import org.n52.subverse.delivery.DeliveryDefinition;
@@ -78,10 +81,16 @@ public class SubscribeDecoder implements Decoder<AbstractServiceRequest, String>
     private static final QName DELIVERY_METHOD_QN = DeliveryMethodDocument.type.getDocumentElementName();
 
     private PublicationsProducer publicationsProducer;
+    private FilterCapabilitiesProducer filterProducer;
 
     @Inject
     public void setPublicationsProducer(PublicationsProducer publicationsProducer) {
         this.publicationsProducer = publicationsProducer;
+    }
+
+    @Inject
+    public void setFilterProducer(FilterCapabilitiesProducer filterProducer) {
+        this.filterProducer = filterProducer;
     }
 
     @Override
@@ -146,6 +155,7 @@ public class SubscribeDecoder implements Decoder<AbstractServiceRequest, String>
 
         Optional<XmlObject> filter;
         if (filterLanguage != null) {
+            checkValidFilterLanguage(filterLanguage);
             filter = extractFilter(subscribe);
         }
         else {
@@ -176,11 +186,18 @@ public class SubscribeDecoder implements Decoder<AbstractServiceRequest, String>
     }
 
 
-    private String parseFilterLanguage(SubscribeDocument.Subscribe subscribe) {
+    private String parseFilterLanguage(SubscribeDocument.Subscribe subscribe) throws InvalidParameterValueException {
         Optional<QueryExpressionType> content = extractFilterContent(subscribe);
 
         if (content.isPresent()) {
-            return content.get().getDialect().trim();
+            String dialect = content.get().getDialect();
+            if (dialect == null || dialect.isEmpty()) {
+                /*
+                 * PubSub SOAP Req 7
+                 */
+                throw new InvalidParameterValueException("wns:Dialect", dialect);
+            }
+            return dialect.trim();
         }
 
         return null;
@@ -206,6 +223,19 @@ public class SubscribeDecoder implements Decoder<AbstractServiceRequest, String>
         }
 
         return Optional.empty();
+    }
+
+    private void checkValidFilterLanguage(String filterLanguage) throws InvalidParameterValueException {
+        long matching = this.filterProducer.get().getLanguages().stream().filter(fl -> {
+            return filterLanguage.equals(fl.getIdentifier());
+        }).count();
+        
+        if (matching == 0) {
+            /*
+             * PubSub SOAP Req 8
+             */
+            throw new InvalidParameterValueException("wsn:Dialect", filterLanguage);
+        }
     }
 
 }
