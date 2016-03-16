@@ -100,7 +100,7 @@ public class RenewDecoder implements Decoder<AbstractServiceRequest, String> {
         if (renew.xgetTerminationTime().isNil()) {
             throw new UnacceptableTerminationTimeFault("TerminationTime cannot be nil");
         }
-        
+
         DateTime terminationTime;
         try {
             terminationTime = TerminationTimeHelper.parseDateTime(renew.xgetTerminationTime());

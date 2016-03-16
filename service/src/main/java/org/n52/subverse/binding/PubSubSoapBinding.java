@@ -40,12 +40,12 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class PubSubSoapBinding extends SoapBinding {
-    
+
     @Override
     public Set<MediaType> getSupportedEncodings() {
         Set<MediaType> result = Sets.newHashSet(super.getSupportedEncodings());
         result.add(PubSubSoapMediaType.TYPE);
         return result;
     }
-    
+
 }

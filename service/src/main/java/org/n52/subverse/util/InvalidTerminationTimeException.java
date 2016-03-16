@@ -41,5 +41,5 @@ public class InvalidTerminationTimeException extends Exception {
     public InvalidTerminationTimeException(String message, Throwable cause) {
         super(message, cause);
     }
-    
+
 }

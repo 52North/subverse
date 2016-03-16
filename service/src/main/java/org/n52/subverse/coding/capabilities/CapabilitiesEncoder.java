@@ -307,7 +307,7 @@ public class CapabilitiesEncoder implements
         constr.getValues().stream().forEach((parameterValue) -> {
             if (parameterValue instanceof OwsParameterValuePossibleValues) {
                 AllowedValuesDocument.AllowedValues xml_allowed = xml_constraint.addNewAllowedValues();
-                
+
                 OwsParameterValuePossibleValues possibleValues = (OwsParameterValuePossibleValues) parameterValue;
                 possibleValues.getValues().forEach(val -> {
                     xml_allowed.addNewValue().setStringValue(val);

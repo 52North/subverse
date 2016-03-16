@@ -45,7 +45,7 @@ public class TerminationTimeHelper {
         SchemaType type = time.instanceType();
 
         String val = null;
-        
+
         if (type == null || type.getName() == null) {
             val = time.getStringValue();
             try {

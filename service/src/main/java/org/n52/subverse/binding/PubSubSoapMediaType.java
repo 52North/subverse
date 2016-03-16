@@ -42,5 +42,5 @@ public class PubSubSoapMediaType extends MediaType {
     public String toString() {
         return "SOAP";
     }
-    
+
 }

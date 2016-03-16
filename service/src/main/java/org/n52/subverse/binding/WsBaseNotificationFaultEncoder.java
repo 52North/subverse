@@ -1,3 +1,31 @@
+/*
+ * Copyright (C) 2016-2016 52°North Initiative for Geospatial Open Source
+ * Software GmbH
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License version 2 as published
+ * by the Free Software Foundation.
+ *
+ * If the program is linked with libraries which are licensed under one of
+ * the following licenses, the combination of the program with the linked
+ * library is not considered a "derivative work" of the program:
+ *
+ *     - Apache License, version 2.0
+ *     - Apache Software License, version 1.0
+ *     - GNU Lesser General Public License, version 3
+ *     - Mozilla Public License, versions 1.0, 1.1 and 2.0
+ *     - Common Development and Distribution License (CDDL), version 1.0
+ *
+ * Therefore the distribution of the program linked with libraries licensed
+ * under the aforementioned licenses, is permitted by the copyright holders
+ * if the distribution is compliant with both the GNU General Public
+ * License version 2 and the aforementioned licenses.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
+ * Public License for more details.
+ */
 package org.n52.subverse.binding;
 
 import java.util.Collections;
@@ -39,7 +67,7 @@ public class WsBaseNotificationFaultEncoder implements Encoder<XmlObject, OwsExc
     private static final EncoderKey KEY = new ExceptionEncoderKey(MediaTypes.APPLICATION_SOAP_XML);
 
     private boolean encodeStackTraces;
-    
+
     @Override
     public XmlObject encode(OwsExceptionReport objectToEncode) throws OwsExceptionReport, UnsupportedEncoderInputException {
         return encode(objectToEncode, Collections.emptyMap());
@@ -101,10 +129,10 @@ public class WsBaseNotificationFaultEncoder implements Encoder<XmlObject, OwsExc
 
         return sb.toString();
     }
-    
+
     private XmlObject wrapWithWsrf(XmlObject owsXml, OwsExceptionReport targetException) {
         XmlObject result;
-        
+
         BaseFaultType bf;
         if (targetException instanceof ResourceUnknownFault ||
                 targetException instanceof InvalidPublicationIdentifierFault ||
@@ -128,9 +156,9 @@ public class WsBaseNotificationFaultEncoder implements Encoder<XmlObject, OwsExc
             bf = doc.addNewBaseFault();
             result = doc;
         }
-        
+
         fillBaseFault(bf, owsXml, targetException);
-        
+
         return result;
     }
 
@@ -142,5 +170,5 @@ public class WsBaseNotificationFaultEncoder implements Encoder<XmlObject, OwsExc
         BaseFaultType.FaultCause cause = bf.addNewFaultCause();
         cause.set(owsXml);
     }
-    
+
 }

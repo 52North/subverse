@@ -315,7 +315,7 @@ public class GetCapabilitiesHandler implements OperationHandler {
                     Constraint constraint = new Constraint(HTTPHeaders.CONTENT_TYPE,
                             new OwsParameterValuePossibleValues(set));
                     constraints.add(constraint);
-                    
+
                     /*
                      * PubSub PostEncoding = SOAP
                      */
@@ -330,7 +330,7 @@ public class GetCapabilitiesHandler implements OperationHandler {
                             new OwsParameterValuePossibleValues(set));
                         constraints.add(constraint);
                     }
-                    
+
                 }
 
                 // common parameters (none yet)
