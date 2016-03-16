@@ -120,7 +120,12 @@ public class PahoMqttConsumer {
             @Override
             public void messageArrived(String topic, MqttMessage message) throws Exception {
                 LOG.info("New message on topic '{}': {}", topic, message);
-                callback.receive(message.getPayload());
+                try {
+                    callback.receive(message.getPayload());
+                }
+                catch (RuntimeException e) {
+                    LOG.warn("Error in callback", e);
+                }
             }
 
             @Override
