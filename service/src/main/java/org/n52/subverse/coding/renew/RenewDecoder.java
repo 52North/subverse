@@ -33,6 +33,7 @@ import com.google.common.collect.Sets;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+import java.util.logging.Level;
 import net.opengis.pubsub.x10.SubscriptionIdentifierDocument;
 import org.apache.xmlbeans.XmlException;
 import org.apache.xmlbeans.XmlObject;
@@ -50,6 +51,7 @@ import org.n52.subverse.SubverseConstants;
 import org.n52.subverse.coding.XmlBeansHelper;
 import org.n52.subverse.coding.subscribe.UnacceptableInitialTerminationTimeFault;
 import org.n52.subverse.coding.unsubscribe.ResourceUnknownFault;
+import org.n52.subverse.util.InvalidTerminationTimeException;
 import org.n52.subverse.util.TerminationTimeHelper;
 import org.oasisOpen.docs.wsn.b2.RenewDocument;
 import org.slf4j.Logger;
@@ -92,9 +94,21 @@ public class RenewDecoder implements Decoder<AbstractServiceRequest, String> {
 
         String id = XmlBeansHelper.extractStringContent(identifier.get());
 
-        DateTime terminationTime = TerminationTimeHelper.parseDateTime(renew.xgetTerminationTime());
+        /*
+         * PubSub SOAP 1.0 Req 10
+         */
+        if (renew.xgetTerminationTime().isNil()) {
+            throw new UnacceptableTerminationTimeFault("TerminationTime cannot be nil");
+        }
+        
+        DateTime terminationTime;
+        try {
+            terminationTime = TerminationTimeHelper.parseDateTime(renew.xgetTerminationTime());
+        } catch (InvalidTerminationTimeException ex) {
+            throw new UnacceptableTerminationTimeFault(ex.getMessage()).causedBy(ex);
+        }
         if (terminationTime.isBeforeNow()) {
-            throw new UnacceptableInitialTerminationTimeFault(
+            throw new UnacceptableTerminationTimeFault(
                     "The termination time must be in the future: "+terminationTime);
         }
 

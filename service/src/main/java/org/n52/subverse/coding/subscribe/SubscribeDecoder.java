@@ -32,6 +32,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
+import java.util.logging.Level;
 import javax.inject.Inject;
 import javax.xml.namespace.QName;
 import net.opengis.pubsub.x10.DeliveryMethodDocument;
@@ -59,6 +60,7 @@ import org.n52.subverse.coding.capabilities.publications.PublicationsProducer;
 import org.n52.subverse.delivery.DeliveryDefinition;
 import org.n52.subverse.request.SubscribeRequest;
 import org.n52.subverse.subscription.SubscribeOptions;
+import org.n52.subverse.util.InvalidTerminationTimeException;
 import org.n52.subverse.util.TerminationTimeHelper;
 import org.oasisOpen.docs.wsn.b2.FilterType;
 import org.oasisOpen.docs.wsn.b2.MessageContentDocument;
@@ -141,7 +143,11 @@ public class SubscribeDecoder implements Decoder<AbstractServiceRequest, String>
         */
         DateTime terminationTime = null;
         if (subscribe.isSetInitialTerminationTime()) {
-            terminationTime = TerminationTimeHelper.parseDateTime(subscribe.xgetInitialTerminationTime());
+            try {
+                terminationTime = TerminationTimeHelper.parseDateTime(subscribe.xgetInitialTerminationTime());
+            } catch (InvalidTerminationTimeException ex) {
+                throw new UnacceptableInitialTerminationTimeFault(ex.getMessage()).causedBy(ex);
+            }
             if (terminationTime.isBeforeNow()) {
                 throw new UnacceptableInitialTerminationTimeFault(
                         "The termination time must be in the future: "+terminationTime);

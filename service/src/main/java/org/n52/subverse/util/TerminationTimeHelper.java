@@ -33,8 +33,6 @@ import org.joda.time.DateTime;
 import org.joda.time.Period;
 import org.joda.time.format.ISOPeriodFormat;
 import org.joda.time.format.PeriodFormatter;
-import org.n52.iceland.exception.CodedException;
-import org.n52.subverse.coding.subscribe.UnacceptableInitialTerminationTimeFault;
 import org.oasisOpen.docs.wsn.b2.AbsoluteOrRelativeTimeType;
 
 /**
@@ -43,39 +41,42 @@ import org.oasisOpen.docs.wsn.b2.AbsoluteOrRelativeTimeType;
  */
 public class TerminationTimeHelper {
 
-   public static DateTime parseDateTime(AbsoluteOrRelativeTimeType time) throws CodedException {
+   public static DateTime parseDateTime(AbsoluteOrRelativeTimeType time) throws InvalidTerminationTimeException {
         SchemaType type = time.instanceType();
 
+        String val = null;
+        
         if (type == null || type.getName() == null) {
+            val = time.getStringValue();
             try {
-                return org.n52.iceland.util.DateTimeHelper.makeDateTime(time.getStringValue());
+                return org.n52.iceland.util.DateTimeHelper.makeDateTime(val);
             }
             catch (Exception e) {
-                throw new UnacceptableInitialTerminationTimeFault(
-                        "Cannot parse date time object").causedBy(e);
+                throw new InvalidTerminationTimeException(
+                        "Cannot parse date time object", e);
             }
         }
 
         if (type.getName().getLocalPart().equals("dateTime")) {
-            return org.n52.iceland.util.DateTimeHelper.makeDateTime(time.getStringValue());
+            val = time.getStringValue();
+            return org.n52.iceland.util.DateTimeHelper.makeDateTime(val);
         }
         else if (type.getName().getLocalPart().equals("duration")) {
-            String string = time.getStringValue().trim();
+            val = time.getStringValue().trim();
 
-            if (string.startsWith("-")) {
-                throw new UnacceptableInitialTerminationTimeFault(
-                        "Termination time cannot be in the past");
+            if (val.startsWith("-")) {
+                throw new InvalidTerminationTimeException(
+                        "Negative durations are not allowed");
             }
 
-            if (string.startsWith("P")) {
+            if (val.startsWith("P")) {
                 PeriodFormatter formatter = ISOPeriodFormat.standard();
-                Period period = formatter.parsePeriod(string);
+                Period period = formatter.parsePeriod(val);
                 return DateTime.now().plus(period);
             }
         }
 
-        throw new UnacceptableInitialTerminationTimeFault(
-                        "Cannot determine type of date time object");
+        throw new InvalidTerminationTimeException("Could not parse termination time");
     }
 
 }
