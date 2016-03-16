@@ -24,6 +24,7 @@ import org.apache.xmlbeans.XmlObject;
 import org.n52.iceland.coding.encode.Encoder;
 import org.n52.iceland.coding.encode.EncoderKey;
 import org.n52.iceland.coding.encode.EncoderRepository;
+import org.n52.iceland.coding.encode.ExceptionEncoderKey;
 import org.n52.iceland.coding.encode.OperationResponseEncoderKey;
 import org.n52.iceland.coding.encode.XmlEncoderKey;
 import org.n52.iceland.exception.ows.NoApplicableCodeException;
@@ -153,7 +154,13 @@ public class SoapEnvelopeEncoder implements Encoder<Object, SoapResponse> {
 
         Detail detail = fault.addNewDetail();
         try {
-            detail.set(new OwsExceptionReportEncoder().encode(targetException));
+            ExceptionEncoderKey excKey = new ExceptionEncoderKey(MediaTypes.APPLICATION_SOAP_XML);
+            Encoder<XmlObject, OwsExceptionReport> encoder = this.encoderRepository.getEncoder(excKey);
+            if (encoder == null) {
+                encoder = new OwsExceptionReportEncoder();
+            }
+            XmlObject owsXml = encoder.encode(targetException);
+            detail.set(owsXml);
         } catch (OwsExceptionReport ex) {
             LOG.warn("Error encoding OwsExceptionReport", ex);
         }

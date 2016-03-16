@@ -46,6 +46,7 @@
     <bean class="org.n52.svalbard.soap.OwsExceptionReportEncoder" />
     <bean class="org.n52.subverse.coding.getsubscription.GetSubscriptionResponseEncoder" />
     <bean class="org.n52.subverse.coding.renew.RenewResponseEncoder" />
+    <bean class="org.n52.subverse.binding.WsBaseNotificationFaultEncoder" />
 
     <!-- response writer -->
     <bean class="org.n52.subverse.writer.XmlBeansWriterFactory" />
