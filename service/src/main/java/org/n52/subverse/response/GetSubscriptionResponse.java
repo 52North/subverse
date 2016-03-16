@@ -26,62 +26,33 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
  * Public License for more details.
  */
-package org.n52.subverse.request;
+package org.n52.subverse.response;
 
-import org.n52.iceland.exception.ows.OwsExceptionReport;
-import org.n52.iceland.request.AbstractServiceRequest;
+import java.util.List;
+import org.n52.iceland.response.AbstractServiceResponse;
 import org.n52.subverse.SubverseConstants;
-import org.n52.subverse.response.SubscribeResponse;
-import org.n52.subverse.subscription.SubscribeOptions;
+import org.n52.subverse.subscription.Subscription;
 
-public class SubscribeRequest extends AbstractServiceRequest<SubscribeResponse> {
+/**
+ *
+ * @author Matthes Rieke <m.rieke@52north.org>
+ */
+public class GetSubscriptionResponse extends AbstractServiceResponse {
 
-    private final SubscribeOptions options;
-    private SubscribeResponse response;
-
-    public SubscribeRequest(SubscribeOptions options) {
-        this.options = options;
-    }
-
-    public void setResponse(SubscribeResponse response) {
-        this.response = response;
-        this.response.setService(getService());
-        this.response.setVersion(getVersion());
-    }
-
-    @Override
-    public SubscribeResponse getResponse() throws OwsExceptionReport {
-        return this.response;
-    }
+    private List<Subscription> subscriptions;
 
     @Override
     public String getOperationName() {
-        return SubverseConstants.OPERATION_SUBSCRIBE;
+        return SubverseConstants.OPERATION_GET_SUBSCRIPTION;
     }
 
-
-    @Override
-    public boolean isSetVersion() {
-        return true;
+    public List<Subscription> getSubscriptions() {
+        return this.subscriptions;
     }
 
-    @Override
-    public boolean isSetService() {
-        return true;
-    }
-
-    @Override
-    public String getVersion() {
-        return SubverseConstants.VERSION;
-    }
-
-    @Override
-    public String getService() {
-        return SubverseConstants.SERVICE;
-    }
-
-    public SubscribeOptions getOptions() {
-        return this.options;
+    public GetSubscriptionResponse setSubscriptions(List<Subscription> subscriptions) {
+        this.subscriptions = subscriptions;
+        return this;
     }
 
 }

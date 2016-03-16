@@ -29,14 +29,18 @@
 package org.n52.subverse.operator;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Set;
+import org.n52.iceland.exception.ows.InvalidParameterValueException;
 import org.n52.iceland.exception.ows.OwsExceptionReport;
-import org.n52.iceland.ogc.ows.OwsOperation;
 import org.n52.iceland.request.AbstractServiceRequest;
-import org.n52.iceland.request.operator.RequestOperator;
 import org.n52.iceland.request.operator.RequestOperatorKey;
 import org.n52.iceland.response.AbstractServiceResponse;
 import org.n52.subverse.SubverseConstants;
+import org.n52.subverse.handler.GetSubscriptionHandler;
+import org.n52.subverse.request.GetSubscriptionRequest;
+import org.n52.subverse.response.GetSubscriptionResponse;
+import org.n52.subverse.subscription.Subscription;
 
 /**
  *
@@ -51,7 +55,17 @@ public class GetSubscriptionOperator extends AbstractOperator {
 
     @Override
     public AbstractServiceResponse receiveRequest(AbstractServiceRequest<?> request) throws OwsExceptionReport {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (request instanceof GetSubscriptionRequest) {
+            GetSubscriptionHandler handler = (GetSubscriptionHandler) getHandler(request);
+
+            List<Subscription> subs =  handler.getSubscriptions(((GetSubscriptionRequest) request).getIdentifiers());
+            GetSubscriptionResponse result = new GetSubscriptionResponse().setSubscriptions(subs);
+            result.setService(request.getService());
+            result.setVersion(request.getVersion());
+            return result;
+        }
+
+        throw new InvalidParameterValueException().withMessage("Invalid GetSubscription request received");
     }
 
     @Override

@@ -124,11 +124,14 @@ public class SoapEnvelopeDecoder implements Decoder<SoapRequest, String> {
                     .withMessage("No body in this soap:Envelope");
         }
 
-        QName qn;
+        QName qn = null;
         if (elem.schemaType() != null && elem.schemaType().getName() != null) {
             qn = elem.schemaType().getName();
+            if (qn.getLocalPart().endsWith("Type")) {
+                qn = null;
+            }
         }
-        else {
+        if (qn == null) {
             qn = new QName(elem.getDomNode().getNamespaceURI(), elem.getDomNode().getLocalName());
         }
         return new XmlNamespaceOperationDecoderKey(qn.getNamespaceURI(), qn.getLocalPart());

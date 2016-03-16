@@ -34,6 +34,7 @@
     <bean class="org.n52.subverse.coding.subscribe.SubscribeDecoder" />
     <bean class="org.n52.subverse.coding.unsubscribe.UnsubscribeDecoder" />
     <bean class="org.n52.subverse.coding.notify.NotifyDecoder" />
+    <bean class="org.n52.subverse.coding.getsubscription.GetSubscriptionDecoder" />
 
     <!-- encoder -->
     <bean class="org.n52.subverse.coding.capabilities.CapabilitiesEncoder" />
@@ -42,6 +43,7 @@
     <bean class="org.n52.subverse.coding.unsubscribe.UnsubscribeResponseEncoder" />
     <bean class="org.n52.subverse.coding.notify.NoContentEncoder" />
     <bean class="org.n52.svalbard.soap.OwsExceptionReportEncoder" />
+    <bean class="org.n52.subverse.coding.getsubscription.GetSubscriptionResponseEncoder" />
 
     <!-- response writer -->
     <bean class="org.n52.subverse.writer.XmlBeansWriterFactory" />

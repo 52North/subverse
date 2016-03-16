@@ -28,37 +28,45 @@
  */
 package org.n52.subverse.request;
 
+import org.n52.subverse.response.GetSubscriptionResponse;
 import org.n52.iceland.exception.ows.OwsExceptionReport;
 import org.n52.iceland.request.AbstractServiceRequest;
 import org.n52.subverse.SubverseConstants;
-import org.n52.subverse.response.SubscribeResponse;
-import org.n52.subverse.subscription.SubscribeOptions;
 
-public class SubscribeRequest extends AbstractServiceRequest<SubscribeResponse> {
+/**
+ *
+ * @author Matthes Rieke <m.rieke@52north.org>
+ */
+public class GetSubscriptionRequest extends AbstractServiceRequest<GetSubscriptionResponse> {
 
-    private final SubscribeOptions options;
-    private SubscribeResponse response;
+    private String[] identifiers;
+    private GetSubscriptionResponse response;
 
-    public SubscribeRequest(SubscribeOptions options) {
-        this.options = options;
+    public GetSubscriptionRequest() {
+        this(new String[0]);
     }
 
-    public void setResponse(SubscribeResponse response) {
+    public GetSubscriptionRequest(String... identifiers) {
+        this.identifiers = identifiers;
+    }
+
+    public void setResponse(GetSubscriptionResponse response) {
         this.response = response;
-        this.response.setService(getService());
-        this.response.setVersion(getVersion());
     }
 
     @Override
-    public SubscribeResponse getResponse() throws OwsExceptionReport {
+    public GetSubscriptionResponse getResponse() throws OwsExceptionReport {
         return this.response;
     }
 
     @Override
     public String getOperationName() {
-        return SubverseConstants.OPERATION_SUBSCRIBE;
+        return SubverseConstants.OPERATION_GET_SUBSCRIPTION;
     }
 
+    public String[] getIdentifiers() {
+        return identifiers;
+    }
 
     @Override
     public boolean isSetVersion() {
@@ -79,9 +87,4 @@ public class SubscribeRequest extends AbstractServiceRequest<SubscribeResponse> 
     public String getService() {
         return SubverseConstants.SERVICE;
     }
-
-    public SubscribeOptions getOptions() {
-        return this.options;
-    }
-
 }

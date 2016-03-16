@@ -28,13 +28,22 @@
  */
 package org.n52.subverse.handler;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
+import javax.inject.Inject;
 import org.n52.iceland.ds.OperationHandler;
 import org.n52.iceland.ds.OperationHandlerKey;
 import org.n52.iceland.exception.ows.OwsExceptionReport;
 import org.n52.iceland.ogc.ows.OwsOperation;
 import org.n52.subverse.SubverseConstants;
+import org.n52.subverse.dao.SubscriptionDao;
+import org.n52.subverse.subscription.Subscription;
 
 /**
  *
@@ -45,6 +54,14 @@ public class GetSubscriptionHandler implements OperationHandler {
     private static final OperationHandlerKey KEY
             = new OperationHandlerKey(SubverseConstants.SERVICE,
                     SubverseConstants.OPERATION_GET_SUBSCRIPTION);
+
+
+    private SubscriptionDao dao;
+
+    @Inject
+    public void setDao(SubscriptionDao dao) {
+        this.dao = dao;
+    }
 
     @Override
     public String getOperationName() {
@@ -61,6 +78,31 @@ public class GetSubscriptionHandler implements OperationHandler {
     @Override
     public Set<OperationHandlerKey> getKeys() {
         return Collections.singleton(KEY);
+    }
+
+    public List<Subscription> getSubscriptions(String[] identifiers) throws InvalidSubscriptionIdentifierFault {
+        Objects.requireNonNull(identifiers);
+        if (identifiers.length == 0) {
+            return this.dao.getAllSubscriptions().collect(Collectors.toList());
+        }
+
+        List<Subscription> result = new ArrayList<>(identifiers.length);
+        List<String> invalids = new ArrayList<>(identifiers.length);
+        Arrays.asList(identifiers).stream().distinct().sorted().forEach(id -> {
+            Optional<Subscription> subscription = this.dao.getSubscription(id);
+            if (subscription.isPresent()) {
+                result.add(subscription.get());
+            }
+            else {
+                invalids.add(id);
+            }
+        });
+
+        if (!invalids.isEmpty()) {
+            throw new InvalidSubscriptionIdentifierFault(invalids.toArray(new String[invalids.size()]));
+        }
+
+        return result;
     }
 
 }

@@ -24,8 +24,11 @@ import org.apache.xmlbeans.XmlObject;
 import org.n52.iceland.coding.encode.Encoder;
 import org.n52.iceland.coding.encode.EncoderKey;
 import org.n52.iceland.coding.encode.ExceptionEncoderKey;
+import org.n52.iceland.exception.ows.CodedOwsException;
+import org.n52.iceland.exception.ows.OwsExceptionCode;
 import org.n52.iceland.exception.ows.OwsExceptionReport;
 import org.n52.iceland.exception.ows.concrete.UnsupportedEncoderInputException;
+import org.n52.iceland.ogc.ows.ExceptionCode;
 import org.n52.iceland.ogc.ows.OWSConstants;
 import org.n52.iceland.util.http.MediaType;
 import org.n52.iceland.util.http.MediaTypes;
@@ -62,7 +65,15 @@ public class OwsExceptionReportEncoder implements Encoder<XmlObject, OwsExceptio
         ExceptionType exception = excRep.addNewException();
         exception.addExceptionText(createExceptionText(objectToEncode));
 
-        exception.setExceptionCode(exception.getExceptionCode());
+        if (objectToEncode instanceof CodedOwsException) {
+            ExceptionCode code = ((CodedOwsException) objectToEncode).getCode();
+            if (code instanceof OwsExceptionCode) {
+                exception.setExceptionCode(((OwsExceptionCode) code).name());
+            }
+            else {
+                exception.setExceptionCode(code.toString());
+            }
+        }
 
         return excRepDoc;
     }

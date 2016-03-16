@@ -26,102 +26,91 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
  * Public License for more details.
  */
-package org.n52.subverse.coding.subscribe;
+package org.n52.subverse.coding.getsubscription;
 
 import com.google.common.collect.Sets;
-import java.net.URI;
 import java.util.Collections;
-import java.util.Locale;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import net.opengis.pubsub.x10.DeliveryMethodDocument;
+import net.opengis.pubsub.x10.DeliveryMethodType;
+import net.opengis.pubsub.x10.GetSubscriptionResponseDocument;
+import net.opengis.pubsub.x10.GetSubscriptionResponseType;
 import net.opengis.pubsub.x10.SubscriptionIdentifierDocument;
+import net.opengis.pubsub.x10.SubscriptionType;
 import org.apache.xmlbeans.XmlObject;
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
 import org.n52.iceland.coding.encode.Encoder;
 import org.n52.iceland.coding.encode.EncoderKey;
 import org.n52.iceland.coding.encode.OperationResponseEncoderKey;
 import org.n52.iceland.config.annotation.Configurable;
-import org.n52.iceland.config.annotation.Setting;
 import org.n52.iceland.exception.ows.OwsExceptionReport;
 import org.n52.iceland.exception.ows.concrete.UnsupportedEncoderInputException;
 import org.n52.iceland.ogc.ows.OWSConstants;
-import org.n52.iceland.service.ServiceSettings;
 import org.n52.iceland.util.http.MediaType;
 import org.n52.iceland.util.http.MediaTypes;
 import org.n52.subverse.SubverseConstants;
 import org.n52.subverse.coding.XmlBeansHelper;
-import org.n52.subverse.response.SubscribeResponse;
+import org.n52.subverse.delivery.DeliveryDefinition;
+import org.n52.subverse.response.GetSubscriptionResponse;
 import org.n52.subverse.subscription.Subscription;
 import org.oasisOpen.docs.wsn.b2.ConsumerReferenceDocument;
-import org.oasisOpen.docs.wsn.b2.SubscribeResponseDocument;
-import org.w3.x2005.x08.addressing.AttributedURIType;
 import org.w3.x2005.x08.addressing.EndpointReferenceType;
-import org.w3.x2005.x08.addressing.ReferenceParametersType;
 
 /**
  *
  * @author Matthes Rieke <m.rieke@52north.org>
  */
 @Configurable
-public class SubscribeResponseEncoder implements Encoder<XmlObject, SubscribeResponse> {
+public class GetSubscriptionResponseEncoder implements Encoder<XmlObject, GetSubscriptionResponse> {
 
     private static final Set<EncoderKey> ENCODER_KEYS = Sets.<EncoderKey>newHashSet(
             new OperationResponseEncoderKey(SubverseConstants.SERVICE,
                     SubverseConstants.VERSION,
-                    SubverseConstants.OPERATION_SUBSCRIBE,
+                    SubverseConstants.OPERATION_GET_SUBSCRIPTION,
                     MediaTypes.TEXT_XML),
             new OperationResponseEncoderKey(SubverseConstants.SERVICE,
                     SubverseConstants.VERSION,
-                    SubverseConstants.OPERATION_SUBSCRIBE,
+                    SubverseConstants.OPERATION_GET_SUBSCRIPTION,
                     MediaTypes.APPLICATION_XML));
-    private URI serviceURL;
-
-    @Setting(ServiceSettings.SERVICE_URL)
-    public void setServiceURL(URI serviceURL) {
-        this.serviceURL = serviceURL;
-    }
 
     @Override
-    public XmlObject encode(SubscribeResponse objectToEncode) throws OwsExceptionReport, UnsupportedEncoderInputException {
+    public XmlObject encode(GetSubscriptionResponse objectToEncode) throws OwsExceptionReport, UnsupportedEncoderInputException {
         return encode(objectToEncode, Collections.emptyMap());
     }
 
     @Override
-    public XmlObject encode(SubscribeResponse objectToEncode, Map<OWSConstants.HelperValues, String> additionalValues) throws OwsExceptionReport, UnsupportedEncoderInputException {
-        SubscribeResponseDocument result = SubscribeResponseDocument.Factory.newInstance();
-        SubscribeResponseDocument.SubscribeResponse resp = result.addNewSubscribeResponse();
+    public XmlObject encode(GetSubscriptionResponse objectToEncode, Map<OWSConstants.HelperValues, String> additionalValues) throws OwsExceptionReport, UnsupportedEncoderInputException {
+        GetSubscriptionResponseDocument result = GetSubscriptionResponseDocument.Factory.newInstance();
+        GetSubscriptionResponseType resp = result.addNewGetSubscriptionResponse();
 
-        Subscription subscriptionObject = objectToEncode.getSubscription();
+        List<Subscription> subscriptions = objectToEncode.getSubscriptions();
 
-        /*
-         * tiem stamps
-         */
-        resp.setCurrentTime(new DateTime(DateTimeZone.UTC).toCalendar(Locale.getDefault()));
-        Optional<DateTime> termTime = subscriptionObject.getOptions().getTerminationTime();
-        if (termTime.isPresent()) {
-            resp.setTerminationTime(termTime.get().toCalendar(Locale.getDefault()));
+        for (Subscription subscriptionObject : subscriptions) {
+            SubscriptionType sub = resp.addNewSubscription();
+            XmlObject loc = sub.addNewDeliveryLocation();
+
+            Optional<DeliveryDefinition> deliveryObject = subscriptionObject.getOptions().getDeliveryDefinition();
+            if (deliveryObject.isPresent()) {
+                DeliveryMethodDocument deliveryDoc = DeliveryMethodDocument.Factory.newInstance();
+                DeliveryMethodType delivery = deliveryDoc.addNewDeliveryMethod();
+                delivery.setIdentifier(deliveryObject.get().getIdentifier());
+
+                XmlBeansHelper.insertChild(loc, deliveryDoc);
+            }
+
+            ConsumerReferenceDocument conRefDoc = ConsumerReferenceDocument.Factory.newInstance();
+            EndpointReferenceType conRef = conRefDoc.addNewConsumerReference();
+            conRef.addNewAddress().setStringValue(subscriptionObject.getEndpoint().getDeliveryEndpoint().getEffectiveLocation());
+
+            XmlBeansHelper.insertChild(loc, conRefDoc);
+
+            SubscriptionIdentifierDocument subIdDoc = SubscriptionIdentifierDocument.Factory.newInstance();
+            subIdDoc.setSubscriptionIdentifier(subscriptionObject.getId());
+
+            XmlBeansHelper.insertChild(loc, subIdDoc);
         }
-
-        /*
-        * sub ID
-        */
-
-        EndpointReferenceType ref = resp.addNewSubscriptionReference();
-        AttributedURIType add = ref.addNewAddress();
-        add.setStringValue(this.serviceURL.toString());
-
-        ReferenceParametersType refParams = ref.addNewReferenceParameters();
-        SubscriptionIdentifierDocument subIdDoc = SubscriptionIdentifierDocument.Factory.newInstance();
-        subIdDoc.setSubscriptionIdentifier(subscriptionObject.getId());
-
-        ConsumerReferenceDocument conRefDoc = ConsumerReferenceDocument.Factory.newInstance();
-        EndpointReferenceType conRef = conRefDoc.addNewConsumerReference();
-        conRef.addNewAddress().setStringValue(subscriptionObject.getEndpoint().getDeliveryEndpoint().getEffectiveLocation());
-
-        XmlBeansHelper.insertChild(refParams, subIdDoc);
-        XmlBeansHelper.insertChild(refParams, conRefDoc);
 
         return result;
     }
@@ -135,13 +124,5 @@ public class SubscribeResponseEncoder implements Encoder<XmlObject, SubscribeRes
     public Set<EncoderKey> getKeys() {
         return ENCODER_KEYS;
     }
-
-    @Override
-    public void addNamespacePrefixToMap(Map<String, String> prefixMap) {
-        prefixMap.put(SubverseConstants.PUB_SUB_NAMESPACE, "pubsub");
-        prefixMap.put(SubverseConstants.WS_N_NAMESPACE, "wsn");
-    }
-
-
 
 }
