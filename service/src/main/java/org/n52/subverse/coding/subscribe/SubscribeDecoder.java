@@ -235,7 +235,7 @@ public class SubscribeDecoder implements Decoder<AbstractServiceRequest, String>
         long matching = this.filterProducer.get().getLanguages().stream().filter(fl -> {
             return filterLanguage.equals(fl.getIdentifier());
         }).count();
-        
+
         if (matching == 0) {
             /*
              * PubSub SOAP Req 8

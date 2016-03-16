@@ -37,6 +37,7 @@ import org.joda.time.DateTime;
 import org.junit.Assert;
 import org.junit.Test;
 import org.n52.iceland.exception.ows.OwsExceptionReport;
+import org.n52.subverse.coding.capabilities.filter.FilterCapabilitiesProducer;
 import org.n52.subverse.coding.capabilities.publications.PublicationsProducer;
 import org.n52.subverse.delivery.DeliveryDefinition;
 import org.n52.subverse.request.SubscribeRequest;
@@ -52,6 +53,7 @@ public class SubscribeDecoderTest {
     public void testDecoding() throws OwsExceptionReport, IOException {
         SubscribeDecoder dec = new SubscribeDecoder();
         dec.setPublicationsProducer(new PublicationsProducer().setPublicationsString("testdata|testdata"));
+        dec.setFilterProducer(new FilterCapabilitiesProducer());
 
         URL res = getClass().getResource("subscribe.xml");
 
@@ -74,6 +76,7 @@ public class SubscribeDecoderTest {
     public void testDurationDecoding() throws OwsExceptionReport, IOException {
         SubscribeDecoder dec = new SubscribeDecoder();
         dec.setPublicationsProducer(new PublicationsProducer().setPublicationsString("testdata|testdata"));
+        dec.setFilterProducer(new FilterCapabilitiesProducer());
 
         URL res = getClass().getResource("subscribe_duration.xml");
         SubscribeRequest subscribe = (SubscribeRequest) dec.decode(Resources.toString(res,
