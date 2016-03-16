@@ -30,6 +30,7 @@ package org.n52.subverse.dao;
 
 import java.util.Optional;
 import java.util.stream.Stream;
+import org.joda.time.DateTime;
 import org.n52.subverse.subscription.UnknownSubscriptionException;
 import org.n52.subverse.subscription.Subscription;
 
@@ -46,5 +47,7 @@ public interface SubscriptionDao {
     Optional<Subscription> getSubscription(String id);
 
     void deleteSubscription(String subscriptionId) throws UnknownSubscriptionException;
+
+    void updateTerminationTime(Subscription sub, DateTime terminationTime);
 
 }

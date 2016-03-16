@@ -26,59 +26,31 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
  * Public License for more details.
  */
-package org.n52.subverse.handler;
+package org.n52.subverse.response;
 
-import java.util.Collections;
-import java.util.Set;
-import javax.inject.Inject;
 import org.joda.time.DateTime;
-import org.n52.iceland.ds.OperationHandler;
-import org.n52.iceland.ds.OperationHandlerKey;
-import org.n52.iceland.exception.ows.OwsExceptionReport;
-import org.n52.iceland.ogc.ows.OwsOperation;
+import org.n52.iceland.response.AbstractServiceResponse;
 import org.n52.subverse.SubverseConstants;
-import org.n52.subverse.request.RenewRequest;
-import org.n52.subverse.subscription.SubscriptionManager;
-import org.n52.subverse.subscription.UnknownSubscriptionException;
 
 /**
  *
  * @author Matthes Rieke <m.rieke@52north.org>
  */
-public class RenewHandler implements OperationHandler {
+public class RenewResponse extends AbstractServiceResponse {
 
-    private static final OperationHandlerKey KEY
-            = new OperationHandlerKey(SubverseConstants.SERVICE,
-                    SubverseConstants.OPERATION_RENEW);
+    private final DateTime terminationTime;
 
-    private SubscriptionManager manager;
-
-    @Inject
-    public void setManager(SubscriptionManager manager) {
-        this.manager = manager;
+    public RenewResponse(DateTime terminationTime) {
+        this.terminationTime = terminationTime;
     }
 
     @Override
     public String getOperationName() {
-        return KEY.getOperationName();
+        return SubverseConstants.OPERATION_RENEW;
     }
 
-    @Override
-    public OwsOperation getOperationsMetadata(String service, String version) throws OwsExceptionReport {
-        OwsOperation op = new OwsOperation();
-        op.setOperationName(getOperationName());
-        return op;
+    public DateTime getTerminationTime() {
+        return this.terminationTime;
     }
-
-    @Override
-    public Set<OperationHandlerKey> getKeys() {
-        return Collections.singleton(KEY);
-    }
-
-    public DateTime renewSubscription(RenewRequest renewRequest) throws UnknownSubscriptionException {
-        this.manager.renew(renewRequest.getSubscriptionId(), renewRequest.getTerminationTime());
-        return renewRequest.getTerminationTime();
-    }
-
 
 }

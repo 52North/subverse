@@ -37,34 +37,26 @@ import javax.xml.namespace.QName;
 import net.opengis.pubsub.x10.DeliveryMethodDocument;
 import net.opengis.pubsub.x10.DeliveryMethodType;
 import net.opengis.pubsub.x10.PublicationIdentifierDocument;
-import org.apache.xmlbeans.SchemaType;
 import org.apache.xmlbeans.XmlException;
 import org.apache.xmlbeans.XmlObject;
 import org.joda.time.DateTime;
-import org.joda.time.Period;
-import org.joda.time.format.ISOPeriodFormat;
-import org.joda.time.format.PeriodFormatter;
 import org.n52.iceland.coding.decode.Decoder;
 import org.n52.iceland.coding.decode.DecoderKey;
 import org.n52.iceland.coding.decode.OperationDecoderKey;
 import org.n52.iceland.coding.decode.XmlNamespaceOperationDecoderKey;
 import org.n52.iceland.config.annotation.Configurable;
-import org.n52.iceland.config.annotation.Setting;
-import org.n52.iceland.exception.CodedException;
 import org.n52.iceland.exception.ows.OwsExceptionReport;
 import org.n52.iceland.exception.ows.concrete.UnsupportedDecoderInputException;
 import org.n52.iceland.request.AbstractServiceRequest;
-import org.n52.iceland.util.DateTimeHelper;
 import org.n52.iceland.util.http.MediaTypes;
 import org.n52.subverse.SubverseConstants;
-import org.n52.subverse.SubverseSettings;
 import org.n52.subverse.coding.XmlBeansHelper;
 import org.n52.subverse.coding.capabilities.publications.Publications;
 import org.n52.subverse.coding.capabilities.publications.PublicationsProducer;
 import org.n52.subverse.delivery.DeliveryDefinition;
 import org.n52.subverse.request.SubscribeRequest;
 import org.n52.subverse.subscription.SubscribeOptions;
-import org.oasisOpen.docs.wsn.b2.AbsoluteOrRelativeTimeType;
+import org.n52.subverse.util.TerminationTimeHelper;
 import org.oasisOpen.docs.wsn.b2.FilterType;
 import org.oasisOpen.docs.wsn.b2.MessageContentDocument;
 import org.oasisOpen.docs.wsn.b2.QueryExpressionType;
@@ -140,7 +132,7 @@ public class SubscribeDecoder implements Decoder<AbstractServiceRequest, String>
         */
         DateTime terminationTime = null;
         if (subscribe.isSetInitialTerminationTime()) {
-            terminationTime = parseDateTime(subscribe.xgetInitialTerminationTime());
+            terminationTime = TerminationTimeHelper.parseDateTime(subscribe.xgetInitialTerminationTime());
             if (terminationTime.isBeforeNow()) {
                 throw new UnacceptableInitialTerminationTimeFault(
                         "The termination time must be in the future: "+terminationTime);
@@ -183,40 +175,6 @@ public class SubscribeDecoder implements Decoder<AbstractServiceRequest, String>
         return keys;
     }
 
-    protected DateTime parseDateTime(AbsoluteOrRelativeTimeType time) throws CodedException {
-        SchemaType type = time.instanceType();
-
-        if (type == null || type.getName() == null) {
-            try {
-                return DateTimeHelper.makeDateTime(time.getStringValue());
-            }
-            catch (Exception e) {
-                throw new UnacceptableInitialTerminationTimeFault(
-                        "Cannot parse date time object").causedBy(e);
-            }
-        }
-
-        if (type.getName().getLocalPart().equals("dateTime")) {
-            return DateTimeHelper.makeDateTime(time.getStringValue());
-        }
-        else if (type.getName().getLocalPart().equals("duration")) {
-            String string = time.getStringValue().trim();
-
-            if (string.startsWith("-")) {
-                throw new UnacceptableInitialTerminationTimeFault(
-                        "Termination time cannot be in the past");
-            }
-
-            if (string.startsWith("P")) {
-                PeriodFormatter formatter = ISOPeriodFormat.standard();
-                Period period = formatter.parsePeriod(string);
-                return DateTime.now().plus(period);
-            }
-        }
-
-        throw new UnacceptableInitialTerminationTimeFault(
-                        "Cannot determine type of date time object");
-    }
 
     private String parseFilterLanguage(SubscribeDocument.Subscribe subscribe) {
         Optional<QueryExpressionType> content = extractFilterContent(subscribe);

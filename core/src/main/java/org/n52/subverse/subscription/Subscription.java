@@ -31,7 +31,7 @@ package org.n52.subverse.subscription;
 public class Subscription {
 
     private final String id;
-    private final SubscribeOptions options;
+    private SubscribeOptions options;
     private final SubscriptionEndpoint endpoint;
 
     public Subscription(String id, SubscribeOptions options, SubscriptionEndpoint endpoint) {
@@ -47,6 +47,10 @@ public class Subscription {
 
     public SubscribeOptions getOptions() {
         return options;
+    }
+
+    public void updateOptions(SubscribeOptions opts) {
+        this.options = opts;
     }
 
     public SubscriptionEndpoint getEndpoint() {

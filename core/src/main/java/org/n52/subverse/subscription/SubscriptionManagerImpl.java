@@ -28,8 +28,10 @@
  */
 package org.n52.subverse.subscription;
 
+import java.util.Optional;
 import org.n52.subverse.IdProvider;
 import javax.inject.Inject;
+import org.joda.time.DateTime;
 import org.n52.iceland.lifecycle.Destroyable;
 import org.n52.subverse.dao.SubscriptionDao;
 import org.n52.subverse.delivery.DeliveryProvider;
@@ -126,6 +128,18 @@ public class SubscriptionManagerImpl implements SubscriptionManager, Destroyable
         this.dao.getAllSubscriptions().forEach(sub -> {
             sub.getEndpoint().getDeliveryEndpoint().destroy();
         });
+    }
+
+    @Override
+    public void renew(String subscriptionId, DateTime terminationTime) throws UnknownSubscriptionException {
+        Optional<Subscription> sub = this.dao.getSubscription(subscriptionId);
+
+        if (!sub.isPresent()) {
+            throw new UnknownSubscriptionException("Subscription unknown: "+subscriptionId);
+        }
+
+        this.dao.updateTerminationTime(sub.get(), terminationTime);
+        //TODO implement termination time manager
     }
 
 

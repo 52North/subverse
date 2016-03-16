@@ -30,11 +30,21 @@ package org.n52.subverse.operator;
 
 import java.util.Collections;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.joda.time.DateTime;
+import org.n52.iceland.exception.ows.InvalidParameterValueException;
 import org.n52.iceland.exception.ows.OwsExceptionReport;
 import org.n52.iceland.request.AbstractServiceRequest;
 import org.n52.iceland.request.operator.RequestOperatorKey;
 import org.n52.iceland.response.AbstractServiceResponse;
 import org.n52.subverse.SubverseConstants;
+import org.n52.subverse.coding.unsubscribe.ResourceUnknownFault;
+import org.n52.subverse.handler.RenewHandler;
+import org.n52.subverse.request.RenewRequest;
+import org.n52.subverse.response.RenewResponse;
+import org.n52.subverse.subscription.UnknownSubscriptionException;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -42,6 +52,7 @@ import org.n52.subverse.SubverseConstants;
  */
 public class RenewOperator extends AbstractOperator {
 
+    private static final org.slf4j.Logger LOG = LoggerFactory.getLogger(RenewOperator.class);
     private static final RequestOperatorKey KEY
             = new RequestOperatorKey(SubverseConstants.SERVICE,
                     SubverseConstants.VERSION,
@@ -49,7 +60,23 @@ public class RenewOperator extends AbstractOperator {
 
     @Override
     public AbstractServiceResponse receiveRequest(AbstractServiceRequest<?> request) throws OwsExceptionReport {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (request instanceof RenewRequest) {
+            RenewHandler handler = (RenewHandler) getHandler(request);
+            DateTime termTime;
+            try {
+                termTime = handler.renewSubscription((RenewRequest) request);
+            } catch (UnknownSubscriptionException ex) {
+                LOG.warn("Unknown subscription", ex);
+                throw new ResourceUnknownFault(ex.getMessage());
+            }
+
+            RenewResponse result = new RenewResponse(termTime);
+            result.setService(request.getService());
+            result.setVersion(request.getVersion());
+            return result;
+        }
+
+        throw new InvalidParameterValueException().withMessage("Invalid Renew request received");
     }
 
     @Override

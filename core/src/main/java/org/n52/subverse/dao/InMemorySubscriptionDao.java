@@ -33,6 +33,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
+import org.joda.time.DateTime;
+import org.n52.subverse.subscription.SubscribeOptions;
 import org.n52.subverse.subscription.Subscription;
 import org.n52.subverse.subscription.UnknownSubscriptionException;
 
@@ -66,6 +68,22 @@ public class InMemorySubscriptionDao implements SubscriptionDao {
         }
 
         this.storage.remove(subscriptionId);
+    }
+
+    @Override
+    public void updateTerminationTime(Subscription sub, DateTime terminationTime) {
+        SubscribeOptions opts = sub.getOptions();
+        SubscribeOptions newOpts = new SubscribeOptions(opts.getPublicationIdentifier(),
+                Optional.of(terminationTime),
+                opts.getFilter(),
+                opts.getFilterLanguageId(),
+                opts.getDeliveryDefinition(),
+                opts.getDeliveryParameters(),
+                opts.getContentType());
+
+        sub.updateOptions(newOpts);
+
+        this.storage.put(sub.getId(), sub);
     }
 
 }

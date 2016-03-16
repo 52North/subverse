@@ -90,10 +90,20 @@ public class SoapEnvelopeEncoder implements Encoder<Object, SoapResponse> {
 
         Body body = env.addNewBody();
 
+        OwsExceptionReport exception = null;
         if (bodyContent != null) {
-            body.set(encodeBody(bodyContent));
+            try {
+                body.set(encodeBody(bodyContent));
+            }
+            catch (OwsExceptionReport e) {
+                exception = e;
+                LOG.warn(exception.getMessage(), exception);
+            }
         } else {
-            OwsExceptionReport exception = objectToEncode.getException();
+            exception = objectToEncode.getException();
+        }
+
+        if (exception != null) {
             body.set(encodeException(exception));
         }
 

@@ -26,59 +26,64 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
  * Public License for more details.
  */
-package org.n52.subverse.handler;
+package org.n52.subverse.request;
 
-import java.util.Collections;
-import java.util.Set;
-import javax.inject.Inject;
 import org.joda.time.DateTime;
-import org.n52.iceland.ds.OperationHandler;
-import org.n52.iceland.ds.OperationHandlerKey;
+import org.n52.subverse.response.RenewResponse;
 import org.n52.iceland.exception.ows.OwsExceptionReport;
-import org.n52.iceland.ogc.ows.OwsOperation;
+import org.n52.iceland.request.AbstractServiceRequest;
 import org.n52.subverse.SubverseConstants;
-import org.n52.subverse.request.RenewRequest;
-import org.n52.subverse.subscription.SubscriptionManager;
-import org.n52.subverse.subscription.UnknownSubscriptionException;
 
 /**
  *
  * @author Matthes Rieke <m.rieke@52north.org>
  */
-public class RenewHandler implements OperationHandler {
+public class RenewRequest extends AbstractServiceRequest<RenewResponse> {
 
-    private static final OperationHandlerKey KEY
-            = new OperationHandlerKey(SubverseConstants.SERVICE,
-                    SubverseConstants.OPERATION_RENEW);
+    private final DateTime terminationTime;
+    private final String subscriptionId;
 
-    private SubscriptionManager manager;
+    public RenewRequest(DateTime terminationTime, String subscriptionId) {
+        this.terminationTime = terminationTime;
+        this.subscriptionId = subscriptionId;
+    }
 
-    @Inject
-    public void setManager(SubscriptionManager manager) {
-        this.manager = manager;
+    public DateTime getTerminationTime() {
+        return terminationTime;
+    }
+
+    public String getSubscriptionId() {
+        return subscriptionId;
+    }
+
+    @Override
+    public RenewResponse getResponse() throws OwsExceptionReport {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public String getOperationName() {
-        return KEY.getOperationName();
+        return SubverseConstants.OPERATION_RENEW;
     }
 
     @Override
-    public OwsOperation getOperationsMetadata(String service, String version) throws OwsExceptionReport {
-        OwsOperation op = new OwsOperation();
-        op.setOperationName(getOperationName());
-        return op;
+    public boolean isSetVersion() {
+        return true;
     }
 
     @Override
-    public Set<OperationHandlerKey> getKeys() {
-        return Collections.singleton(KEY);
+    public boolean isSetService() {
+        return true;
     }
 
-    public DateTime renewSubscription(RenewRequest renewRequest) throws UnknownSubscriptionException {
-        this.manager.renew(renewRequest.getSubscriptionId(), renewRequest.getTerminationTime());
-        return renewRequest.getTerminationTime();
+    @Override
+    public String getVersion() {
+        return SubverseConstants.VERSION;
     }
 
+    @Override
+    public String getService() {
+        return SubverseConstants.SERVICE;
+    }
 
 }

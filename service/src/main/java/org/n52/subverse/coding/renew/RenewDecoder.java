@@ -26,15 +26,17 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
  * Public License for more details.
  */
-package org.n52.subverse.coding.getsubscription;
+package org.n52.subverse.coding.renew;
 
+import org.n52.subverse.request.RenewRequest;
 import com.google.common.collect.Sets;
-import org.n52.subverse.request.GetSubscriptionRequest;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
-import net.opengis.pubsub.x10.GetSubscriptionDocument;
-import net.opengis.pubsub.x10.GetSubscriptionType;
+import net.opengis.pubsub.x10.SubscriptionIdentifierDocument;
 import org.apache.xmlbeans.XmlException;
+import org.apache.xmlbeans.XmlObject;
+import org.joda.time.DateTime;
 import org.n52.iceland.coding.decode.Decoder;
 import org.n52.iceland.coding.decode.DecoderKey;
 import org.n52.iceland.coding.decode.OperationDecoderKey;
@@ -45,6 +47,11 @@ import org.n52.iceland.exception.ows.concrete.UnsupportedDecoderInputException;
 import org.n52.iceland.request.AbstractServiceRequest;
 import org.n52.iceland.util.http.MediaTypes;
 import org.n52.subverse.SubverseConstants;
+import org.n52.subverse.coding.XmlBeansHelper;
+import org.n52.subverse.coding.subscribe.UnacceptableInitialTerminationTimeFault;
+import org.n52.subverse.coding.unsubscribe.ResourceUnknownFault;
+import org.n52.subverse.util.TerminationTimeHelper;
+import org.oasisOpen.docs.wsn.b2.RenewDocument;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -53,35 +60,45 @@ import org.slf4j.LoggerFactory;
  * @author Matthes Rieke <m.rieke@52north.org>
  */
 @Configurable
-public class GetSubscriptionDecoder implements Decoder<AbstractServiceRequest, String> {
+public class RenewDecoder implements Decoder<AbstractServiceRequest, String> {
 
-    private static final Logger LOG = LoggerFactory.getLogger(GetSubscriptionDecoder.class);
+    private static final Logger LOG = LoggerFactory.getLogger(RenewDecoder.class);
 
-    private static final DecoderKey KEY = new XmlNamespaceOperationDecoderKey(SubverseConstants.PUB_SUB_NAMESPACE,
-            SubverseConstants.OPERATION_GET_SUBSCRIPTION);
+    private static final DecoderKey KEY = new XmlNamespaceOperationDecoderKey(SubverseConstants.WS_N_NAMESPACE,
+            SubverseConstants.OPERATION_RENEW);
     private static final DecoderKey DCP_KEY = new OperationDecoderKey(SubverseConstants.SERVICE,
-            SubverseConstants.VERSION, SubverseConstants.OPERATION_GET_SUBSCRIPTION, MediaTypes.APPLICATION_XML);
+            SubverseConstants.VERSION, SubverseConstants.OPERATION_RENEW, MediaTypes.APPLICATION_XML);
 
     @Override
     public AbstractServiceRequest decode(String objectToDecode) throws OwsExceptionReport, UnsupportedDecoderInputException {
         Objects.requireNonNull(objectToDecode);
 
-        GetSubscriptionDocument getSubDoc;
+        RenewDocument renewDoc;
         try {
-            getSubDoc = GetSubscriptionDocument.Factory.parse(objectToDecode);
+            renewDoc = RenewDocument.Factory.parse(objectToDecode);
         } catch (XmlException ex) {
-            LOG.warn("Could not parse request", ex);
+            LOG.warn("Could not parse Renew request", ex);
             throw new UnsupportedDecoderInputException(this, ex);
         }
 
-        GetSubscriptionType getSub = getSubDoc.getGetSubscription();
-        String[] identifiers = getSub.getSubscriptionIdentifierArray();
+        RenewDocument.Renew renew = renewDoc.getRenew();
 
-        if (identifiers == null) {
-            return new GetSubscriptionRequest();
+        Optional<XmlObject> identifier = XmlBeansHelper.findFirstChild(
+                SubscriptionIdentifierDocument.type.getDocumentElementName(), renew);
+
+        if (!identifier.isPresent()) {
+            throw new ResourceUnknownFault("No SubscriptionIdentifier provided.");
         }
 
-        return new GetSubscriptionRequest(identifiers);
+        String id = XmlBeansHelper.extractStringContent(identifier.get());
+
+        DateTime terminationTime = TerminationTimeHelper.parseDateTime(renew.xgetTerminationTime());
+        if (terminationTime.isBeforeNow()) {
+            throw new UnacceptableInitialTerminationTimeFault(
+                    "The termination time must be in the future: "+terminationTime);
+        }
+
+        return new RenewRequest(terminationTime, id);
     }
 
     @Override

@@ -28,16 +28,19 @@
  */
 package org.n52.subverse.subscription;
 
+import org.joda.time.DateTime;
 import org.n52.subverse.delivery.UnsupportedDeliveryDefinitionException;
 import org.n52.subverse.engine.SubscriptionRegistrationException;
 
 public interface SubscriptionManager {
 
-    public Subscription subscribe(SubscribeOptions aThis) throws UnsupportedDeliveryDefinitionException,
+    Subscription subscribe(SubscribeOptions aThis) throws UnsupportedDeliveryDefinitionException,
             SubscriptionRegistrationException;
 
-    public void unsubscribe(String subscriptionId) throws UnsubscribeFailedException;
+    void unsubscribe(String subscriptionId) throws UnsubscribeFailedException;
 
     void destroy();
+
+    void renew(String subscriptionId, DateTime terminationTime) throws UnknownSubscriptionException;
 
 }
