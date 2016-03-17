@@ -26,43 +26,48 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
  * Public License for more details.
  */
-package org.n52.subverse.delivery.amqp;
+package org.n52.subverse.util;
 
-import java.util.Optional;
-import org.junit.Test;
-import org.n52.subverse.delivery.DeliveryDefinition;
-import org.n52.subverse.delivery.streamable.StringStreamable;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.List;
+import javax.xml.namespace.QName;
+import org.apache.xmlbeans.XmlCursor;
+import org.apache.xmlbeans.XmlObject;
+import org.n52.subverse.delivery.DeliveryParameter;
 
 /**
  *
+ * @author Matthes Rieke <m.rieke@52north.org>
  */
-public class AmqpProducerTestDisabled {
+public class DeliveryParameterXmlHelper {
+    
+    public static XmlObject createDeliveryParameters(List<DeliveryParameter> parameters) {
+        XmlObject xo = XmlObject.Factory.newInstance();
+        XmlCursor cur = xo.newCursor();
+        cur.toNextToken();
 
-    private static final Logger LOG = LoggerFactory.getLogger(AmqpProducerTestDisabled.class);
+        parameters.forEach(param -> {
+            createElement(cur, param);
+        });
 
-    public static void main(String[] args) throws InterruptedException {
-        new AmqpProducerTestDisabled().testProducer();
+        cur.dispose();
+
+        return xo;
     }
 
-    @Test
-    public void testProducer() throws InterruptedException {
-        AmqpDeliveryEndpoint ade = new AmqpDeliveryEndpoint(createDef(), "localhost");
+    private static void createElement(XmlCursor cur, DeliveryParameter param) {
+        cur.beginElement(new QName(param.getNamespace(), param.getElementName()));
 
-        int i = 0;
-        while (i++ < 10) {
-            LOG.info("Sending message... "+i);
-            ade.deliver(Optional.of(new StringStreamable("hahaha "+i)));
-            Thread.sleep(10000);
+        if (!param.hasChildren()) {
+            cur.insertChars(param.getValue());
+        }
+        else {
+            param.getChildren().forEach(child -> {
+                createElement(cur, child);
+            });
         }
 
+        cur.toEndDoc();
     }
-
-    private DeliveryDefinition createDef() {
-        DeliveryDefinition def = new DeliveryDefinition("wurz", "localhost", "test-pub");
-        return def;
-    }
-
-
+    
+    
 }

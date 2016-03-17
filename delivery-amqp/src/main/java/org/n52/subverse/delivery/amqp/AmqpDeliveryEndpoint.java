@@ -43,6 +43,7 @@ import org.apache.activemq.transport.amqp.client.AmqpSession;
 import org.apache.qpid.proton.messenger.Messenger;
 import org.n52.subverse.delivery.DeliveryDefinition;
 import org.n52.subverse.delivery.DeliveryEndpoint;
+import org.n52.subverse.delivery.DeliveryParameter;
 import org.n52.subverse.delivery.Streamable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,10 +57,8 @@ public class AmqpDeliveryEndpoint implements DeliveryEndpoint {
     private static final Logger LOG = LoggerFactory.getLogger(AmqpDeliveryEndpoint.class);
     private static final String BASE_TOPIC = "subverse";
 
-    private final Optional<String> subject;
     private final Optional<String> broker;
     private final String defaultBroker;
-    private final Optional<String> topic;
     private final String address;
     private final String parentPublicationId;
     private Messenger messenger;
@@ -75,12 +74,11 @@ public class AmqpDeliveryEndpoint implements DeliveryEndpoint {
 
         this.id = ShortId.randomString(8, 10);
 
-        this.subject = def.getParameter("amqp.subject");
-        this.topic = def.getParameter("amqp.topic");
         this.broker = Optional.ofNullable(def.getLocation());
         this.defaultBroker = defaultBroker;
         this.parentPublicationId = def.getPublicationId();
         this.address = createQueueAddress();
+        def.addParameter(new DeliveryParameter(AmqpDeliveryProvider.EXTENSION_NAMESPACE, "queue", this.address));
     }
 
     @Override
@@ -162,7 +160,7 @@ public class AmqpDeliveryEndpoint implements DeliveryEndpoint {
 
     @Override
     public String getEffectiveLocation() {
-        return this.address;
+        return removeProtocol(broker.orElse(this.defaultBroker));
     }
 
     private String createQueueAddress() {

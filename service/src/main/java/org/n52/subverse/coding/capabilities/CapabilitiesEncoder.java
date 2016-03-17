@@ -92,6 +92,7 @@ import org.n52.subverse.coding.capabilities.filter.FilterCapabilities;
 import org.n52.subverse.coding.capabilities.publications.Publications;
 import org.n52.subverse.delivery.DeliveryProvider;
 import org.n52.subverse.delivery.DeliveryProviderRepository;
+import org.n52.subverse.util.DeliveryParameterXmlHelper;
 import org.slf4j.LoggerFactory;
 
 /**
@@ -399,38 +400,9 @@ public class CapabilitiesEncoder implements
             deliveryMethod.addNewAbstract().setStringValue(method.getTheAbstract());
             List<DeliveryParameter> params = method.getParameters();
             if (params != null && !params.isEmpty()) {
-                deliveryMethod.addNewExtension().set(createDeliveryParameters(params));
+                deliveryMethod.addNewExtension().set(DeliveryParameterXmlHelper.createDeliveryParameters(params));
             }
         });
-    }
-
-    private XmlObject createDeliveryParameters(List<DeliveryParameter> parameters) {
-        XmlObject xo = XmlObject.Factory.newInstance();
-        XmlCursor cur = xo.newCursor();
-        cur.toNextToken();
-
-        parameters.forEach(param -> {
-            createElement(cur, param);
-        });
-
-        cur.dispose();
-
-        return xo;
-    }
-
-    private void createElement(XmlCursor cur, DeliveryParameter param) {
-        cur.beginElement(new QName(param.getNamespace(), param.getElementName()));
-
-        if (!param.hasChildren()) {
-            cur.insertChars(param.getValue());
-        }
-        else {
-            param.getChildren().forEach(child -> {
-                createElement(cur, child);
-            });
-        }
-
-        cur.toEndDoc();
     }
 
 

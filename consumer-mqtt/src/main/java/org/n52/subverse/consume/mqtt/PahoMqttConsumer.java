@@ -59,6 +59,7 @@ package org.n52.subverse.consume.mqtt;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttClient;
+import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
@@ -76,6 +77,7 @@ public class PahoMqttConsumer {
     private final String clientId;
     private MqttClient client;
     private final MessageCallback callback;
+    private boolean connected;
 
     /**
      * the MQTT QoS as enum. use #ordinal() to get the int
@@ -104,7 +106,10 @@ public class PahoMqttConsumer {
     public void connect() throws MqttException {
         this.client = new MqttClient(String.format("tcp://%s:1883", host), clientId,
                 new MemoryPersistence());
-        client.connect();
+        MqttConnectOptions options = new MqttConnectOptions();
+        options.setConnectionTimeout(5000);
+        
+        client.connect(options);
 
         client.setCallback(new MqttCallback() {
             @Override
@@ -128,6 +133,8 @@ public class PahoMqttConsumer {
                 LOG.info("Delivery completed for message id '{}'", token.getMessageId());
             }
         });
+        
+        this.connected = true;
     }
 
     /**
@@ -143,7 +150,9 @@ public class PahoMqttConsumer {
 
     public void destroy() {
         try {
-            this.client.disconnect();
+            if (this.client.isConnected() && this.connected) {
+                this.client.disconnectForcibly(5000);
+            }
         } catch (MqttException ex) {
             LOG.warn(ex.getMessage(), ex);
         }

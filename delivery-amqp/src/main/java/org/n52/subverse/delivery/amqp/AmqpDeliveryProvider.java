@@ -47,7 +47,7 @@ import org.slf4j.LoggerFactory;
 public class AmqpDeliveryProvider implements DeliveryProvider {
 
     private static final Logger LOG = LoggerFactory.getLogger(AmqpDeliveryProvider.class);
-    private static final String EXTENSION_NAMESPACE = "http://52north.org/pubsub/amqp-10-delivery";
+    protected static final String EXTENSION_NAMESPACE = "http://52north.org/pubsub/amqp-10-delivery";
 
     private static final String IDENTIFIER = "amqp10";
     private String defaultHost;

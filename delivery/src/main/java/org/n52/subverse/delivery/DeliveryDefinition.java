@@ -29,10 +29,9 @@
 package org.n52.subverse.delivery;
 
 import com.google.common.base.MoreObjects;
-import com.google.common.collect.Maps;
+import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Map;
-import java.util.Optional;
+import java.util.List;
 
 /**
  *
@@ -43,7 +42,7 @@ public class DeliveryDefinition {
     private final String identifier;
     private final String location;
     private final String publicationId;
-    private final Map<String, String> parameters = Maps.newConcurrentMap();
+    private final List<DeliveryParameter> parameters = new ArrayList<>();
 
     public DeliveryDefinition(String identifier, String location, String publicationId) {
         this.identifier = identifier;
@@ -63,8 +62,8 @@ public class DeliveryDefinition {
         return publicationId;
     }
 
-    public void addParameter(String key, String value) {
-        this.parameters.put(key, value);
+    public void addParameter(DeliveryParameter param) {
+        this.parameters.add(param);
     }
 
     @Override
@@ -75,12 +74,10 @@ public class DeliveryDefinition {
                .toString();
     }
 
-    public Map<String, String> getParameters() {
-        return Collections.unmodifiableMap(parameters);
+    public List<DeliveryParameter> getParameters() {
+        return Collections.unmodifiableList(parameters);
     }
 
-    public Optional<String> getParameter(String key) {
-        return Optional.ofNullable(this.parameters.get(key));
-    }
-
+    
+    
 }

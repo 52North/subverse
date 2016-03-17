@@ -58,28 +58,37 @@ public class PahoMqttConsumerFactory implements Constructable, Destroyable {
 
     @Override
     public void init() {
-        try {
-            String host = "ows.dev.52north.org";
-            String topic = "n52.adsb";
 
-            this.consumer = new PahoMqttConsumer(host, UUID.randomUUID().toString(), (byte[] msg) -> {
-                engine.filterMessage(new String(msg));
-            });
-            this.consumer.connect();
-            this.consumer.subscribe(topic, PahoMqttConsumer.QualityOfService.EXACTLY_ONCE);
+        String host = "ows.dev.52north.org";
+        String topic = "n52.adsb";
 
-            LOG.info("listening for messages on topic '{}' of MQTT host {}", topic, host);
-        } catch (MqttException ex) {
-            LOG.warn("Could not start MQTT consumer", ex);
-        }
+        this.consumer = new PahoMqttConsumer(host, UUID.randomUUID().toString(), (byte[] msg) -> {
+            engine.filterMessage(new String(msg));
+        });
+
+        new Thread(() -> {
+            try {
+                this.consumer.connect();
+                this.consumer.subscribe(topic, PahoMqttConsumer.QualityOfService.EXACTLY_ONCE);
+            } catch (MqttException ex) {
+                LOG.warn("Could not start MQTT consumer", ex);
+            }
+        }).start();
+
+
+        LOG.info("listening for messages on topic '{}' of MQTT host {}", topic, host);
+
     }
 
     @Override
     public void destroy() {
-        if (this.consumer != null) {
-            this.consumer.destroy();
+        if (this.consumer == null) {
+            return;
         }
+        
+        new Thread(() -> {
+            this.consumer.destroy();
+        }).start();
     }
-
 
 }

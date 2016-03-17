@@ -52,8 +52,10 @@ import org.n52.iceland.util.http.MediaType;
 import org.n52.iceland.util.http.MediaTypes;
 import org.n52.subverse.SubverseConstants;
 import org.n52.subverse.coding.XmlBeansHelper;
+import org.n52.subverse.delivery.DeliveryDefinition;
 import org.n52.subverse.response.SubscribeResponse;
 import org.n52.subverse.subscription.Subscription;
+import org.n52.subverse.util.DeliveryParameterXmlHelper;
 import org.oasisOpen.docs.wsn.b2.ConsumerReferenceDocument;
 import org.oasisOpen.docs.wsn.b2.SubscribeResponseDocument;
 import org.w3.x2005.x08.addressing.AttributedURIType;
@@ -120,9 +122,14 @@ public class SubscribeResponseEncoder implements Encoder<XmlObject, SubscribeRes
         EndpointReferenceType conRef = conRefDoc.addNewConsumerReference();
         conRef.addNewAddress().setStringValue(subscriptionObject.getEndpoint().getDeliveryEndpoint().getEffectiveLocation());
 
+        Optional<DeliveryDefinition> def = subscriptionObject.getOptions().getDeliveryDefinition();
+        if (def.isPresent()) {
+            XmlBeansHelper.insertChild(refParams, DeliveryParameterXmlHelper.createDeliveryParameters(def.get().getParameters()));
+        }
+        
         XmlBeansHelper.insertChild(refParams, subIdDoc);
         XmlBeansHelper.insertChild(refParams, conRefDoc);
-
+        
         return result;
     }
 
