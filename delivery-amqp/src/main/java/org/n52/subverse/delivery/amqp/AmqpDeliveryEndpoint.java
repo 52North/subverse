@@ -31,11 +31,15 @@ package org.n52.subverse.delivery.amqp;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
 import java.security.SecureRandom;
 import java.util.Objects;
 import java.util.Optional;
-import org.apache.qpid.proton.amqp.messaging.AmqpValue;
-import org.apache.qpid.proton.message.Message;
+import org.apache.activemq.transport.amqp.client.AmqpClient;
+import org.apache.activemq.transport.amqp.client.AmqpConnection;
+import org.apache.activemq.transport.amqp.client.AmqpMessage;
+import org.apache.activemq.transport.amqp.client.AmqpSender;
+import org.apache.activemq.transport.amqp.client.AmqpSession;
 import org.apache.qpid.proton.messenger.Messenger;
 import org.n52.subverse.delivery.DeliveryDefinition;
 import org.n52.subverse.delivery.DeliveryEndpoint;
@@ -59,84 +63,87 @@ public class AmqpDeliveryEndpoint implements DeliveryEndpoint {
     private final String address;
     private final String parentPublicationId;
     private Messenger messenger;
+    private AmqpClient client;
+    private AmqpConnection connection;
+    private final String id;
+    private int messageCount;
 
 
     public AmqpDeliveryEndpoint(DeliveryDefinition def, String defaultBroker) {
         Objects.requireNonNull(def);
         Objects.requireNonNull(defaultBroker);
+
+        this.id = ShortId.randomString(8, 10);
+
         this.subject = def.getParameter("amqp.subject");
         this.topic = def.getParameter("amqp.topic");
         this.broker = Optional.ofNullable(def.getLocation());
         this.defaultBroker = defaultBroker;
         this.parentPublicationId = def.getPublicationId();
-        this.address = ensureTopic(prepareAddress());
+        this.address = createQueueAddress();
     }
 
     @Override
-    public void deliver(Optional<Streamable> o) {
-        if (!o.isPresent()) {
-            LOG.warn("Cannot delivery null object");
-            return;
-        }
-
-        synchronized (this) {
-            if (this.messenger == null) {
-                this.messenger = Messenger.Factory.create();
-                this.messenger.setBlocking(false);
-            }
-        }
-
-
+    public synchronized void deliver(Optional<Streamable> o) {
         try {
-            synchronized (this) {
-                if (this.messenger.stopped()) {
-                    this.messenger.start();
-                }
+            if (!o.isPresent()) {
+                LOG.warn("Cannot delivery null object");
+                return;
             }
 
-            Message msg = Message.Factory.create();
-            msg.setAddress(address);
-            msg.setSubject(subject.orElse("subverse"));
-            msg.setBody(new AmqpValue(prepareBody(o.get())));
+            if (this.client == null) {
+                String uri = "tcp://"+removeProtocol(broker.orElse(this.defaultBroker));
+                this.client = new AmqpClient(URI.create(uri), null, null);
+                LOG.info("AMQP Client for {} created", uri);
+            }
 
-            LOG.info("sending message to {}...", this.address);
+            if (this.connection == null || !this.connection.isConnected()) {
+                this.connection = client.connect();
+                LOG.info("AMQP Client connected");
+            }
 
-            this.messenger.put(msg);
-            this.messenger.send();
-            LOG.info("...message sended to {}!", this.address);
-        } catch (IOException ex) {
-            LOG.warn("Could not delivery amqp message", ex);
+            LOG.info("Sending message to {}", this.address);
+            AmqpSession session = connection.createSession();
+            AmqpSender sender = session.createSender(this.address);
+            AmqpMessage message = new AmqpMessage();
+            message.setMessageId(id+"_"+messageCount++);
+            message.setText(prepareBody(o.get()));
+            sender.send(message);
+            sender.close();
+            LOG.info("Message sent to {}", this.address);
+        } catch (Exception ex) {
+            LOG.warn("Could not send AMQP message", ex);
         }
     }
 
-    private String prepareAddress() {
-        String add = broker.orElse(this.defaultBroker);
-
-        if (add.startsWith("amqp://")) {
-            if (topic.isPresent()) {
-                return add.replace("amqp://", "topic://")+ "/" +topic.get();
-            }
-            return add;
-        }
-        else if (add.startsWith("topic://")) {
-            if (!topic.isPresent()) {
-                return add;
-            }
-            return add+ "/" +topic.get();
-        }
-        else if (add.startsWith("queue://")) {
-            if (topic.isPresent()) {
-                return add.replace("queue://", "topic://")+ "/" +topic.get();
-            }
-            return add;
-        }
-
-        if (topic.isPresent()) {
-            return "topic://".concat(add)+ "/" +topic.get();
-        }
-
-        return "amqp://".concat(add);
-    }
+//    private String prepareAddress() {
+//        String add = broker.orElse(this.defaultBroker);
+//
+//        if (add.startsWith("queue://")) {
+//            if (topic.isPresent()) {
+//                return add+ "/" +topic.get();
+//            }
+//            return add;
+//        }
+//        else if (add.startsWith("topic://")) {
+//            if (!topic.isPresent()) {
+//                return add.replace("topic://", "queue://");
+//            }
+//            return add.replace("topic://", "queue://")+ "/" +topic.get();
+//        }
+//        else if (add.startsWith("amqp://")) {
+//            if (topic.isPresent()) {
+//                return add.replace("amqp://", "queue://")+ "/" +topic.get();
+//            }
+//            return add.replace("amqp://", "queue://");
+//        }
+//
+//        if (topic.isPresent()) {
+//            return "queue://".concat(add)+ "/" +topic.get();
+//        }
+//
+//        return "queue://".concat(add);
+//    }
 
     private String prepareBody(Streamable s) throws IOException {
         if (s.originalObject() instanceof String) {
@@ -158,31 +165,15 @@ public class AmqpDeliveryEndpoint implements DeliveryEndpoint {
         return this.address;
     }
 
-    private String ensureTopic(String add) {
+    private String createQueueAddress() {
         StringBuilder sb = new StringBuilder();
-        sb.append(add);
-        if (add.lastIndexOf("/") < 8) {
-            String id = ShortId.randomString(8, 10);
-            sb.append("/");
-            sb.append(BASE_TOPIC);
-            sb.append(".");
-            sb.append(parentPublicationId);
-            sb.append(".");
-            sb.append(id);
-            return sb.toString();
-        }
-
-        if (add.lastIndexOf("/") == add.length() - 1) {
-            String id = ShortId.randomString(6, 8);
-            sb.append(BASE_TOPIC);
-            sb.append(".");
-            sb.append(parentPublicationId);
-            sb.append(".");
-            sb.append(id);
-            return sb.toString();
-        }
-
-        return add;
+        sb.append("queue://");
+        sb.append(BASE_TOPIC);
+        sb.append(".");
+        sb.append(parentPublicationId);
+        sb.append(".");
+        sb.append(id);
+        return sb.toString();
     }
 
     @Override
@@ -191,6 +182,14 @@ public class AmqpDeliveryEndpoint implements DeliveryEndpoint {
             this.messenger.stop();
             LOG.info("Messenger for {} stopped.", this.address);
         }
+    }
+
+    private String removeProtocol(String b) {
+        if (b.contains("://")) {
+            return b.substring(b.indexOf("://")+3, b.length());
+        }
+
+        return b;
     }
 
     private static class ShortId {

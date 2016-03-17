@@ -35,7 +35,6 @@ import org.n52.subverse.delivery.DeliveryEndpoint;
 import org.n52.subverse.delivery.DeliveryProvider;
 import org.n52.subverse.delivery.UnsupportedDeliveryDefinitionException;
 import org.n52.svalbard.xml.XmlOptionsHelper;
-import org.springframework.stereotype.Component;
 
 /**
  *

@@ -10,7 +10,7 @@ parser.add_option("-p", "--password", help="password for private key file")
 opts, args = parser.parse_args()
 
 if not args:
-  args = ["topic://ows.dev.52north.org/adsb2"]
+  args = ["topic://ows.dev.52north.org/subverse.testData.rmrwkymw"]
 
 mng = Messenger()
 mng.certificate=opts.certificate

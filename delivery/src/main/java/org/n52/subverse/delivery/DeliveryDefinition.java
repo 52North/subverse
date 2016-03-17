@@ -30,6 +30,7 @@ package org.n52.subverse.delivery;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.collect.Maps;
+import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
 
@@ -72,6 +73,10 @@ public class DeliveryDefinition {
                .add("identifier", identifier)
                .add("location", location)
                .toString();
+    }
+
+    public Map<String, String> getParameters() {
+        return Collections.unmodifiableMap(parameters);
     }
 
     public Optional<String> getParameter(String key) {

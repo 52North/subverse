@@ -238,15 +238,33 @@ public class CapabilitiesEncoder implements
 
                 if (dcp.containsKey(HTTPMethods.GET)) {
                     dcp.get(HTTPMethods.GET).forEach((val) -> {
-                        RequestMethodType xml_get = xml_http.addNewGet();
-                        xml_get.setHref(val.getUrl());
+                        RequestMethodType xml_get;
+                        if (xml_http.getGetArray() != null &&
+                                xml_http.getGetArray().length > 0 &&
+                                xml_http.getGetArray(0).getHref().equals(val.getUrl())) {
+                            xml_get = xml_http.getGetArray(0);
+                        }
+                        else {
+                            xml_get = xml_http.addNewGet();
+                            xml_get.setHref(val.getUrl());
+                        }
+
                         val.getConstraints().forEach(constr -> addConstraintToRequestMethod(constr, xml_get));
                     });
                 }
                 if (dcp.containsKey(HTTPMethods.POST)) {
                     dcp.get(HTTPMethods.POST).forEach((val) -> {
-                        RequestMethodType xml_post = xml_http.addNewPost();
-                        xml_post.setHref(val.getUrl());
+                        RequestMethodType xml_post;
+                        if (xml_http.getPostArray() != null &&
+                                xml_http.getPostArray().length > 0 &&
+                                xml_http.getPostArray(0).getHref().equals(val.getUrl())) {
+                            xml_post = xml_http.getPostArray(0);
+                        }
+                        else {
+                            xml_post = xml_http.addNewPost();
+                            xml_post.setHref(val.getUrl());
+                        }
+
                         val.getConstraints().forEach(constr -> addConstraintToRequestMethod(constr, xml_post));
                     });
                 }
@@ -306,12 +324,17 @@ public class CapabilitiesEncoder implements
     }
 
     private void addConstraintToRequestMethod(Constraint constr, RequestMethodType xml_requestMethod) {
-        DomainType xml_constraint = xml_requestMethod.addNewConstraint();
-        xml_constraint.setName(constr.getName());
+        DomainType xml_constraint = findExistingConstraintOrCreateNew(xml_requestMethod, constr.getName());
 
         constr.getValues().stream().forEach((parameterValue) -> {
             if (parameterValue instanceof OwsParameterValuePossibleValues) {
-                AllowedValuesDocument.AllowedValues xml_allowed = xml_constraint.addNewAllowedValues();
+                AllowedValuesDocument.AllowedValues xml_allowed;
+                if (xml_constraint.isSetAllowedValues()) {
+                    xml_allowed = xml_constraint.getAllowedValues();
+                }
+                else {
+                    xml_allowed = xml_constraint.addNewAllowedValues();
+                }
 
                 OwsParameterValuePossibleValues possibleValues = (OwsParameterValuePossibleValues) parameterValue;
                 possibleValues.getValues().forEach(val -> {
@@ -322,6 +345,20 @@ public class CapabilitiesEncoder implements
                         parameterValue == null ? null : parameterValue.getClass());
             }
         });
+    }
+
+    private DomainType findExistingConstraintOrCreateNew(RequestMethodType xml_requestMethod, String name) {
+        if (xml_requestMethod.getConstraintArray() != null) {
+            for (DomainType domainType : xml_requestMethod.getConstraintArray()) {
+                if (name.equals(domainType.getName())) {
+                    return domainType;
+                }
+            }
+        }
+
+        DomainType constr = xml_requestMethod.addNewConstraint();
+        constr.setName(name);
+        return constr;
     }
 
     private void addEntryToDomainType(Map.Entry<String, List<OwsParameterValue>> entry, DomainType xml_domainType) {

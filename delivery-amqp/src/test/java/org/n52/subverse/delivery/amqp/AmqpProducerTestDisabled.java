@@ -60,8 +60,8 @@ public class AmqpProducerTestDisabled {
     }
 
     private DeliveryDefinition createDef() {
-        DeliveryDefinition def = new DeliveryDefinition("test", "topic://ows.dev.52north.org/adsb2", "test-pub");
-        def.addParameter("amqp.subject", "test");
+        DeliveryDefinition def = new DeliveryDefinition("wurz", "localhost", "test-pub");
+        def.addParameter("amqp.subject", "wurgs");
         return def;
     }
 

@@ -231,6 +231,11 @@
                 <version>${activemq-version}</version>
             </dependency>
             <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-all</artifactId>
+                <version>4.0.34.Final</version>
+            </dependency>
+            <dependency>
                 <groupId>org.apache.qpid</groupId>
                 <artifactId>proton-j</artifactId>
                 <version>0.12.0</version>
@@ -460,6 +465,7 @@
                         <exclude>**/webapp/WEB-INF/web.xml</exclude>
                         <exclude>**/buildNumber.properties</exclude>
                         <exclude>**/svalbard/**/*.java</exclude>
+                        <exclude>**/org/apache/activemq/**/*.java</exclude>
                     </excludes>
                     <includes>
                         <include>**/*.java</include>
