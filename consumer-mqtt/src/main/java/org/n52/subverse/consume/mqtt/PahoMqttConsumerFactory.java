@@ -85,7 +85,7 @@ public class PahoMqttConsumerFactory implements Constructable, Destroyable {
         if (this.consumer == null) {
             return;
         }
-        
+
         new Thread(() -> {
             this.consumer.destroy();
         }).start();

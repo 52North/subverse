@@ -108,7 +108,7 @@ public class PahoMqttConsumer {
                 new MemoryPersistence());
         MqttConnectOptions options = new MqttConnectOptions();
         options.setConnectionTimeout(5000);
-        
+
         client.connect(options);
 
         client.setCallback(new MqttCallback() {
@@ -133,7 +133,7 @@ public class PahoMqttConsumer {
                 LOG.info("Delivery completed for message id '{}'", token.getMessageId());
             }
         });
-        
+
         this.connected = true;
     }
 

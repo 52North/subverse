@@ -39,7 +39,7 @@ import org.n52.subverse.delivery.DeliveryParameter;
  * @author Matthes Rieke <m.rieke@52north.org>
  */
 public class DeliveryParameterXmlHelper {
-    
+
     public static XmlObject createDeliveryParameters(List<DeliveryParameter> parameters) {
         XmlObject xo = XmlObject.Factory.newInstance();
         XmlCursor cur = xo.newCursor();
@@ -68,6 +68,6 @@ public class DeliveryParameterXmlHelper {
 
         cur.toEndDoc();
     }
-    
-    
+
+
 }

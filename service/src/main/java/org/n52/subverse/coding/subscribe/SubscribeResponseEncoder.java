@@ -126,10 +126,10 @@ public class SubscribeResponseEncoder implements Encoder<XmlObject, SubscribeRes
         if (def.isPresent()) {
             XmlBeansHelper.insertChild(refParams, DeliveryParameterXmlHelper.createDeliveryParameters(def.get().getParameters()));
         }
-        
+
         XmlBeansHelper.insertChild(refParams, subIdDoc);
         XmlBeansHelper.insertChild(refParams, conRefDoc);
-        
+
         return result;
     }
 
