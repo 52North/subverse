@@ -57,8 +57,7 @@ public class AmqpDeliveryEndpoint implements DeliveryEndpoint {
     private static final Logger LOG = LoggerFactory.getLogger(AmqpDeliveryEndpoint.class);
     private static final String BASE_TOPIC = "subverse";
 
-    private final Optional<String> broker;
-    private final String defaultBroker;
+    private final String broker;
     private final String address;
     private final String parentPublicationId;
     private Messenger messenger;
@@ -74,8 +73,7 @@ public class AmqpDeliveryEndpoint implements DeliveryEndpoint {
 
         this.id = ShortId.randomString(8, 10);
 
-        this.broker = Optional.ofNullable(def.getLocation());
-        this.defaultBroker = defaultBroker;
+        this.broker = createBrokerUrl(Optional.ofNullable(def.getLocation()).orElse(defaultBroker));
         this.parentPublicationId = def.getPublicationId();
         this.address = createQueueAddress();
         def.addParameter(new DeliveryParameter(AmqpDeliveryProvider.EXTENSION_NAMESPACE, "queue", this.address));
@@ -90,9 +88,8 @@ public class AmqpDeliveryEndpoint implements DeliveryEndpoint {
             }
 
             if (this.client == null) {
-                String uri = "tcp://"+removeProtocol(broker.orElse(this.defaultBroker));
-                this.client = new AmqpClient(URI.create(uri), null, null);
-                LOG.info("AMQP Client for {} created", uri);
+                this.client = new AmqpClient(URI.create(this.broker), null, null);
+                LOG.info("AMQP Client for {} created", this.broker);
             }
 
             if (this.connection == null || !this.connection.isConnected()) {
@@ -114,34 +111,22 @@ public class AmqpDeliveryEndpoint implements DeliveryEndpoint {
         }
     }
 
-//    private String prepareAddress() {
-//        String add = broker.orElse(this.defaultBroker);
-//
-//        if (add.startsWith("queue://")) {
-//            if (topic.isPresent()) {
-//                return add+ "/" +topic.get();
-//            }
-//            return add;
-//        }
-//        else if (add.startsWith("topic://")) {
-//            if (!topic.isPresent()) {
-//                return add.replace("topic://", "queue://");
-//            }
-//            return add.replace("topic://", "queue://")+ "/" +topic.get();
-//        }
-//        else if (add.startsWith("amqp://")) {
-//            if (topic.isPresent()) {
-//                return add.replace("amqp://", "queue://")+ "/" +topic.get();
-//            }
-//            return add.replace("amqp://", "queue://");
-//        }
-//
-//        if (topic.isPresent()) {
-//            return "queue://".concat(add)+ "/" +topic.get();
-//        }
-//
-//        return "queue://".concat(add);
-//    }
+    private String prepareAddress(String add) {
+        if (add.startsWith("queue://")) {
+            return add.replace("queue://", "amqp://");
+        }
+        else if (add.startsWith("topic://")) {
+            return add.replace("topic://", "amqp://");
+        }
+        else if (add.startsWith("amqp://")) {
+            return add;
+        }
+        else if (add.startsWith("amqps://")) {
+            return add;
+        }
+
+        return "amqp://".concat(add);
+    }
 
     private String prepareBody(Streamable s) throws IOException {
         if (s.originalObject() instanceof String) {
@@ -160,7 +145,7 @@ public class AmqpDeliveryEndpoint implements DeliveryEndpoint {
 
     @Override
     public String getEffectiveLocation() {
-        return removeProtocol(broker.orElse(this.defaultBroker));
+        return this.broker;
     }
 
     private String createQueueAddress() {
@@ -182,12 +167,17 @@ public class AmqpDeliveryEndpoint implements DeliveryEndpoint {
         }
     }
 
-    private String removeProtocol(String b) {
-        if (b.contains("://")) {
-            return b.substring(b.indexOf("://")+3, b.length());
+    private String removePath(String b) {
+        int i = b.indexOf("/", 8);
+        if (i > 0) {
+            return b.substring(0, i);
         }
 
         return b;
+    }
+
+    private String createBrokerUrl(String str) {
+        return removePath(prepareAddress(str));
     }
 
     private static class ShortId {

@@ -95,7 +95,7 @@ public class AmqpConsumerTestDisabled {
     public void startListening() {
         new Thread(() -> {
             if (this.client == null) {
-                String uri = "tcp://localhost";
+                String uri = "amqp://localhost";
                 this.client = new AmqpClient(URI.create(uri), null, null);
                 LOG.info("consumer Client for {} created", uri);
             }
@@ -107,7 +107,7 @@ public class AmqpConsumerTestDisabled {
                     LOG.info("consumer Client connected");
                 }
                 AmqpSession session = connection.createSession();
-                String add = "queue://foknunss";
+                String add = "queue://subverse.test-pub.fsynyiqsev";
                 receiver = session.createReceiver(add);
             } catch (Exception ex) {
                 LOG.warn(ex.getMessage(), ex);
