@@ -36,8 +36,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.SortedSet;
-import javax.inject.Inject;
-import javax.xml.namespace.QName;
 import net.opengis.ows.x11.AddressType;
 import net.opengis.ows.x11.AllowedValuesDocument;
 import net.opengis.ows.x11.CodeType;
@@ -60,18 +58,16 @@ import net.opengis.pubsub.x10.PublicationType;
 import net.opengis.pubsub.x10.PublicationsType;
 import net.opengis.pubsub.x10.PublisherCapabilitiesDocument;
 import net.opengis.pubsub.x10.PublisherCapabilitiesType;
-import org.apache.xmlbeans.XmlCursor;
 import org.apache.xmlbeans.XmlObject;
+import org.n52.iceland.coding.HelperValues;
 import org.n52.iceland.coding.encode.Encoder;
 import org.n52.iceland.coding.encode.EncoderKey;
+import org.n52.iceland.coding.encode.EncodingException;
 import org.n52.iceland.coding.encode.OperationRequestEncoderKey;
 import org.n52.iceland.config.annotation.Configurable;
-import org.n52.iceland.exception.ows.OwsExceptionReport;
-import org.n52.iceland.exception.ows.concrete.UnsupportedEncoderInputException;
 import org.n52.iceland.i18n.MultilingualString;
 import org.n52.iceland.ogc.ows.Constraint;
 import org.n52.iceland.ogc.ows.DCP;
-import org.n52.iceland.ogc.ows.OWSConstants;
 import org.n52.iceland.ogc.ows.OwsCapabilities;
 import org.n52.iceland.ogc.ows.OwsExtendedCapabilities;
 import org.n52.iceland.ogc.ows.OwsOperation;
@@ -90,8 +86,6 @@ import org.n52.subverse.coding.capabilities.delivery.DeliveryCapabilities;
 import org.n52.subverse.delivery.DeliveryParameter;
 import org.n52.subverse.coding.capabilities.filter.FilterCapabilities;
 import org.n52.subverse.coding.capabilities.publications.Publications;
-import org.n52.subverse.delivery.DeliveryProvider;
-import org.n52.subverse.delivery.DeliveryProviderRepository;
 import org.n52.subverse.util.DeliveryParameterXmlHelper;
 import org.slf4j.LoggerFactory;
 
@@ -116,12 +110,12 @@ public class CapabilitiesEncoder implements
                     MediaTypes.APPLICATION_XML));
 
     @Override
-    public XmlObject encode(GetCapabilitiesResponse objectToEncode) throws OwsExceptionReport, UnsupportedEncoderInputException {
+    public XmlObject encode(GetCapabilitiesResponse objectToEncode) throws EncodingException {
         return encode(objectToEncode, Collections.emptyMap());
     }
 
     @Override
-    public XmlObject encode(GetCapabilitiesResponse resp, Map<OWSConstants.HelperValues, String> additionalValues) throws OwsExceptionReport, UnsupportedEncoderInputException {
+    public XmlObject encode(GetCapabilitiesResponse resp, Map<HelperValues, String> additionalValues) throws EncodingException {
         PublisherCapabilitiesDocument rootDoc = PublisherCapabilitiesDocument.Factory.newInstance();
         PublisherCapabilitiesType publisherCaps = rootDoc.addNewPublisherCapabilities();
 

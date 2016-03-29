@@ -26,12 +26,8 @@ import org.apache.xmlbeans.XmlObject;
 import org.n52.iceland.coding.decode.Decoder;
 import org.n52.iceland.coding.decode.DecoderKey;
 import org.n52.iceland.coding.decode.DecoderRepository;
+import org.n52.iceland.coding.decode.DecodingException;
 import org.n52.iceland.coding.decode.XmlNamespaceOperationDecoderKey;
-import org.n52.iceland.exception.CodedException;
-import org.n52.iceland.exception.ows.NoApplicableCodeException;
-import org.n52.iceland.exception.ows.OwsExceptionReport;
-import org.n52.iceland.exception.ows.concrete.NoDecoderForKeyException;
-import org.n52.iceland.exception.ows.concrete.UnsupportedDecoderInputException;
 import org.n52.iceland.request.AbstractServiceRequest;
 import org.n52.iceland.w3c.soap.SoapRequest;
 import org.slf4j.Logger;
@@ -49,7 +45,7 @@ public class SoapEnvelopeDecoder implements Decoder<SoapRequest, String> {
     private DecoderRepository decoderRepository;
 
     @Override
-    public SoapRequest decode(String xml) throws OwsExceptionReport, UnsupportedDecoderInputException {
+    public SoapRequest decode(String xml) throws DecodingException {
         Objects.requireNonNull(xml);
 
         EnvelopeDocument envDoc;
@@ -59,7 +55,7 @@ public class SoapEnvelopeDecoder implements Decoder<SoapRequest, String> {
             env = envDoc.getEnvelope();
         } catch (XmlException ex) {
             LOG.warn("Could not decode XML", ex);
-            throw new NoApplicableCodeException().causedBy(ex).withMessage(ex.getMessage());
+            throw new DecodingException(ex.getMessage(), ex);
         }
 
         Header header = null;
@@ -88,7 +84,7 @@ public class SoapEnvelopeDecoder implements Decoder<SoapRequest, String> {
     }
 
 
-    private AbstractServiceRequest internalDecode(SoapEnvelopeContainer<XmlObject> env) throws OwsExceptionReport {
+    private AbstractServiceRequest internalDecode(SoapEnvelopeContainer<XmlObject> env) throws DecodingException {
         XmlObject body = env.getBody();
         XmlNamespaceOperationDecoderKey targetKey = createKey(body);
 
@@ -102,16 +98,15 @@ public class SoapEnvelopeDecoder implements Decoder<SoapRequest, String> {
                 return (AbstractServiceRequest) request;
             }
 
-            throw new NoApplicableCodeException()
-                    .withMessage("invalid decoder response."
+            throw new DecodingException("invalid decoder response."
                             + " Expected AbstractServiceRequest but got "
                             +request.getClass());
         }
 
-        throw new NoDecoderForKeyException(targetKey);
+        throw new DecodingException(String.format("Could not find internal decoder for key %s", targetKey));
     }
 
-    private XmlNamespaceOperationDecoderKey createKey(XmlObject body) throws CodedException {
+    private XmlNamespaceOperationDecoderKey createKey(XmlObject body) throws DecodingException {
         XmlCursor cur = body.newCursor();
 
         XmlObject elem;
@@ -120,8 +115,7 @@ public class SoapEnvelopeDecoder implements Decoder<SoapRequest, String> {
             cur.dispose();
         }
         else {
-            throw new NoApplicableCodeException()
-                    .withMessage("No body in this soap:Envelope");
+            throw new DecodingException("No body in this soap:Envelope");
         }
 
         QName qn = null;

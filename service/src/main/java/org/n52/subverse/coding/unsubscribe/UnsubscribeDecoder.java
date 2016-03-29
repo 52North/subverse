@@ -36,10 +36,10 @@ import org.apache.xmlbeans.XmlException;
 import org.apache.xmlbeans.XmlObject;
 import org.n52.iceland.coding.decode.Decoder;
 import org.n52.iceland.coding.decode.DecoderKey;
+import org.n52.iceland.coding.decode.DecodingException;
 import org.n52.iceland.coding.decode.OperationDecoderKey;
 import org.n52.iceland.coding.decode.XmlNamespaceOperationDecoderKey;
-import org.n52.iceland.exception.ows.OwsExceptionReport;
-import org.n52.iceland.exception.ows.concrete.UnsupportedDecoderInputException;
+import org.n52.iceland.exception.CodedException;
 import org.n52.iceland.request.AbstractServiceRequest;
 import org.n52.iceland.util.http.MediaTypes;
 import org.n52.subverse.SubverseConstants;
@@ -58,13 +58,13 @@ public class UnsubscribeDecoder implements Decoder<AbstractServiceRequest, Strin
             SubverseConstants.VERSION, SubverseConstants.OPERATION_UNSUBSCRIBE, MediaTypes.APPLICATION_XML);
 
     @Override
-    public AbstractServiceRequest decode(String objectToDecode) throws OwsExceptionReport, UnsupportedDecoderInputException {
+    public AbstractServiceRequest decode(String objectToDecode) throws DecodingException {
         UnsubscribeDocument subDoc;
         try {
             subDoc = UnsubscribeDocument.Factory.parse(objectToDecode);
         } catch (XmlException ex) {
             LOG.warn("Could not decode Unsubscribe XML", ex);
-            throw new UnsupportedDecoderInputException(this, ex);
+            throw new DecodingException("Could not decode Unsubscribe XML", ex);
         }
 
         UnsubscribeDocument.Unsubscribe unsub = subDoc.getUnsubscribe();
@@ -73,13 +73,15 @@ public class UnsubscribeDecoder implements Decoder<AbstractServiceRequest, Strin
                 SubscriptionIdentifierDocument.type.getDocumentElementName(), unsub);
 
         if (!identifier.isPresent()) {
-            throw new ResourceUnknownFault("No SubscriptionIdentifier provided.");
+            CodedException e = new ResourceUnknownFault("No SubscriptionIdentifier provided.");
+            throw new DecodingException(e.getMessage(), e);
         }
 
         String subId = XmlBeansHelper.extractStringContent(identifier.get());
 
         if (subId == null || subId.isEmpty()) {
-            throw new ResourceUnknownFault("Invalid SubscriptionIdentifier provided.");
+            CodedException e = new ResourceUnknownFault("Invalid SubscriptionIdentifier provided.");
+            throw new DecodingException(e.getMessage(), e);
         }
 
         return new UnsubscribeRequest(subId);

@@ -33,23 +33,21 @@ import com.google.common.collect.Sets;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
-import java.util.logging.Level;
 import net.opengis.pubsub.x10.SubscriptionIdentifierDocument;
 import org.apache.xmlbeans.XmlException;
 import org.apache.xmlbeans.XmlObject;
 import org.joda.time.DateTime;
 import org.n52.iceland.coding.decode.Decoder;
 import org.n52.iceland.coding.decode.DecoderKey;
+import org.n52.iceland.coding.decode.DecodingException;
 import org.n52.iceland.coding.decode.OperationDecoderKey;
 import org.n52.iceland.coding.decode.XmlNamespaceOperationDecoderKey;
 import org.n52.iceland.config.annotation.Configurable;
-import org.n52.iceland.exception.ows.OwsExceptionReport;
-import org.n52.iceland.exception.ows.concrete.UnsupportedDecoderInputException;
+import org.n52.iceland.exception.CodedException;
 import org.n52.iceland.request.AbstractServiceRequest;
 import org.n52.iceland.util.http.MediaTypes;
 import org.n52.subverse.SubverseConstants;
 import org.n52.subverse.coding.XmlBeansHelper;
-import org.n52.subverse.coding.subscribe.UnacceptableInitialTerminationTimeFault;
 import org.n52.subverse.coding.unsubscribe.ResourceUnknownFault;
 import org.n52.subverse.util.InvalidTerminationTimeException;
 import org.n52.subverse.util.TerminationTimeHelper;
@@ -72,7 +70,7 @@ public class RenewDecoder implements Decoder<AbstractServiceRequest, String> {
             SubverseConstants.VERSION, SubverseConstants.OPERATION_RENEW, MediaTypes.APPLICATION_XML);
 
     @Override
-    public AbstractServiceRequest decode(String objectToDecode) throws OwsExceptionReport, UnsupportedDecoderInputException {
+    public AbstractServiceRequest decode(String objectToDecode) throws DecodingException {
         Objects.requireNonNull(objectToDecode);
 
         RenewDocument renewDoc;
@@ -80,7 +78,7 @@ public class RenewDecoder implements Decoder<AbstractServiceRequest, String> {
             renewDoc = RenewDocument.Factory.parse(objectToDecode);
         } catch (XmlException ex) {
             LOG.warn("Could not parse Renew request", ex);
-            throw new UnsupportedDecoderInputException(this, ex);
+            throw new DecodingException("Could not parse Renew request", ex);
         }
 
         RenewDocument.Renew renew = renewDoc.getRenew();
@@ -89,7 +87,8 @@ public class RenewDecoder implements Decoder<AbstractServiceRequest, String> {
                 SubscriptionIdentifierDocument.type.getDocumentElementName(), renew);
 
         if (!identifier.isPresent()) {
-            throw new ResourceUnknownFault("No SubscriptionIdentifier provided.");
+            ResourceUnknownFault ruk = new ResourceUnknownFault("No SubscriptionIdentifier provided.");
+            throw new DecodingException(ruk.getMessage(), ruk);
         }
 
         String id = XmlBeansHelper.extractStringContent(identifier.get());
@@ -98,18 +97,21 @@ public class RenewDecoder implements Decoder<AbstractServiceRequest, String> {
          * PubSub SOAP 1.0 Req 10
          */
         if (renew.xgetTerminationTime().isNil()) {
-            throw new UnacceptableTerminationTimeFault("TerminationTime cannot be nil");
+            UnacceptableTerminationTimeFault uttf = new UnacceptableTerminationTimeFault("TerminationTime cannot be nil");
+            throw new DecodingException(uttf.getMessage(), uttf);
         }
 
         DateTime terminationTime;
         try {
             terminationTime = TerminationTimeHelper.parseDateTime(renew.xgetTerminationTime());
         } catch (InvalidTerminationTimeException ex) {
-            throw new UnacceptableTerminationTimeFault(ex.getMessage()).causedBy(ex);
+            CodedException uttf = new UnacceptableTerminationTimeFault(ex.getMessage()).causedBy(ex);
+            throw new DecodingException(uttf.getMessage(), uttf);
         }
         if (terminationTime.isBeforeNow()) {
-            throw new UnacceptableTerminationTimeFault(
+            CodedException uttf = new UnacceptableTerminationTimeFault(
                     "The termination time must be in the future: "+terminationTime);
+            throw new DecodingException(uttf.getMessage(), uttf);
         }
 
         return new RenewRequest(terminationTime, id);

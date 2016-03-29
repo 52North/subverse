@@ -25,9 +25,11 @@ import org.n52.iceland.coding.encode.AbstractResponseWriter;
 import org.n52.iceland.coding.encode.Encoder;
 import org.n52.iceland.coding.encode.EncoderKey;
 import org.n52.iceland.coding.encode.EncoderRepository;
+import org.n52.iceland.coding.encode.EncodingException;
 import org.n52.iceland.coding.encode.ResponseProxy;
 import org.n52.iceland.coding.encode.ResponseWriterKey;
 import org.n52.iceland.coding.encode.XmlEncoderKey;
+import org.n52.iceland.exception.ows.NoApplicableCodeException;
 import org.n52.iceland.exception.ows.OwsExceptionReport;
 import org.n52.iceland.exception.ows.concrete.NoEncoderForKeyException;
 import org.n52.iceland.response.NoContentResponse;
@@ -65,7 +67,14 @@ public class SoapChainResponseWriter extends AbstractResponseWriter<SoapChain> {
         EncoderKey key = new XmlEncoderKey(chain.getSoapResponse().getSoapNamespace(), chain.getSoapResponse().getClass());
         Encoder<?, SoapResponse> encoder = this.encoderRepository.getEncoder(key);
         if (encoder != null) {
-            return encoder.encode(chain.getSoapResponse());
+            try {
+                return encoder.encode(chain.getSoapResponse());
+            } catch (EncodingException ex) {
+                if (ex.getCause() instanceof OwsExceptionReport) {
+                    throw (OwsExceptionReport) ex.getCause();
+                }
+                throw new NoApplicableCodeException().withMessage(ex.getMessage()).causedBy(ex);
+            }
         } else {
             throw new NoEncoderForKeyException(key);
         }

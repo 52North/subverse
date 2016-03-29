@@ -32,7 +32,6 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
-import java.util.logging.Level;
 import javax.inject.Inject;
 import javax.xml.namespace.QName;
 import net.opengis.pubsub.x10.DeliveryMethodDocument;
@@ -43,17 +42,16 @@ import org.apache.xmlbeans.XmlObject;
 import org.joda.time.DateTime;
 import org.n52.iceland.coding.decode.Decoder;
 import org.n52.iceland.coding.decode.DecoderKey;
+import org.n52.iceland.coding.decode.DecodingException;
 import org.n52.iceland.coding.decode.OperationDecoderKey;
 import org.n52.iceland.coding.decode.XmlNamespaceOperationDecoderKey;
 import org.n52.iceland.config.annotation.Configurable;
+import org.n52.iceland.exception.CodedException;
 import org.n52.iceland.exception.ows.InvalidParameterValueException;
-import org.n52.iceland.exception.ows.OwsExceptionReport;
-import org.n52.iceland.exception.ows.concrete.UnsupportedDecoderInputException;
 import org.n52.iceland.request.AbstractServiceRequest;
 import org.n52.iceland.util.http.MediaTypes;
 import org.n52.subverse.SubverseConstants;
 import org.n52.subverse.coding.XmlBeansHelper;
-import org.n52.subverse.coding.capabilities.filter.FilterCapabilities;
 import org.n52.subverse.coding.capabilities.filter.FilterCapabilitiesProducer;
 import org.n52.subverse.coding.capabilities.publications.Publications;
 import org.n52.subverse.coding.capabilities.publications.PublicationsProducer;
@@ -96,13 +94,13 @@ public class SubscribeDecoder implements Decoder<AbstractServiceRequest, String>
     }
 
     @Override
-    public AbstractServiceRequest decode(String objectToDecode) throws OwsExceptionReport, UnsupportedDecoderInputException {
+    public AbstractServiceRequest decode(String objectToDecode) throws DecodingException {
         SubscribeDocument subDoc;
         try {
             subDoc = SubscribeDocument.Factory.parse(objectToDecode);
         } catch (XmlException ex) {
             LOG.warn("Could not decode Subscribe XML", ex);
-            throw new UnsupportedDecoderInputException(this, ex);
+            throw new DecodingException("Could not decode Subscribe XML", ex);
         }
 
         /*
@@ -116,9 +114,10 @@ public class SubscribeDecoder implements Decoder<AbstractServiceRequest, String>
         Publications pubs = this.publicationsProducer.get();
         long matching = pubs.getPublicationList().stream().filter(p -> p.getIdentifier().equals(pubId.get())).count();
         if (matching == 0) {
-            throw new InvalidPublicationIdentifierFault(
+            CodedException e = new InvalidPublicationIdentifierFault(
                     String.format("Publication identifier '%s' is not registered with this service",
                             pubId.get()));
+            throw new DecodingException(e.getMessage(), e);
         }
 
         /*
@@ -146,26 +145,32 @@ public class SubscribeDecoder implements Decoder<AbstractServiceRequest, String>
             try {
                 terminationTime = TerminationTimeHelper.parseDateTime(subscribe.xgetInitialTerminationTime());
             } catch (InvalidTerminationTimeException ex) {
-                throw new UnacceptableInitialTerminationTimeFault(ex.getMessage()).causedBy(ex);
+                CodedException e = new UnacceptableInitialTerminationTimeFault(ex.getMessage()).causedBy(ex);
+                throw new DecodingException(e.getMessage(), e);
             }
             if (terminationTime.isBeforeNow()) {
-                throw new UnacceptableInitialTerminationTimeFault(
+                CodedException e = new UnacceptableInitialTerminationTimeFault(
                         "The termination time must be in the future: "+terminationTime);
+                throw new DecodingException(e.getMessage(), e);
             }
         }
 
         /*
         * filter
         */
-        String filterLanguage = parseFilterLanguage(subscribe);
-
+        String filterLanguage;
         Optional<XmlObject> filter;
-        if (filterLanguage != null) {
-            checkValidFilterLanguage(filterLanguage);
-            filter = extractFilter(subscribe);
-        }
-        else {
-            filter = Optional.empty();
+        try {
+            filterLanguage = parseFilterLanguage(subscribe);
+            if (filterLanguage != null) {
+                checkValidFilterLanguage(filterLanguage);
+                filter = extractFilter(subscribe);
+            }
+            else {
+                filter = Optional.empty();
+            }
+        } catch (InvalidParameterValueException e) {
+            throw new DecodingException(e.getMessage(), e);
         }
 
         /*

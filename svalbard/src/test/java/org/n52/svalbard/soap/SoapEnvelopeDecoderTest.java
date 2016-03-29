@@ -39,8 +39,8 @@ import org.mockito.Mockito;
 import org.n52.iceland.coding.decode.Decoder;
 import org.n52.iceland.coding.decode.DecoderKey;
 import org.n52.iceland.coding.decode.DecoderRepository;
+import org.n52.iceland.coding.decode.DecodingException;
 import org.n52.iceland.coding.decode.XmlNamespaceOperationDecoderKey;
-import org.n52.iceland.exception.ows.OwsExceptionReport;
 import org.n52.iceland.request.AbstractServiceRequest;
 import org.n52.iceland.w3c.soap.SoapRequest;
 
@@ -52,7 +52,7 @@ public class SoapEnvelopeDecoderTest {
             "Subscribe");
 
     @Test
-    public void testDecoding() throws OwsExceptionReport {
+    public void testDecoding() throws DecodingException {
         SoapEnvelopeDecoder dec = new SoapEnvelopeDecoder();
         dec.setDecoderRepository(createMockRepo());
         SoapRequest result = dec.decode(readResource(SOAP12_ENV_FILE));
@@ -75,7 +75,7 @@ public class SoapEnvelopeDecoderTest {
         return sb.toString();
     }
 
-    private DecoderRepository createMockRepo() throws OwsExceptionReport {
+    private DecoderRepository createMockRepo() throws DecodingException {
         DecoderRepository result = new DecoderRepository();
         DecoderRepository mockRepo = Mockito.spy(result);
 

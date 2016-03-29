@@ -34,12 +34,11 @@ import java.util.Map;
 import java.util.Set;
 import net.opengis.pubsub.x10.SubscriptionIdentifierDocument;
 import org.apache.xmlbeans.XmlObject;
+import org.n52.iceland.coding.HelperValues;
 import org.n52.iceland.coding.encode.Encoder;
 import org.n52.iceland.coding.encode.EncoderKey;
+import org.n52.iceland.coding.encode.EncodingException;
 import org.n52.iceland.coding.encode.OperationResponseEncoderKey;
-import org.n52.iceland.exception.ows.OwsExceptionReport;
-import org.n52.iceland.exception.ows.concrete.UnsupportedEncoderInputException;
-import org.n52.iceland.ogc.ows.OWSConstants;
 import org.n52.iceland.util.http.MediaType;
 import org.n52.iceland.util.http.MediaTypes;
 import org.n52.subverse.SubverseConstants;
@@ -64,12 +63,12 @@ public class UnsubscribeResponseEncoder implements Encoder<XmlObject, Unsubscrib
 
 
     @Override
-    public XmlObject encode(UnsubscribeResponse objectToEncode) throws OwsExceptionReport, UnsupportedEncoderInputException {
+    public XmlObject encode(UnsubscribeResponse objectToEncode) throws EncodingException {
         return encode(objectToEncode, Collections.emptyMap());
     }
 
     @Override
-    public XmlObject encode(UnsubscribeResponse objectToEncode, Map<OWSConstants.HelperValues, String> additionalValues) throws OwsExceptionReport, UnsupportedEncoderInputException {
+    public XmlObject encode(UnsubscribeResponse objectToEncode, Map<HelperValues, String> additionalValues) throws EncodingException {
         UnsubscribeResponseDocument result = UnsubscribeResponseDocument.Factory.newInstance();
 
         UnsubscribeResponseDocument.UnsubscribeResponse resp = result.addNewUnsubscribeResponse();

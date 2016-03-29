@@ -31,6 +31,7 @@ package org.n52.subverse.coding;
 import java.util.Map;
 import org.n52.iceland.coding.decode.Decoder;
 import org.n52.iceland.coding.decode.DecoderKey;
+import org.n52.iceland.coding.decode.DecodingException;
 import org.n52.iceland.coding.decode.OperationDecoderKey;
 import org.n52.iceland.exception.ows.CompositeOwsException;
 import org.n52.iceland.exception.ows.OwsExceptionReport;
@@ -41,7 +42,7 @@ public abstract class KvpDecoder<T> implements Decoder<T, Map<String, String>> {
     @Override
     @SuppressWarnings("ThrowableResultIgnored")
     public T decode(Map<String, String> parameters)
-            throws OwsExceptionReport {
+            throws DecodingException {
         CompositeOwsException exceptions = new CompositeOwsException();
         T t = createRequest();
         parameters.forEach((name, value) -> {
@@ -51,7 +52,11 @@ public abstract class KvpDecoder<T> implements Decoder<T, Map<String, String>> {
                 exceptions.add(e);
             }
         });
-        exceptions.throwIfNotEmpty();
+        try {
+            exceptions.throwIfNotEmpty();
+        } catch (CompositeOwsException ex) {
+            throw new DecodingException(ex.getMessage(), ex);
+        }
         return t;
     }
 

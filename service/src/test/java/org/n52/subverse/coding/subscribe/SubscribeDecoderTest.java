@@ -36,6 +36,7 @@ import org.hamcrest.CoreMatchers;
 import org.joda.time.DateTime;
 import org.junit.Assert;
 import org.junit.Test;
+import org.n52.iceland.coding.decode.DecodingException;
 import org.n52.iceland.exception.ows.OwsExceptionReport;
 import org.n52.subverse.coding.capabilities.filter.FilterCapabilitiesProducer;
 import org.n52.subverse.coding.capabilities.publications.PublicationsProducer;
@@ -50,7 +51,7 @@ import org.n52.subverse.subscription.SubscribeOptions;
 public class SubscribeDecoderTest {
 
     @Test
-    public void testDecoding() throws OwsExceptionReport, IOException {
+    public void testDecoding() throws DecodingException, IOException {
         SubscribeDecoder dec = new SubscribeDecoder();
         dec.setPublicationsProducer(new PublicationsProducer().setPublicationsString("testdata|testdata"));
         dec.setFilterProducer(new FilterCapabilitiesProducer());
@@ -73,7 +74,7 @@ public class SubscribeDecoderTest {
     }
 
     @Test
-    public void testDurationDecoding() throws OwsExceptionReport, IOException {
+    public void testDurationDecoding() throws DecodingException, IOException {
         SubscribeDecoder dec = new SubscribeDecoder();
         dec.setPublicationsProducer(new PublicationsProducer().setPublicationsString("testdata|testdata"));
         dec.setFilterProducer(new FilterCapabilitiesProducer());

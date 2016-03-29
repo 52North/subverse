@@ -37,6 +37,7 @@ import org.n52.iceland.coding.encode.AbstractResponseWriter;
 import org.n52.iceland.coding.encode.Encoder;
 import org.n52.iceland.coding.encode.EncoderKey;
 import org.n52.iceland.coding.encode.EncoderRepository;
+import org.n52.iceland.coding.encode.EncodingException;
 import org.n52.iceland.coding.encode.OperationRequestEncoderKey;
 import org.n52.iceland.coding.encode.ResponseProxy;
 import org.n52.iceland.coding.encode.ResponseWriter;
@@ -82,7 +83,7 @@ public class ServiceResponseWriter extends AbstractResponseWriter<AbstractServic
         Object encode = null;
         try {
             encode = encoder.encode(asr);
-        } catch (RuntimeException e) {
+        } catch (RuntimeException | EncodingException e) {
             log.warn("Unexpected error", e);
             throw new NoApplicableCodeException().withMessage("Internal server error during encoding.").causedBy(e);
         }

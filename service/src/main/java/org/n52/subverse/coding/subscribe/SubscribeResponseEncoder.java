@@ -39,14 +39,13 @@ import net.opengis.pubsub.x10.SubscriptionIdentifierDocument;
 import org.apache.xmlbeans.XmlObject;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
+import org.n52.iceland.coding.HelperValues;
 import org.n52.iceland.coding.encode.Encoder;
 import org.n52.iceland.coding.encode.EncoderKey;
+import org.n52.iceland.coding.encode.EncodingException;
 import org.n52.iceland.coding.encode.OperationResponseEncoderKey;
 import org.n52.iceland.config.annotation.Configurable;
 import org.n52.iceland.config.annotation.Setting;
-import org.n52.iceland.exception.ows.OwsExceptionReport;
-import org.n52.iceland.exception.ows.concrete.UnsupportedEncoderInputException;
-import org.n52.iceland.ogc.ows.OWSConstants;
 import org.n52.iceland.service.ServiceSettings;
 import org.n52.iceland.util.http.MediaType;
 import org.n52.iceland.util.http.MediaTypes;
@@ -86,12 +85,12 @@ public class SubscribeResponseEncoder implements Encoder<XmlObject, SubscribeRes
     }
 
     @Override
-    public XmlObject encode(SubscribeResponse objectToEncode) throws OwsExceptionReport, UnsupportedEncoderInputException {
+    public XmlObject encode(SubscribeResponse objectToEncode) throws EncodingException {
         return encode(objectToEncode, Collections.emptyMap());
     }
 
     @Override
-    public XmlObject encode(SubscribeResponse objectToEncode, Map<OWSConstants.HelperValues, String> additionalValues) throws OwsExceptionReport, UnsupportedEncoderInputException {
+    public XmlObject encode(SubscribeResponse objectToEncode, Map<HelperValues, String> additionalValues) throws EncodingException {
         SubscribeResponseDocument result = SubscribeResponseDocument.Factory.newInstance();
         SubscribeResponseDocument.SubscribeResponse resp = result.addNewSubscribeResponse();
 

@@ -51,6 +51,7 @@ import org.xml.sax.SAXException;
 import org.n52.iceland.coding.decode.Decoder;
 import org.n52.iceland.coding.decode.DecoderKey;
 import org.n52.iceland.coding.decode.DecoderRepository;
+import org.n52.iceland.coding.decode.DecodingException;
 import org.n52.iceland.coding.decode.XmlNamespaceDecoderKey;
 import org.n52.iceland.exception.ows.NoApplicableCodeException;
 import org.n52.iceland.exception.ows.OwsExceptionReport;
@@ -94,7 +95,7 @@ public class DelegatingStringDecoder
 
     @Override
     public AbstractServiceCommunicationObject decode(String string)
-            throws OwsExceptionReport, UnsupportedDecoderInputException {
+            throws DecodingException {
         try {
             JAXBElement<Object> xmlObject = asXmlElement(string);
             DecoderKey key = new XmlNamespaceDecoderKey(getDocumentNamespace(string), xmlObject.getDeclaredType());
@@ -102,10 +103,8 @@ public class DelegatingStringDecoder
 
             log.trace("Delegated decoding to {} based on key {}", delegate, key);
             return delegate.decode(xmlObject);
-        } catch (JAXBException | IOException | ParserConfigurationException | SAXException ex) {
-            throw new NoApplicableCodeException()
-                    .withMessage("Error while decoding request string: \n%s", string)
-                    .causedBy(ex);
+        } catch (JAXBException | IOException | ParserConfigurationException | SAXException | NoDecoderForKeyException ex) {
+            throw new DecodingException(String.format("Error while decoding request string: \n%s", string), ex);
         }
     }
 

@@ -21,17 +21,17 @@ import java.util.Set;
 import javax.inject.Inject;
 import javax.xml.namespace.QName;
 import org.apache.xmlbeans.XmlObject;
+import org.n52.iceland.coding.HelperValues;
 import org.n52.iceland.coding.encode.Encoder;
 import org.n52.iceland.coding.encode.EncoderKey;
 import org.n52.iceland.coding.encode.EncoderRepository;
+import org.n52.iceland.coding.encode.EncodingException;
 import org.n52.iceland.coding.encode.ExceptionEncoderKey;
 import org.n52.iceland.coding.encode.OperationResponseEncoderKey;
 import org.n52.iceland.coding.encode.XmlEncoderKey;
 import org.n52.iceland.exception.ows.NoApplicableCodeException;
 import org.n52.iceland.exception.ows.OwsExceptionReport;
 import org.n52.iceland.exception.ows.concrete.NoEncoderForResponseException;
-import org.n52.iceland.exception.ows.concrete.UnsupportedEncoderInputException;
-import org.n52.iceland.ogc.ows.OWSConstants;
 import org.n52.iceland.response.AbstractServiceResponse;
 import org.n52.iceland.response.NoContentResponse;
 import org.n52.iceland.util.http.HTTPStatus;
@@ -71,12 +71,12 @@ public class SoapEnvelopeEncoder implements Encoder<Object, SoapResponse> {
     }
 
     @Override
-    public Object encode(SoapResponse objectToEncode) throws OwsExceptionReport, UnsupportedEncoderInputException {
+    public Object encode(SoapResponse objectToEncode) throws EncodingException {
         return encode(objectToEncode, Collections.emptyMap());
     }
 
     @Override
-    public Object encode(SoapResponse objectToEncode, Map<OWSConstants.HelperValues, String> additionalValues) throws OwsExceptionReport, UnsupportedEncoderInputException {
+    public Object encode(SoapResponse objectToEncode, Map<HelperValues, String> additionalValues) throws EncodingException {
         AbstractServiceResponse bodyContent = objectToEncode.getBodyContent();
 
         /*
@@ -127,7 +127,11 @@ public class SoapEnvelopeEncoder implements Encoder<Object, SoapResponse> {
         Encoder<Object, Object> encoder = this.encoderRepository.getEncoder(key);
 
         if (encoder != null) {
-            return (XmlObject) encoder.encode(bodyContent);
+            try {
+                return (XmlObject) encoder.encode(bodyContent);
+            } catch (EncodingException ex) {
+                throw new NoApplicableCodeException().withMessage(ex.getMessage()).causedBy(ex);
+            }
         }
 
         throw new NoEncoderForResponseException().withMessage("No encoder found for key: " + key);
@@ -161,7 +165,7 @@ public class SoapEnvelopeEncoder implements Encoder<Object, SoapResponse> {
             }
             XmlObject owsXml = encoder.encode(targetException);
             detail.set(owsXml);
-        } catch (OwsExceptionReport ex) {
+        } catch (EncodingException ex) {
             LOG.warn("Error encoding OwsExceptionReport", ex);
         }
 

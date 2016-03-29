@@ -31,12 +31,11 @@ package org.n52.subverse.coding.notify;
 import com.google.common.collect.Sets;
 import java.util.Map;
 import java.util.Set;
+import org.n52.iceland.coding.HelperValues;
 import org.n52.iceland.coding.encode.Encoder;
 import org.n52.iceland.coding.encode.EncoderKey;
+import org.n52.iceland.coding.encode.EncodingException;
 import org.n52.iceland.coding.encode.OperationResponseEncoderKey;
-import org.n52.iceland.exception.ows.OwsExceptionReport;
-import org.n52.iceland.exception.ows.concrete.UnsupportedEncoderInputException;
-import org.n52.iceland.ogc.ows.OWSConstants;
 import org.n52.iceland.response.NoContentResponse;
 import org.n52.iceland.util.http.MediaType;
 import org.n52.iceland.util.http.MediaTypes;
@@ -56,12 +55,12 @@ public class NoContentEncoder implements Encoder<NoContent, NoContentResponse> {
                     MediaTypes.WILD_CARD));
 
     @Override
-    public NoContent encode(NoContentResponse objectToEncode) throws OwsExceptionReport, UnsupportedEncoderInputException {
+    public NoContent encode(NoContentResponse objectToEncode) throws EncodingException {
         return new NoContent();
     }
 
     @Override
-    public NoContent encode(NoContentResponse objectToEncode, Map<OWSConstants.HelperValues, String> additionalValues) throws OwsExceptionReport, UnsupportedEncoderInputException {
+    public NoContent encode(NoContentResponse objectToEncode, Map<HelperValues, String> additionalValues) throws EncodingException {
         return new NoContent();
     }
 
