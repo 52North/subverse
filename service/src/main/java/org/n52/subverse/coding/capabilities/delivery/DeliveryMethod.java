@@ -43,9 +43,9 @@ public class DeliveryMethod {
     private final String identifier;
     private final List<DeliveryParameter> parameters = new ArrayList<>();
 
-    public DeliveryMethod(String theAbstract, String identifier, DeliveryParameter... params) {
-        this.theAbstract = theAbstract;
+    public DeliveryMethod(String identifier, String theAbstract, DeliveryParameter... params) {
         this.identifier = identifier;
+        this.theAbstract = theAbstract;
         this.parameters.addAll(Arrays.asList(params));
     }
 
