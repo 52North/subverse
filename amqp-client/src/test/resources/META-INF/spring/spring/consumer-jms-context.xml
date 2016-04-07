@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:jms="http://www.springframework.org/schema/jms"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd http://www.springframework.org/schema/jms http://www.springframework.org/schema/jms/spring-jms-3.0.xsd">
+
+    <!-- A JMS connection factory for ActiveMQ -->
+    <bean id="connectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory"
+          p:brokerURL="tcp://localhost:61616" />
+
+    <!-- A POJO that implements the JMS message listener -->
+    <bean id="consumerMessageListener" class="org.n52.eventservice.core.jms.ConsumerMessageListener" />
+
+    <!-- The Spring message listener container configuration -->
+    <jms:listener-container
+        container-type="default"
+        connection-factory="connectionFactory"
+        acknowledge="auto">
+        <jms:listener destination="TEST-10" ref="consumerMessageListener" method="onMessage" />
+    </jms:listener-container>
+</beans>
