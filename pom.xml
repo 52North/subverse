@@ -59,6 +59,7 @@
         <module>service</module>
         <module>webapp</module>
         <module>svalbard</module>
+        <module>amqp-client</module>
     </modules>
     
     <properties>
@@ -119,6 +120,11 @@
             <dependency>
                 <groupId>${project.groupId}</groupId>
                 <artifactId>svalbard</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>amqp-client</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
@@ -427,7 +433,7 @@
                 </configuration>
             </plugin>
             
-            <plugin>
+<!--            <plugin>
                 <groupId>org.jasig.maven</groupId>
                 <artifactId>maven-notice-plugin</artifactId>
                 <configuration>
@@ -448,7 +454,7 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>
+            </plugin>-->
             
             <plugin>
                 <groupId>com.mycila</groupId>

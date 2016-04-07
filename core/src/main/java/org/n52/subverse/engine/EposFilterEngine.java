@@ -79,12 +79,18 @@ public class EposFilterEngine implements FilterEngine {
 
     @Override
     public void filterMessage(Object message) {
+        EposEvent event = null;
         try {
-            EposEvent event = TransformationRepository.Instance.transform(message, EposEvent.class);
-            this.engine.filterEvent(event);
+            event = TransformationRepository.Instance.transform(message, EposEvent.class);
         } catch (TransformationException ex) {
-            LOG.warn("could not transform to EposEvent", ex);
+            LOG.warn("could not transform to EposEvent: {}", ex.getMessage());
         }
+        
+        if (event == null) {
+            event = new GenericEposEvent(message);
+        }
+
+        this.engine.filterEvent(event);
     }
 
     @Override
@@ -156,7 +162,7 @@ public class EposFilterEngine implements FilterEngine {
 
                 public synchronized String getXml() {
                     if (this.xml == null) {
-                        this.xml = ((XmlObject) o).xmlText(xmlOptions.create());
+                        this.xml = ((XmlObject) o).xmlText(xmlOptions.create().setSaveOuter());
                     }
                     return xml;
                 }
