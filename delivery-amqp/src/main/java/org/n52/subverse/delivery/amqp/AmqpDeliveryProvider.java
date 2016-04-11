@@ -69,7 +69,7 @@ public class AmqpDeliveryProvider implements DeliveryProvider {
 
     @Override
     public String getAbstract() {
-        return "Advanced Message Queuing Protocol 1.0 (using 1-to-1 queues)";
+        return "Advanced Message Queuing Protocol 1.0";
     }
 
     @Override

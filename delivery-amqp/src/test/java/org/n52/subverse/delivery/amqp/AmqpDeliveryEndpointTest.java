@@ -28,13 +28,10 @@
  */
 package org.n52.subverse.delivery.amqp;
 
-import java.util.ArrayList;
-import java.util.List;
 import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
 import org.junit.Test;
 import org.n52.subverse.delivery.DeliveryDefinition;
-import org.n52.subverse.delivery.DeliveryParameter;
 
 /**
  *
@@ -46,22 +43,13 @@ public class AmqpDeliveryEndpointTest {
     public void testLocationWithTopic() {
         DeliveryDefinition def = new DeliveryDefinition("amqp10", "localhost", "pubId");
         AmqpDeliveryEndpoint ep = new AmqpDeliveryEndpoint(def, "localhoster");
-        List<DeliveryParameter> queueParam = new ArrayList<>();
-        def.getParameters().forEach(param -> {
-            if (param.getElementName().equals("queue")) {
-                queueParam.add(param);
-            }
-        });
-        Assert.assertThat(queueParam.size(), CoreMatchers.is(1));
-        DeliveryParameter param = queueParam.get(0);
-        Assert.assertThat(param.getValue(), CoreMatchers.startsWith("queue://subverse.pubId."));
 
-        Assert.assertThat(ep.getEffectiveLocation(), CoreMatchers.is("amqp://localhost"));
+        Assert.assertThat(ep.getEffectiveLocation(), CoreMatchers.startsWith("amqp://localhost/subverse.pubId."));
 
         def = new DeliveryDefinition("amqp10", "localhost/trying-to-path", "pubId");
         ep = new AmqpDeliveryEndpoint(def, "localhoster");
 
-        Assert.assertThat(ep.getEffectiveLocation(), CoreMatchers.is("amqp://localhost"));
+        Assert.assertThat(ep.getEffectiveLocation(), CoreMatchers.startsWith("amqp://localhost/trying-to-path"));
     }
 
 }

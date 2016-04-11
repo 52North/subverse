@@ -35,12 +35,9 @@ import java.net.URI;
 import java.security.SecureRandom;
 import java.util.Objects;
 import java.util.Optional;
-import org.apache.activemq.transport.amqp.client.AmqpClient;
-import org.apache.activemq.transport.amqp.client.AmqpConnection;
-import org.apache.activemq.transport.amqp.client.AmqpMessage;
-import org.apache.activemq.transport.amqp.client.AmqpSender;
-import org.apache.activemq.transport.amqp.client.AmqpSession;
 import org.apache.qpid.proton.messenger.Messenger;
+import org.n52.amqp.ConnectionBuilder;
+import org.n52.amqp.Publisher;
 import org.n52.subverse.delivery.DeliveryDefinition;
 import org.n52.subverse.delivery.DeliveryEndpoint;
 import org.n52.subverse.delivery.DeliveryParameter;
@@ -61,10 +58,8 @@ public class AmqpDeliveryEndpoint implements DeliveryEndpoint {
     private final String address;
     private final String parentPublicationId;
     private Messenger messenger;
-    private AmqpClient client;
-    private AmqpConnection connection;
+    private Publisher client;
     private final String id;
-    private int messageCount;
 
 
     public AmqpDeliveryEndpoint(DeliveryDefinition def, String defaultBroker) {
@@ -76,7 +71,7 @@ public class AmqpDeliveryEndpoint implements DeliveryEndpoint {
         this.broker = createBrokerUrl(Optional.ofNullable(def.getLocation()).orElse(defaultBroker));
         this.parentPublicationId = def.getPublicationId();
         this.address = createQueueAddress();
-        def.addParameter(new DeliveryParameter(AmqpDeliveryProvider.EXTENSION_NAMESPACE, "queue", this.address));
+//        def.addParameter(new DeliveryParameter(AmqpDeliveryProvider.EXTENSION_NAMESPACE, "queue", this.address));
     }
 
     @Override
@@ -88,23 +83,12 @@ public class AmqpDeliveryEndpoint implements DeliveryEndpoint {
             }
 
             if (this.client == null) {
-                this.client = new AmqpClient(URI.create(this.broker), null, null);
-                LOG.info("AMQP Client for {} created", this.broker);
-            }
-
-            if (this.connection == null || !this.connection.isConnected()) {
-                this.connection = client.connect();
-                LOG.info("AMQP Client connected");
+                this.client = ConnectionBuilder.create(URI.create(this.address)).build().createPublisher();
+                LOG.info("AMQP Client for {} created", this.address);
             }
 
             LOG.info("Sending message to {}", this.address);
-            AmqpSession session = connection.createSession();
-            AmqpSender sender = session.createSender(this.address);
-            AmqpMessage message = new AmqpMessage();
-            message.setMessageId(id+"_"+messageCount++);
-            message.setText(prepareBody(o.get()));
-            sender.send(message);
-            sender.close();
+            this.client.publish(prepareBody(o.get()));
             LOG.info("Message sent to {}", this.address);
         } catch (Exception ex) {
             LOG.warn("Could not send AMQP message", ex);
@@ -145,12 +129,21 @@ public class AmqpDeliveryEndpoint implements DeliveryEndpoint {
 
     @Override
     public String getEffectiveLocation() {
-        return this.broker;
+        return this.address;
     }
 
     private String createQueueAddress() {
+        if (hasPath(this.broker)) {
+            return this.broker;
+        }
+
         StringBuilder sb = new StringBuilder();
-        sb.append("queue://");
+        sb.append(this.broker);
+
+        if (!this.broker.endsWith("/")) {
+            sb.append("/");
+        }
+
         sb.append(BASE_TOPIC);
         sb.append(".");
         sb.append(parentPublicationId);
@@ -167,17 +160,13 @@ public class AmqpDeliveryEndpoint implements DeliveryEndpoint {
         }
     }
 
-    private String removePath(String b) {
+    private boolean hasPath(String b) {
         int i = b.indexOf("/", 8);
-        if (i > 0) {
-            return b.substring(0, i);
-        }
-
-        return b;
+        return i > 0;
     }
 
     private String createBrokerUrl(String str) {
-        return removePath(prepareAddress(str));
+        return prepareAddress(str);
     }
 
     private static class ShortId {

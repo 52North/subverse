@@ -207,6 +207,11 @@
                 <scope>test</scope>
             </dependency>
             <dependency>
+                <groupId>io.reactivex</groupId>
+                <artifactId>rxjava</artifactId>
+                <version>1.1.3</version>
+            </dependency>
+            <dependency>
                 <groupId>org.apache.httpcomponents</groupId>
                 <artifactId>httpclient</artifactId>
                 <version>4.5.2</version>
@@ -433,7 +438,7 @@
                 </configuration>
             </plugin>
             
-<!--            <plugin>
+            <plugin>
                 <groupId>org.jasig.maven</groupId>
                 <artifactId>maven-notice-plugin</artifactId>
                 <configuration>
@@ -454,7 +459,7 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>-->
+            </plugin>
             
             <plugin>
                 <groupId>com.mycila</groupId>
@@ -471,7 +476,7 @@
                         <exclude>**/webapp/WEB-INF/web.xml</exclude>
                         <exclude>**/buildNumber.properties</exclude>
                         <exclude>**/svalbard/**/*.java</exclude>
-                        <exclude>**/org/apache/activemq/**/*.java</exclude>
+                        <exclude>**/org/n52/amqp/**/*.java</exclude>
                     </excludes>
                     <includes>
                         <include>**/*.java</include>

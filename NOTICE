@@ -7,10 +7,6 @@ This project includes:
   52°North Iceland under The Apache Software License, Version 2.0
   52°North Iceland Util module under The Apache Software License, Version 2.0
   52°North subverse under GNU General Public License, version 2
-  ActiveMQ :: AMQP under Apache License, Version 2.0
-  ActiveMQ :: Broker under Apache License, Version 2.0
-  ActiveMQ :: Client under Apache License, Version 2.0
-  ActiveMQ :: Openwire Legacy Support under Apache License, Version 2.0
   Antlr 3 Runtime under BSD License
   AntLR Parser Generator under BSD License
   ANTLR StringTemplate under BSD licence
@@ -35,21 +31,17 @@ This project includes:
   Event Model schema version 0.2.0 under The Apache Software License, Version 2.0
   Guava: Google Core Libraries for Java under The Apache Software License, Version 2.0
   Hamcrest Core under New BSD License
-  hawtbuf under The Apache Software License, Version 2.0
-  J2EE Management 1.1 under The Apache Software License, Version 2.0
   Jackson-annotations under The Apache Software License, Version 2.0
   Jackson-core under The Apache Software License, Version 2.0
   jackson-databind under The Apache Software License, Version 2.0
   Java Property Utility under The Apache Software License, Version 2.0
   javax.inject under The Apache Software License, Version 2.0
-  JMS 1.1 under The Apache Software License, Version 2.0
   Joda-Time under Apache 2
   JTS Topology Suite under Lesser General Public License (LGPL)
   JUnit under Eclipse Public License 1.0
   Logback Classic Module under Eclipse Public License - v 1.0 or GNU Lesser General Public License
   Logback Core Module under Eclipse Public License - v 1.0 or GNU Lesser General Public License
   Mockito under The MIT License
-  Netty/All-in-One under Apache License, Version 2.0
   OASIS WS-N specification schemas - including WS-BrokeredNotification (v1.3) under The Apache Software License, Version 2.0
   OASIS WS-Resources specification schemas v1.2 under The Apache Software License, Version 2.0
   OGC EML schema 0.0.1 (OGC Discussion Paper 08-132) under The Apache Software License, Version 2.0
@@ -69,6 +61,7 @@ This project includes:
   org.n52.sensorweb:52n-xml-swes-v20 under GNU GENERAL PUBLIC LICENSE Version 2, June 1991
   org.vast:swe-common-data-framework under GNU GENERAL PUBLIC LICENSE Version 2, June 1991
   proton-j under The Apache Software License, Version 2.0
+  rxjava under The Apache Software License, Version 2.0
   Saxon-HE under Mozilla Public License Version 1.0
   servlet-api under CDDL 1.1 or GPL2 w/ CPE
   SLF4J API Module under MIT License
@@ -80,6 +73,7 @@ This project includes:
   Spring Web under The Apache Software License, Version 2.0
   Spring Web MVC under The Apache Software License, Version 2.0
   StAX API under The Apache Software License, Version 2.0
+  subverse amqp client library under The Apache Software License, Version 2.0
   subverse core under GNU General Public License, version 2
   subverse delivery amqp implementation under GNU General Public License, version 2
   subverse delivery API under GNU General Public License, version 2

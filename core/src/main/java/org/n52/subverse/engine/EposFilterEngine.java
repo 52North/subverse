@@ -85,7 +85,7 @@ public class EposFilterEngine implements FilterEngine {
         } catch (TransformationException ex) {
             LOG.warn("could not transform to EposEvent: {}", ex.getMessage());
         }
-        
+
         if (event == null) {
             event = new GenericEposEvent(message);
         }

@@ -44,7 +44,7 @@ public class GenericEposEvent implements EposEvent {
     public GenericEposEvent(Object message) {
         this(message, "text/plain");
     }
-    
+
     public GenericEposEvent(Object message, String ct) {
         this.originalObject = message;
         this.creationTime = System.currentTimeMillis();
@@ -90,5 +90,5 @@ public class GenericEposEvent implements EposEvent {
     public String getContentType() {
         return this.contentType;
     }
-    
+
 }
