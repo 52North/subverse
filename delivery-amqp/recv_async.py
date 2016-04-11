@@ -10,7 +10,7 @@ parser.add_option("-p", "--password", help="password for private key file")
 opts, args = parser.parse_args()
 
 if not args:
-  args = ["amqp://localhost/test-queue.abc"]
+  args = ["amqp://~127.0.0.1"]
 
 mng = Messenger()
 mng.certificate=opts.certificate
@@ -20,14 +20,11 @@ mng.start()
 
 for a in args:
   mng.subscribe(a)
-  print "subscribed to "+a
 
 msg = Message()
 while True:
-  print "recv()"
-  mng.recv(1)
+  mng.recv()
   while mng.incoming:
-    print "mgn.get()"
     try:
       mng.get(msg)
     except Exception, e:

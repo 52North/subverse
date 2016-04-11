@@ -50,7 +50,7 @@ public class ConnectionBuilder {
         try {
             AmqpClient client = new AmqpClient(this.address, this.user, this.password);
             AmqpConnection conn = client.connect();
-            return new Connection(client, conn);
+            return new Connection(this.address, this.user, this.password);
         } catch (Exception ex) {
             throw new AmqpConnectionCreationFailedException(ex);
         }

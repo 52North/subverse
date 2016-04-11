@@ -5,3 +5,4 @@ target
 **/subverse.log
 **/subverse/*.log
 
+/amqp-client/logs/

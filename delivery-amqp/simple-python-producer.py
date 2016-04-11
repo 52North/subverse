@@ -9,7 +9,7 @@ parser.add_option("-p", "--password", help="password for private key file")
 
 opts, args = parser.parse_args()
 
-targetadd = "amqp://ows.dev.52north.org/adsb"
+targetadd = "amqp://localhost/test-queue.abc"
 
 mng = Messenger()
 mng.certificate=opts.certificate
@@ -26,4 +26,3 @@ mng.send()
 print "send message"
 
 mng.stop()
-
