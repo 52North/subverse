@@ -28,6 +28,7 @@
  */
 package org.n52.subverse.delivery.amqp;
 
+import java.net.URISyntaxException;
 import java.util.Optional;
 import org.junit.Test;
 import org.n52.subverse.delivery.DeliveryDefinition;
@@ -42,12 +43,12 @@ public class AmqpProducerTestDisabled {
 
     private static final Logger LOG = LoggerFactory.getLogger(AmqpProducerTestDisabled.class);
 
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) throws InterruptedException, URISyntaxException {
         new AmqpProducerTestDisabled().testProducer();
     }
 
     @Test
-    public void testProducer() throws InterruptedException {
+    public void testProducer() throws InterruptedException, URISyntaxException {
         AmqpDeliveryEndpoint ade = new AmqpDeliveryEndpoint(createDef(), "localhost");
 
         int i = 0;

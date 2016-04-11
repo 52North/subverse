@@ -28,6 +28,7 @@
  */
 package org.n52.subverse.delivery.amqp;
 
+import java.net.URISyntaxException;
 import org.n52.iceland.config.annotation.Configurable;
 import org.n52.iceland.config.annotation.Setting;
 import org.n52.subverse.SubverseSettings;
@@ -74,7 +75,11 @@ public class AmqpDeliveryProvider implements DeliveryProvider {
 
     @Override
     public DeliveryEndpoint createDeliveryEndpoint(DeliveryDefinition def) throws UnsupportedDeliveryDefinitionException {
-        return new AmqpDeliveryEndpoint(def, defaultHost);
+        try {
+            return new AmqpDeliveryEndpoint(def, defaultHost);
+        } catch (URISyntaxException ex) {
+            throw new UnsupportedDeliveryDefinitionException(ex.getMessage(), ex);
+        }
     }
 
     @Override

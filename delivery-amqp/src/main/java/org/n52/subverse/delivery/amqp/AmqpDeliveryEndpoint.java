@@ -32,6 +32,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.security.SecureRandom;
 import java.util.Objects;
 import java.util.Optional;
@@ -62,15 +63,44 @@ public class AmqpDeliveryEndpoint implements DeliveryEndpoint {
     private final String id;
 
 
-    public AmqpDeliveryEndpoint(DeliveryDefinition def, String defaultBroker) {
+    public AmqpDeliveryEndpoint(DeliveryDefinition def, String defaultBroker) throws URISyntaxException {
         Objects.requireNonNull(def);
         Objects.requireNonNull(defaultBroker);
 
         this.id = ShortId.randomString(8, 10);
-
-        this.broker = createBrokerUrl(Optional.ofNullable(def.getLocation()).orElse(defaultBroker));
         this.parentPublicationId = def.getPublicationId();
-        this.address = createQueueAddress();
+
+        URI defaultBrokerUri = new URI(ensureSchemeInAddress(defaultBroker));
+
+        if (def.getLocation() != null) {
+            URI locationUri = new URI(ensureSchemeInAddress(def.getLocation()));
+
+            if (defaultBrokerUri.getHost().equals(locationUri.getHost())) {
+                /*
+                 * same host, we can check for a path (=queue) and
+                 * add one if not present
+                 */
+                this.broker = ensureSchemeInAddress(def.getLocation());
+                this.address = createQueueAddress();
+            }
+            else {
+                /*
+                 * the location host is not the same as the default broker
+                 * - we cannot assume that adhoc queue work, do not use
+                 * them
+                 */
+                this.broker = ensureSchemeInAddress(def.getLocation());
+                this.address = this.broker;
+            }
+        }
+        else {
+            /*
+             * use the default broker and add an adhoc queue
+             */
+            this.broker = ensureSchemeInAddress(defaultBroker);
+            this.address = createQueueAddress();
+        }
+
 //        def.addParameter(new DeliveryParameter(AmqpDeliveryProvider.EXTENSION_NAMESPACE, "queue", this.address));
     }
 
@@ -95,7 +125,7 @@ public class AmqpDeliveryEndpoint implements DeliveryEndpoint {
         }
     }
 
-    private String prepareAddress(String add) {
+    private String ensureSchemeInAddress(String add) {
         if (add.startsWith("queue://")) {
             return add.replace("queue://", "amqp://");
         }
@@ -165,9 +195,6 @@ public class AmqpDeliveryEndpoint implements DeliveryEndpoint {
         return i > 0;
     }
 
-    private String createBrokerUrl(String str) {
-        return prepareAddress(str);
-    }
 
     private static class ShortId {
 
