@@ -70,7 +70,7 @@ public class PublishConsumeIT {
         });
 
         String time = new Date().toString();
-        conn.createPublisher().publish("<test>"+time+"</test>");
+        conn.createPublisher().publish("<test>"+time+"</test>", ContentType.APPLICATION_XML);
 
         barrier.await(10, TimeUnit.SECONDS);
 

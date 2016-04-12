@@ -40,6 +40,8 @@ public interface FilterEngine {
 
     void filterMessage(Object message);
 
+    void filterMessage(Object message, String contentType);
+
     void register(Subscription result, DeliveryEndpoint deliveryEndpoint)
             throws SubscriptionRegistrationException;
 

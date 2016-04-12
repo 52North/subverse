@@ -60,6 +60,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import org.apache.qpid.proton.messenger.Messenger;
 import org.n52.amqp.AmqpConnectionCreationFailedException;
+import org.n52.amqp.AmqpMessage;
 import org.n52.amqp.ConnectionBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -80,7 +81,6 @@ public class AmqpConsumerTestDisabled {
     }
 
     private final Messenger messenger;
-    private boolean running = true;
 
     public AmqpConsumerTestDisabled() {
         this.messenger = Messenger.Factory.create();
@@ -91,7 +91,7 @@ public class AmqpConsumerTestDisabled {
     public void startListening() throws AmqpConnectionCreationFailedException, URISyntaxException {
         String uri = "amqp://localhost/subverse.test-pub.fsynyiqsev";
 
-        Observable<Object> observable = ConnectionBuilder.create(new URI(uri)).build().createObservable();
+        Observable<AmqpMessage> observable = ConnectionBuilder.create(new URI(uri)).build().createObservable();
 
         observable
             .subscribeOn(Schedulers.io())

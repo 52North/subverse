@@ -42,13 +42,13 @@ public class GenericEposEvent implements EposEvent {
     private final String contentType;
 
     public GenericEposEvent(Object message) {
-        this(message, "text/plain");
+        this(message, null);
     }
 
     public GenericEposEvent(Object message, String ct) {
         this.originalObject = message;
         this.creationTime = System.currentTimeMillis();
-        this.contentType = ct;
+        this.contentType = ct == null ? "text/plain" : ct;
     }
 
     @Override

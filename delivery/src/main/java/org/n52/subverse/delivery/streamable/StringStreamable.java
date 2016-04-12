@@ -40,10 +40,16 @@ import org.n52.subverse.delivery.Streamable;
 public class StringStreamable implements Streamable {
 
     private final String payload;
+    private String contentType;
 
     public StringStreamable(String payload) {
+        this(payload, null);
+    }
+
+    public StringStreamable(String payload, String contentType) {
         Objects.requireNonNull(payload);
         this.payload = payload;
+        this.contentType = contentType != null ? contentType : "text/plain";
     }
 
     @Override
@@ -54,7 +60,7 @@ public class StringStreamable implements Streamable {
 
     @Override
     public String getContentType() {
-        return "text/plain";
+        return this.contentType;
     }
 
     @Override

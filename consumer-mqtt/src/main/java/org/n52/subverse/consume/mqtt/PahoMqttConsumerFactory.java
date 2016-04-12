@@ -33,6 +33,8 @@ import javax.inject.Inject;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.n52.iceland.lifecycle.Constructable;
 import org.n52.iceland.lifecycle.Destroyable;
+import org.n52.iceland.util.JSONUtils;
+import org.n52.iceland.util.http.MediaTypes;
 import org.n52.subverse.engine.FilterEngine;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -63,7 +65,8 @@ public class PahoMqttConsumerFactory implements Constructable, Destroyable {
         String topic = "n52.adsb";
 
         this.consumer = new PahoMqttConsumer(host, UUID.randomUUID().toString(), (byte[] msg) -> {
-            engine.filterMessage(new String(msg));
+            String content = new String(msg);
+            engine.filterMessage(content, determineContentType(content));
         });
 
         new Thread(() -> {
@@ -78,6 +81,18 @@ public class PahoMqttConsumerFactory implements Constructable, Destroyable {
 
         LOG.info("listening for messages on topic '{}' of MQTT host {}", topic, host);
 
+    }
+
+    private String determineContentType(String content) {
+        try {
+            JSONUtils.loadString(content);
+            return MediaTypes.APPLICATION_JSON.getType();
+        }
+        catch (RuntimeException e) {
+            LOG.info("Not a JSON message");
+        }
+
+        return null;
     }
 
     @Override

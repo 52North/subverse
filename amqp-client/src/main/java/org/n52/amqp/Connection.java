@@ -74,8 +74,8 @@ public class Connection {
         }
     }
 
-    public Observable<Object> createObservable() {
-        return Observable.create((Subscriber<Object> t) -> {
+    public Observable<AmqpMessage> createObservable() {
+        return Observable.create(t -> {
             LOG.debug("Creating observable for {}", this.remoteURI);
 
             Messenger messenger = null;
@@ -90,14 +90,17 @@ public class Connection {
                 messenger.subscribe(this.remoteURI.toString());
 
                 while (!messenger.stopped()) {
-                    LOG.debug("starting recv()");
+                    LOG.debug("start receiving");
                     messenger.recv();
                     while (messenger.incoming() > 0) {
-                        LOG.debug("starting recv() loop");
+                        LOG.debug("starting receiving loop");
                         Message msg = messenger.get();
                         Section body = msg.getBody();
                         if (body instanceof AmqpValue) {
-                            t.onNext(((AmqpValue) body).getValue());
+                            t.onNext(createMessage(msg));
+                        }
+                        else {
+                            LOG.warn("Unsupported type of body: " + (body == null ? "n/a" : body.getClass()));
                         }
                     }
                 }
@@ -115,4 +118,17 @@ public class Connection {
         });
     }
 
+    private AmqpMessage createMessage(Message msg) {
+        return new AmqpMessage(((AmqpValue) msg.getBody()).getValue(),
+            createContentType(msg.getContentType()),
+            msg.getSubject());
+    }
+
+    private ContentType createContentType(String contentType) {
+        if (contentType == null) {
+            return null;
+        }
+
+        return new ContentType(contentType);
+    }
 }

@@ -16,7 +16,10 @@
 package org.n52.amqp;
 
 import java.io.IOException;
+import java.util.Collections;
+import java.util.Map;
 import java.util.UUID;
+import org.apache.qpid.proton.amqp.Symbol;
 import org.apache.qpid.proton.amqp.messaging.AmqpValue;
 import org.apache.qpid.proton.message.Message;
 import org.apache.qpid.proton.messenger.Messenger;
@@ -39,10 +42,29 @@ public class Publisher {
     }
 
     public void publish(CharSequence msg) {
-        publish(msg, null);
+        publish(msg, null, null);
     }
 
     public void publish(CharSequence msg, String subject) {
+        publish(msg, subject, null);
+    }
+
+    public void publish(CharSequence msg, ContentType ct) {
+        publish(msg, null, ct);
+    }
+
+    public void publish(CharSequence msg, String subject, ContentType ct) {
+        publish(msg, subject, ct, Collections.emptyMap());
+    }
+
+    public void publish(CharSequence msg, String subject, ContentType ct,
+            Map<String, String> deliveryAnnotations) {
+        publish(msg, subject, ct, deliveryAnnotations, Collections.emptyMap());
+    }
+
+    public void publish(CharSequence msg, String subject, ContentType ct,
+            Map<String, String> deliveryAnnotations,
+            Map<String, String> messageAnnotations) {
         LOG.debug("publishing message to target '{}'", connection.getRemoteURI());
         if (this.connection.isOpen()) {
             try {
@@ -59,6 +81,21 @@ public class Publisher {
                 if (subject != null) {
                     message.setSubject(subject);
                 }
+
+                if (ct != null) {
+                    message.setContentType(ct.getName());
+                    if (ct.getEncoding().isPresent()) {
+                        message.setContentEncoding(ct.getEncoding().get());
+                    }
+                }
+
+                messageAnnotations.forEach((String k, String v) -> {
+                    message.getMessageAnnotations().getValue().put(Symbol.valueOf(k), v);
+                });
+
+                deliveryAnnotations.forEach((String k, String v) -> {
+                    message.getDeliveryAnnotations().getValue().put(Symbol.valueOf(k), v);
+                });
 
                 message.setBody(new AmqpValue(msg));
 

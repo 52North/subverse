@@ -37,8 +37,11 @@ import java.security.SecureRandom;
 import java.util.Objects;
 import java.util.Optional;
 import org.apache.qpid.proton.messenger.Messenger;
+import org.n52.amqp.AmqpConnectionCreationFailedException;
 import org.n52.amqp.ConnectionBuilder;
+import org.n52.amqp.ContentType;
 import org.n52.amqp.Publisher;
+import org.n52.amqp.PublisherCreationFailedException;
 import org.n52.subverse.delivery.DeliveryDefinition;
 import org.n52.subverse.delivery.DeliveryEndpoint;
 import org.n52.subverse.delivery.DeliveryParameter;
@@ -118,9 +121,9 @@ public class AmqpDeliveryEndpoint implements DeliveryEndpoint {
             }
 
             LOG.info("Sending message to {}", this.address);
-            this.client.publish(prepareBody(o.get()));
+            this.client.publish(prepareBody(o.get()), new ContentType(o.get().getContentType()));
             LOG.info("Message sent to {}", this.address);
-        } catch (Exception ex) {
+        } catch (PublisherCreationFailedException | IOException | AmqpConnectionCreationFailedException ex) {
             LOG.warn("Could not send AMQP message", ex);
         }
     }

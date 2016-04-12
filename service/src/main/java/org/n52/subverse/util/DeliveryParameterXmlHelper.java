@@ -41,6 +41,10 @@ import org.n52.subverse.delivery.DeliveryParameter;
 public class DeliveryParameterXmlHelper {
 
     public static XmlObject createDeliveryParameters(List<DeliveryParameter> parameters) {
+        if (parameters.isEmpty()) {
+            return null;
+        }
+
         XmlObject xo = XmlObject.Factory.newInstance();
         XmlCursor cur = xo.newCursor();
         cur.toNextToken();

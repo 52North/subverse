@@ -68,7 +68,7 @@ public class EposFilterEngine implements FilterEngine {
 
     private final EposEngine engine = EposEngine.getInstance();
 
-    private Map<String, Rule> rules = new HashMap<>();
+    private final Map<String, Rule> rules = new HashMap<>();
 
     private XmlOptionsHelper xmlOptions;
 
@@ -79,6 +79,11 @@ public class EposFilterEngine implements FilterEngine {
 
     @Override
     public void filterMessage(Object message) {
+        filterMessage(message, null);
+    }
+
+    @Override
+    public void filterMessage(Object message, String contentType) {
         EposEvent event = null;
         try {
             event = TransformationRepository.Instance.transform(message, EposEvent.class);
@@ -87,11 +92,13 @@ public class EposFilterEngine implements FilterEngine {
         }
 
         if (event == null) {
-            event = new GenericEposEvent(message);
+            event = new GenericEposEvent(message, contentType);
         }
 
         this.engine.filterEvent(event);
     }
+
+
 
     @Override
     public synchronized void register(Subscription result, DeliveryEndpoint deliveryEndpoint)
@@ -144,12 +151,12 @@ public class EposFilterEngine implements FilterEngine {
         return obj;
     }
 
-    private Streamable createStreamable(Object o) {
+    private Streamable createStreamable(Object o, String contentType) {
         /*
          * TODO outsource to module
          */
         if (o instanceof String) {
-            return new StringStreamable((String) o);
+            return new StringStreamable((String) o, contentType);
         }
         else if (o instanceof XmlObject) {
             return new GenericStreamable("application/xml", o) {
@@ -188,12 +195,12 @@ public class EposFilterEngine implements FilterEngine {
 
         @Override
         public void onMatchingEvent(EposEvent event) {
-            this.endpoint.deliver(Optional.ofNullable(createStreamable(event.getOriginalObject())));
+            this.endpoint.deliver(Optional.ofNullable(createStreamable(event.getOriginalObject(), event.getContentType())));
         }
 
         @Override
         public void onMatchingEvent(EposEvent event, Object desiredOutputToConsumer) {
-            this.endpoint.deliver(Optional.ofNullable(createStreamable(desiredOutputToConsumer)));
+            this.endpoint.deliver(Optional.ofNullable(createStreamable(desiredOutputToConsumer, event.getContentType())));
         }
 
         @Override

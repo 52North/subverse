@@ -33,10 +33,10 @@
             <groupId>${project.groupId}</groupId>
             <artifactId>delivery-amqp</artifactId>
         </dependency>
-        <!--<dependency>
+        <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>consumer-mqtt</artifactId>
-        </dependency>-->
+        </dependency>
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
