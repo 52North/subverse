@@ -115,8 +115,8 @@ public class SubscribeDecoder implements Decoder<AbstractServiceRequest, String>
         long matching = pubs.getPublicationList().stream().filter(p -> p.getIdentifier().equals(pubId.get())).count();
         if (matching == 0) {
             CodedException e = new InvalidPublicationIdentifierFault(
-                    String.format("Publication identifier '%s' is not registered with this service",
-                            pubId.get()));
+                    String.format("Publication identifier '%s' is not registered with this service. Valid are: %s",
+                            pubId.get(), pubs.getPublicationList()));
             throw new DecodingException(e.getMessage(), e);
         }
 

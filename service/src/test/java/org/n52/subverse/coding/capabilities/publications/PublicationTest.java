@@ -26,39 +26,25 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
  * Public License for more details.
  */
+
 package org.n52.subverse.coding.capabilities.publications;
 
-import com.google.common.base.MoreObjects;
-import java.util.Objects;
+import org.hamcrest.CoreMatchers;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  *
- * @author Matthes Rieke <m.rieke@52north.org>
+ * @author <a href="mailto:m.rieke@52north.org">Matthes Rieke</a>
  */
-public class Publication {
+public class PublicationTest {
 
-    private final String theAbstract;
-    private final String identifier;
+    @Test
+    public void testTrimming() {
+        Publication pub = new Publication("  aaaabstract \n", " \t myDataId   ");
 
-    public Publication(String theAbstract, String identifier) {
-        Objects.requireNonNull(theAbstract);
-        Objects.requireNonNull(identifier);
-        this.theAbstract = theAbstract.trim();
-        this.identifier = identifier.trim();
-    }
-
-    public String getTheAbstract() {
-        return theAbstract;
-    }
-
-    public String getIdentifier() {
-        return identifier;
-    }
-
-    @Override
-    public String toString() {
-        return MoreObjects.toStringHelper(this)
-                .add("id", identifier).toString();
+        Assert.assertThat(pub.getIdentifier(), CoreMatchers.is("myDataId"));
+        Assert.assertThat(pub.getTheAbstract(), CoreMatchers.is("aaaabstract"));
     }
 
 }
