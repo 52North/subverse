@@ -103,8 +103,19 @@ public class SubscriptionManagerImpl implements SubscriptionManager, Destroyable
     @Override
     public void unsubscribe(String subscriptionId) throws UnsubscribeFailedException {
         try {
-            this.dao.deleteSubscription(subscriptionId);
+            LOG.debug("Invoking removal of subscription '{}'", subscriptionId);
+            Subscription toBeRemoved = this.dao.deleteSubscription(subscriptionId);
             this.filterEngine.removeSubscription(subscriptionId);
+            if (toBeRemoved != null) {
+                if (toBeRemoved.getEndpoint() != null) {
+                    LOG.debug("Destroying endpoint: {}", toBeRemoved.getEndpoint().getDeliveryEndpoint());
+                    toBeRemoved.getEndpoint().destroy();
+                }
+            }
+            else {
+                LOG.warn("DAO did not return subscription {}", subscriptionId);
+            }
+
             LOG.info("Removed subscription '{}'", subscriptionId);
         } catch (UnknownSubscriptionException ex) {
             throw new UnsubscribeFailedException("Unknown subscription id: "+subscriptionId, ex);

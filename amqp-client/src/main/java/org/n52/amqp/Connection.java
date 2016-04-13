@@ -24,7 +24,6 @@ import org.apache.qpid.proton.messenger.Messenger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import rx.Observable;
-import rx.Subscriber;
 
 /**
  *

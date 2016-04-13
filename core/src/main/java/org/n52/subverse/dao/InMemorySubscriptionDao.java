@@ -62,12 +62,12 @@ public class InMemorySubscriptionDao implements SubscriptionDao {
     }
 
     @Override
-    public synchronized void deleteSubscription(String subscriptionId) throws UnknownSubscriptionException {
+    public synchronized Subscription deleteSubscription(String subscriptionId) throws UnknownSubscriptionException {
         if (!this.storage.containsKey(subscriptionId)) {
             throw new UnknownSubscriptionException("Unknown Subscription id: "+subscriptionId);
         }
 
-        this.storage.remove(subscriptionId);
+        return this.storage.remove(subscriptionId);
     }
 
     @Override

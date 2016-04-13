@@ -46,7 +46,7 @@ public interface SubscriptionDao {
 
     Optional<Subscription> getSubscription(String id);
 
-    void deleteSubscription(String subscriptionId) throws UnknownSubscriptionException;
+    Subscription deleteSubscription(String subscriptionId) throws UnknownSubscriptionException;
 
     void updateTerminationTime(Subscription sub, DateTime terminationTime);
 

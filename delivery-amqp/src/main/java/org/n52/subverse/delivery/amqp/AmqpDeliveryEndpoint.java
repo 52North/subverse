@@ -36,15 +36,14 @@ import java.net.URISyntaxException;
 import java.security.SecureRandom;
 import java.util.Objects;
 import java.util.Optional;
-import org.apache.qpid.proton.messenger.Messenger;
 import org.n52.amqp.AmqpConnectionCreationFailedException;
+import org.n52.amqp.Connection;
 import org.n52.amqp.ConnectionBuilder;
 import org.n52.amqp.ContentType;
 import org.n52.amqp.Publisher;
 import org.n52.amqp.PublisherCreationFailedException;
 import org.n52.subverse.delivery.DeliveryDefinition;
 import org.n52.subverse.delivery.DeliveryEndpoint;
-import org.n52.subverse.delivery.DeliveryParameter;
 import org.n52.subverse.delivery.Streamable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -61,9 +60,9 @@ public class AmqpDeliveryEndpoint implements DeliveryEndpoint {
     private final String broker;
     private final String address;
     private final String parentPublicationId;
-    private Messenger messenger;
     private Publisher client;
     private final String id;
+    private Connection connection;
 
 
     public AmqpDeliveryEndpoint(DeliveryDefinition def, String defaultBroker) throws URISyntaxException {
@@ -116,7 +115,8 @@ public class AmqpDeliveryEndpoint implements DeliveryEndpoint {
             }
 
             if (this.client == null) {
-                this.client = ConnectionBuilder.create(URI.create(this.address)).build().createPublisher();
+                this.connection = ConnectionBuilder.create(URI.create(this.address)).build();
+                this.client = this.connection.createPublisher();
                 LOG.info("AMQP Client for {} created", this.address);
             }
 
@@ -186,9 +186,13 @@ public class AmqpDeliveryEndpoint implements DeliveryEndpoint {
     }
 
     @Override
-    public void destroy() {
-        if (this.messenger != null) {
-            this.messenger.stop();
+    public synchronized void destroy() {
+        if (this.connection != null) {
+            this.connection.close();
+        }
+
+        if (this.client != null) {
+            this.client.destroy();
             LOG.info("Messenger for {} stopped.", this.address);
         }
     }

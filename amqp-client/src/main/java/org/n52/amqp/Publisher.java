@@ -112,4 +112,10 @@ public class Publisher {
         }
     }
 
+    public synchronized void destroy() {
+        if (this.messenger != null) {
+            this.messenger.stop();
+        }
+    }
+
 }

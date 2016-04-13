@@ -29,6 +29,8 @@
 package org.n52.subverse.subscription;
 
 import org.n52.subverse.delivery.DeliveryEndpoint;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -36,6 +38,7 @@ import org.n52.subverse.delivery.DeliveryEndpoint;
  */
 public class SubscriptionEndpoint {
 
+    private static final Logger LOG = LoggerFactory.getLogger(SubscriptionEndpoint.class);
     private final DeliveryEndpoint deliveryEndpoint;
 
     public SubscriptionEndpoint(DeliveryEndpoint deliveryEndpoint) {
@@ -44,6 +47,15 @@ public class SubscriptionEndpoint {
 
     public DeliveryEndpoint getDeliveryEndpoint() {
         return deliveryEndpoint;
+    }
+
+    public void destroy() {
+        if (deliveryEndpoint != null) {
+            deliveryEndpoint.destroy();
+        }
+        else {
+            LOG.warn("Could not destroy delivery endpoint: null");
+        }
     }
 
 }
