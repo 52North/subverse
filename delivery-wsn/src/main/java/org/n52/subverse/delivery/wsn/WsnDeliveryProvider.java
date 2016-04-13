@@ -29,6 +29,8 @@
 package org.n52.subverse.delivery.wsn;
 
 import java.net.MalformedURLException;
+import java.util.Collections;
+import java.util.Map;
 import javax.inject.Inject;
 import org.n52.subverse.delivery.DeliveryDefinition;
 import org.n52.subverse.delivery.DeliveryEndpoint;
@@ -76,6 +78,11 @@ public class WsnDeliveryProvider implements DeliveryProvider {
     @Override
     public String getAbstract() {
         return ABSTRACT;
+    }
+
+    @Override
+    public Map<? extends String, ? extends String> getNamespacePrefixMap() {
+        return Collections.emptyMap();
     }
 
 }

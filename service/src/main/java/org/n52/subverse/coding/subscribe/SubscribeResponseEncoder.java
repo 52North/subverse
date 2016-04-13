@@ -31,10 +31,12 @@ package org.n52.subverse.coding.subscribe;
 import com.google.common.collect.Sets;
 import java.net.URI;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import javax.inject.Inject;
 import net.opengis.pubsub.x10.SubscriptionIdentifierDocument;
 import org.apache.xmlbeans.XmlObject;
 import org.joda.time.DateTime;
@@ -52,6 +54,7 @@ import org.n52.iceland.util.http.MediaTypes;
 import org.n52.subverse.SubverseConstants;
 import org.n52.subverse.coding.XmlBeansHelper;
 import org.n52.subverse.delivery.DeliveryDefinition;
+import org.n52.subverse.delivery.DeliveryProviderRepository;
 import org.n52.subverse.response.SubscribeResponse;
 import org.n52.subverse.subscription.Subscription;
 import org.n52.subverse.util.DeliveryParameterXmlHelper;
@@ -78,6 +81,18 @@ public class SubscribeResponseEncoder implements Encoder<XmlObject, SubscribeRes
                     SubverseConstants.OPERATION_SUBSCRIBE,
                     MediaTypes.APPLICATION_XML));
     private URI serviceURL;
+    private DeliveryProviderRepository deliveryProviderRepository;
+    private Map<String, String> prefixes;
+
+
+    public DeliveryProviderRepository getDeliveryProviderRepository() {
+        return deliveryProviderRepository;
+    }
+
+    @Inject
+    public void setDeliveryProviderRepository(DeliveryProviderRepository deliveryProviderRepository) {
+        this.deliveryProviderRepository = deliveryProviderRepository;
+    }
 
     @Setting(ServiceSettings.SERVICE_URL)
     public void setServiceURL(URI serviceURL) {
@@ -147,8 +162,19 @@ public class SubscribeResponseEncoder implements Encoder<XmlObject, SubscribeRes
 
     @Override
     public void addNamespacePrefixToMap(Map<String, String> prefixMap) {
-        prefixMap.put(SubverseConstants.PUB_SUB_NAMESPACE, "pubsub");
-        prefixMap.put(SubverseConstants.WS_N_NAMESPACE, "wsn");
+        synchronized (this) {
+            if (this.prefixes == null) {
+                this.prefixes = new HashMap<>();
+                prefixMap.put(SubverseConstants.PUB_SUB_NAMESPACE, "pubsub");
+                prefixMap.put(SubverseConstants.WS_N_NAMESPACE, "wsn");
+
+                if (this.deliveryProviderRepository != null) {
+                    prefixMap.putAll(this.deliveryProviderRepository.getNamespacePrefixMap());
+                }
+            }
+        }
+
+       prefixMap.putAll(this.prefixes);
     }
 
 

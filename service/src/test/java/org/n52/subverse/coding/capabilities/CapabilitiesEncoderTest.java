@@ -29,6 +29,7 @@
 package org.n52.subverse.coding.capabilities;
 
 import java.util.Collections;
+import java.util.Map;
 import java.util.Optional;
 import net.opengis.pubsub.x10.PublisherCapabilitiesDocument;
 import net.opengis.pubsub.x10.PublisherCapabilitiesType;
@@ -104,6 +105,13 @@ public class CapabilitiesEncoderTest {
                 }
             };
         }
+
+        @Override
+        public Map<? extends String, ? extends String> getNamespacePrefixMap() {
+            return Collections.emptyMap();
+        }
+
+
 
     }
 }

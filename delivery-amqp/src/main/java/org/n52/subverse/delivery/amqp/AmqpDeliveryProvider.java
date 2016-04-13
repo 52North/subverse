@@ -29,6 +29,8 @@
 package org.n52.subverse.delivery.amqp;
 
 import java.net.URISyntaxException;
+import java.util.Collections;
+import java.util.Map;
 import org.n52.iceland.config.annotation.Configurable;
 import org.n52.iceland.config.annotation.Setting;
 import org.n52.subverse.SubverseSettings;
@@ -84,6 +86,11 @@ public class AmqpDeliveryProvider implements DeliveryProvider {
         DeliveryParameter defaultHostParam = new DeliveryParameter(EXTENSION_NAMESPACE,
                 "defaultHost", defaultHost);
         return new DeliveryParameter[] {defaultHostParam};
+    }
+
+    @Override
+    public Map<? extends String, ? extends String> getNamespacePrefixMap() {
+        return Collections.singletonMap(EXTENSION_NAMESPACE, "amqp");
     }
 
 

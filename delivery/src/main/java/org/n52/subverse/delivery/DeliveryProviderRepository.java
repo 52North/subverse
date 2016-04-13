@@ -30,6 +30,8 @@ package org.n52.subverse.delivery;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -62,6 +64,19 @@ public class DeliveryProviderRepository {
 
     public Collection<DeliveryProvider> getProviders() {
         return Collections.unmodifiableCollection(providers);
+    }
+
+    public Map<String, String> getNamespacePrefixMap() {
+        if (this.providers == null || this.providers.isEmpty()) {
+            return Collections.emptyMap();
+        }
+
+        Map<String, String> result = new HashMap<>();
+        this.providers.stream().forEach(p -> {
+            result.putAll(p.getNamespacePrefixMap());
+        });
+
+        return result;
     }
 
 }

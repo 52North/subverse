@@ -28,6 +28,8 @@
  */
 package org.n52.subverse.delivery;
 
+import java.util.Map;
+
 /**
  *
  * @author Matthes Rieke <m.rieke@52north.org>
@@ -45,4 +47,6 @@ public interface DeliveryProvider {
     default DeliveryParameter[] getParameters() {
         return new DeliveryParameter[0];
     }
+
+    public Map<? extends String, ? extends String> getNamespacePrefixMap();
 }
