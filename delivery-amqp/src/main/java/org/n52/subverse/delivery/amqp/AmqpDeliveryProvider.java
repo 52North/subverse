@@ -37,8 +37,6 @@ import org.n52.subverse.delivery.DeliveryEndpoint;
 import org.n52.subverse.delivery.DeliveryParameter;
 import org.n52.subverse.delivery.DeliveryProvider;
 import org.n52.subverse.delivery.UnsupportedDeliveryDefinitionException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -47,10 +45,9 @@ import org.slf4j.LoggerFactory;
 @Configurable
 public class AmqpDeliveryProvider implements DeliveryProvider {
 
-    private static final Logger LOG = LoggerFactory.getLogger(AmqpDeliveryProvider.class);
-    protected static final String EXTENSION_NAMESPACE = "http://52north.org/pubsub/amqp-10-delivery";
+    protected static final String EXTENSION_NAMESPACE = "http://www.opengis.net/pubsub/1.0/amqp/v1.0";
 
-    private static final String IDENTIFIER = "amqp10";
+    private static final String IDENTIFIER = "https://docs.oasis-open.org/amqp/core/v1.0";
     private String defaultHost;
 
     @Setting(SubverseSettings.AMQP_DEFAULT_HOST)
