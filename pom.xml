@@ -52,6 +52,7 @@
   
     <modules>
         <module>core</module>
+        <module>engine</module>
         <module>delivery</module>
         <module>delivery-amqp</module>
         <module>delivery-wsn</module>
@@ -90,6 +91,11 @@
             <dependency>
                 <groupId>${project.groupId}</groupId>
                 <artifactId>core</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>engine</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
