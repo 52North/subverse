@@ -76,14 +76,19 @@ public class EposFilterEngine implements FilterEngine {
     @Override
     public void filterMessage(Object message, String contentType) {
         EposEvent event = null;
-        try {
-            event = TransformationRepository.Instance.transform(message, EposEvent.class);
-        } catch (TransformationException ex) {
-            LOG.warn("could not transform to EposEvent: {}", ex.getMessage());
+        if (message instanceof EposEvent) {
+            event = (EposEvent) message;
         }
+        else {
+            try {
+                event = TransformationRepository.Instance.transform(message, EposEvent.class);
+            } catch (TransformationException ex) {
+                LOG.warn("could not transform to EposEvent: {}", ex.getMessage());
+            }
 
-        if (event == null) {
-            event = new GenericEposEvent(message, contentType);
+            if (event == null) {
+                event = new GenericEposEvent(message, contentType);
+            }
         }
 
         this.engine.filterEvent(event);
