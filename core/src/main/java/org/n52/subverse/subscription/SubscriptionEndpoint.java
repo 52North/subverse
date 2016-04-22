@@ -34,7 +34,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  *
- * @author Matthes Rieke <m.rieke@52north.org>
+ * @author <a href="mailto:m.rieke@52north.org">Matthes Rieke</a>
  */
 public class SubscriptionEndpoint {
 

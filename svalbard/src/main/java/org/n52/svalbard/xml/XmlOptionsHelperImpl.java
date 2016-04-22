@@ -42,7 +42,7 @@ import org.n52.iceland.coding.CodingRepository;
 
 /**
  *
- * @author Matthes Rieke <m.rieke@52north.org>
+ * @author <a href="mailto:m.rieke@52north.org">Matthes Rieke</a>
  */
 public class XmlOptionsHelperImpl implements XmlOptionsHelper {
 

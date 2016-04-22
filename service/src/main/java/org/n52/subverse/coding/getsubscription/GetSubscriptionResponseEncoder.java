@@ -59,7 +59,7 @@ import org.w3.x2005.x08.addressing.EndpointReferenceType;
 
 /**
  *
- * @author Matthes Rieke <m.rieke@52north.org>
+ * @author <a href="mailto:m.rieke@52north.org">Matthes Rieke</a>
  */
 @Configurable
 public class GetSubscriptionResponseEncoder implements Encoder<XmlObject, GetSubscriptionResponse> {

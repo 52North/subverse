@@ -66,7 +66,7 @@ import org.w3.x2005.x08.addressing.ReferenceParametersType;
 
 /**
  *
- * @author Matthes Rieke <m.rieke@52north.org>
+ * @author <a href="mailto:m.rieke@52north.org">Matthes Rieke</a>
  */
 @Configurable
 public class SubscribeResponseEncoder implements Encoder<XmlObject, SubscribeResponse> {

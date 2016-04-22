@@ -36,7 +36,7 @@ import org.springframework.stereotype.Component;
 
 /**
  *
- * @author Matthes Rieke <m.rieke@52north.org>
+ * @author <a href="mailto:m.rieke@52north.org">Matthes Rieke</a>
  */
 public class PubSubSoapBinding extends SoapBinding {
 

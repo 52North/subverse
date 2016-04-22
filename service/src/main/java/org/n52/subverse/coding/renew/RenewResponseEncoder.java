@@ -50,7 +50,7 @@ import org.oasisOpen.docs.wsn.b2.RenewResponseDocument;
 
 /**
  *
- * @author Matthes Rieke <m.rieke@52north.org>
+ * @author <a href="mailto:m.rieke@52north.org">Matthes Rieke</a>
  */
 @Configurable
 public class RenewResponseEncoder implements Encoder<XmlObject, RenewResponse> {

@@ -38,7 +38,7 @@ import org.n52.iceland.request.operator.RequestOperator;
 
 /**
  *
- * @author Matthes Rieke <m.rieke@52north.org>
+ * @author <a href="mailto:m.rieke@52north.org">Matthes Rieke</a>
  */
 public abstract class AbstractOperator implements RequestOperator {
 

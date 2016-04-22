@@ -35,7 +35,7 @@ import org.n52.subverse.delivery.Streamable;
 
 /**
  *
- * @author Matthes Rieke <m.rieke@52north.org>
+ * @author <a href="mailto:m.rieke@52north.org">Matthes Rieke</a>
  */
 public class StringStreamable implements Streamable {
 

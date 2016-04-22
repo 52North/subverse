@@ -32,7 +32,7 @@ import org.n52.iceland.util.http.MediaType;
 
 /**
  *
- * @author Matthes Rieke <m.rieke@52north.org>
+ * @author <a href="mailto:m.rieke@52north.org">Matthes Rieke</a>
  */
 public class PubSubSoapMediaType extends MediaType {
 

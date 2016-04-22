@@ -41,7 +41,7 @@ import org.n52.epos.transform.TransformationException;
 
 /**
  *
- * @author Matthes Rieke <m.rieke@52north.org>
+ * @author <a href="mailto:m.rieke@52north.org">Matthes Rieke</a>
  */
 public class Dump1090Transformer implements EposTransformer {
 

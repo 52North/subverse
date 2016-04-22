@@ -38,7 +38,7 @@ import org.n52.subverse.notify.NotificationMessage;
 
 /**
  *
- * @author Matthes Rieke <m.rieke@52north.org>
+ * @author <a href="mailto:m.rieke@52north.org">Matthes Rieke</a>
  */
 public class NotifyRequest extends AbstractServiceRequest<NoContentResponse> {
 

@@ -47,7 +47,7 @@ import org.oasisOpen.docs.wsn.b2.UnsubscribeResponseDocument;
 
 /**
  *
- * @author Matthes Rieke <m.rieke@52north.org>
+ * @author <a href="mailto:m.rieke@52north.org">Matthes Rieke</a>
  */
 public class UnsubscribeResponseEncoder implements Encoder<XmlObject, UnsubscribeResponse> {
 

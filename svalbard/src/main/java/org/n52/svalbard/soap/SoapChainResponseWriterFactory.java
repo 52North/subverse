@@ -26,7 +26,7 @@ import org.n52.svalbard.xml.XmlOptionsHelper;
 
 /**
  *
- * @author Matthes Rieke <m.rieke@52north.org>
+ * @author <a href="mailto:m.rieke@52north.org">Matthes Rieke</a>
  */
 public class SoapChainResponseWriterFactory implements ResponseWriterFactory {
 

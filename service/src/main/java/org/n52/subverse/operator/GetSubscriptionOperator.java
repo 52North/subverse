@@ -44,7 +44,7 @@ import org.n52.subverse.subscription.Subscription;
 
 /**
  *
- * @author Matthes Rieke <m.rieke@52north.org>
+ * @author <a href="mailto:m.rieke@52north.org">Matthes Rieke</a>
  */
 public class GetSubscriptionOperator extends AbstractOperator {
 

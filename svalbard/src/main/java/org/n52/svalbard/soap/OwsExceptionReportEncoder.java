@@ -35,7 +35,7 @@ import org.n52.iceland.util.http.MediaTypes;
 
 /**
  *
- * @author Matthes Rieke <m.rieke@52north.org>
+ * @author <a href="mailto:m.rieke@52north.org">Matthes Rieke</a>
  */
 public class OwsExceptionReportEncoder implements Encoder<XmlObject, OwsExceptionReport> {
 

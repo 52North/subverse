@@ -58,7 +58,7 @@ import org.oasisOpen.docs.wsrf.r2.ResourceUnknownFaultDocument;
 
 /**
  *
- * @author Matthes Rieke <m.rieke@52north.org>
+ * @author <a href="mailto:m.rieke@52north.org">Matthes Rieke</a>
  */
 public class WsBaseNotificationFaultEncoder implements Encoder<XmlObject, OwsExceptionReport> {
 

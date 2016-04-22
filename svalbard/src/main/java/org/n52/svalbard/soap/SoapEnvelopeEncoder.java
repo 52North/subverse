@@ -50,7 +50,7 @@ import org.w3.x2003.x05.soapEnvelope.Faultcode;
 
 /**
  *
- * @author Matthes Rieke <m.rieke@52north.org>
+ * @author <a href="mailto:m.rieke@52north.org">Matthes Rieke</a>
  */
 public class SoapEnvelopeEncoder implements Encoder<Object, SoapResponse> {
 
