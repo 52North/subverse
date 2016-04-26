@@ -19,7 +19,7 @@
         <name>52°North</name>
         <url>http://52north.org/</url>
     </organization>
-  
+
     <licenses>
         <license>
             <name>GNU General Public License, version 2</name>
@@ -27,7 +27,7 @@
             <distribution>repo</distribution>
         </license>
     </licenses>
-    
+
     <developers>
         <developer>
             <id>matthesrieke</id>
@@ -38,18 +38,18 @@
             <timezone>GMT+1</timezone>
         </developer>
     </developers>
-    
+
     <scm>
         <url>https://github.com/52North/subverse</url>
         <connection>scm:git:https://github.com/52North/subverse.git</connection>
         <developerConnection>scm:git:https://github.com/52North/subverse.git</developerConnection>
     </scm>
-	
+
     <issueManagement>
         <system>GitHub issues</system>
         <url>https://github.com/52North/subverse/issues?state=open</url>
     </issueManagement>
-  
+
     <modules>
         <module>core</module>
         <module>engine</module>
@@ -62,7 +62,7 @@
         <module>svalbard</module>
         <module>amqp-client</module>
     </modules>
-    
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.build.timestamp.format>yyyyMMdd-HHmm</maven.build.timestamp.format>
@@ -78,11 +78,15 @@
         <version.mockito>1.10.19</version.mockito>
         <epos.version>0.0.1-SNAPSHOT</epos.version>
     </properties>
-    
+
     <repositories>
         <repository>
             <id>sonatype-snapshots</id>
             <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </repository>
+        <repository>
+            <id>52n-snapshots</id>
+            <url>https://52north.org/maven/repo/snapshots</url>
         </repository>
     </repositories>
 
@@ -331,7 +335,7 @@
                 <version>2.4</version>
                 <scope>runtime</scope>
             </dependency>
-            
+
             <dependency>
                 <groupId>org.n52.sensorweb</groupId>
                 <artifactId>52n-xml-soap-v12</artifactId>
@@ -379,7 +383,7 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
-    
+
     <build>
         <pluginManagement>
             <plugins>
@@ -434,7 +438,7 @@
                     </execution>
                 </executions>
             </plugin>
-            
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
@@ -443,7 +447,7 @@
                     <failOnWarning>false</failOnWarning>
                 </configuration>
             </plugin>
-            
+
             <plugin>
                 <groupId>org.jasig.maven</groupId>
                 <artifactId>maven-notice-plugin</artifactId>
@@ -466,7 +470,7 @@
                     </execution>
                 </executions>
             </plugin>
-            
+
             <plugin>
                 <groupId>com.mycila</groupId>
                 <artifactId>license-maven-plugin</artifactId>
@@ -521,7 +525,7 @@
             </extension>
         </extensions>
     </build>
-    
+
     <profiles>
         <profile>
             <id>snapshot-dist</id>
@@ -529,7 +533,7 @@
                 <repository>
                     <id>n52-releases-dist</id>
                     <name>repository for 52North releases</name>
-                    <url>dav:https://52north.org/maven/repo/releases</url>            
+                    <url>dav:https://52north.org/maven/repo/releases</url>
                 </repository>
                 <snapshotRepository>
                     <id>n52-snapshots-dist</id>
@@ -552,7 +556,7 @@
                 </plugins>
             </build>
         </profile>
-    </profiles>	
-        
+    </profiles>
+
 
 </project>
