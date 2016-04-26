@@ -22,7 +22,7 @@
         <groupId>org.n52.sensorweb</groupId>
         <artifactId>oxf-third-party-saxon</artifactId>
         <name>52North OxFramework Third Party - Saxon</name>
-        <license>GNU General Public License, v2.0</license>
+        <license>Apache License 2.0</license>
     </artifact>
     <artifact>
         <groupId>org.n52.sensorweb</groupId>
