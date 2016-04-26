@@ -10,19 +10,19 @@
         <groupId>org.n52.sensorweb</groupId>
         <artifactId>52n-oxf-conversion</artifactId>
         <name>52°North OXF Conversion module</name>
-        <license>GNU GENERAL PUBLIC LICENSE Version 2, June 1991</license>
+        <license>GNU General Public License, v2.0</license>
     </artifact>
     <artifact>
         <groupId>org.n52.sensorweb</groupId>
         <artifactId>52n-oxf-xmlbeans</artifactId>
         <name>52North OxFramework Xmlbeans Handling</name>
-        <license>GNU GENERAL PUBLIC LICENSE Version 2, June 1991</license>
+        <license>GNU General Public License, v2.0</license>
     </artifact>
     <artifact>
         <groupId>org.n52.sensorweb</groupId>
         <artifactId>oxf-third-party-saxon</artifactId>
         <name>52North OxFramework Third Party - Saxon</name>
-        <license>GNU GENERAL PUBLIC LICENSE Version 2, June 1991</license>
+        <license>GNU General Public License, v2.0</license>
     </artifact>
     <artifact>
         <groupId>org.n52.sensorweb</groupId>
