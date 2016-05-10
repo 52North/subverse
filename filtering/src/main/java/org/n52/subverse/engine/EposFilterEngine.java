@@ -105,7 +105,7 @@ public class EposFilterEngine implements FilterEngine {
             this.engine.registerRule(rule);
             this.rules.put(result.getId(), rule);
         } catch (FilterInstantiationException ex) {
-            LOG.warn("Could not instantiate rule", ex);
+            LOG.warn("Could not instantiate rule: {}", ex.getMessage());
             throw new SubscriptionRegistrationException("Could not instantiate rule", ex);
         }
     }
