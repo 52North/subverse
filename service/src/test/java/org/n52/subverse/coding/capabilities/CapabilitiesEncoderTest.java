@@ -79,9 +79,9 @@ public class CapabilitiesEncoderTest {
 
         @Override
         public DeliveryParameter[] getParameters() {
-            DeliveryParameter p1 = new DeliveryParameter("mytestspace", "myprop", "whatever");
-            DeliveryParameter p2 = new DeliveryParameter("mytestspace", "myprop2", "you");
-            DeliveryParameter p3 = new DeliveryParameter("mytestspace", "myprop3", "want");
+            DeliveryParameter p1 = new DeliveryParameter("text", "mytestspace", "myprop", "whatever");
+            DeliveryParameter p2 = new DeliveryParameter("text", "mytestspace", "myprop2", "you");
+            DeliveryParameter p3 = new DeliveryParameter("text", "mytestspace", "myprop3", "want");
             return new DeliveryParameter[] {
                 p1, p2, p3
             };

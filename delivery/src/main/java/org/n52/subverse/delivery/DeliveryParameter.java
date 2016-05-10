@@ -37,14 +37,20 @@ import java.io.Serializable;
  */
 public class DeliveryParameter implements Serializable {
 
+    private final String type;
     private final String namespace;
     private final String elementName;
     private final String value;
 
-    public DeliveryParameter(String namespace, String elementName, String value) {
+    public DeliveryParameter(String type, String namespace, String elementName, String value) {
+        this.type = type;
         this.namespace = namespace;
         this.elementName = elementName;
         this.value = value;
+    }
+
+    public String getType() {
+        return type;
     }
 
     public String getNamespace() {
@@ -62,6 +68,7 @@ public class DeliveryParameter implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hashCode(this.namespace,
+                this.type,
                 this.elementName,
                 this.value);
     }
@@ -76,6 +83,7 @@ public class DeliveryParameter implements Serializable {
         }
         final DeliveryParameter other = (DeliveryParameter) obj;
         return Objects.equal(this.namespace, other.namespace)
+            && Objects.equal(this.type, other.type)
             && Objects.equal(this.elementName, other.elementName)
             && Objects.equal(this.value, other.value);
     }

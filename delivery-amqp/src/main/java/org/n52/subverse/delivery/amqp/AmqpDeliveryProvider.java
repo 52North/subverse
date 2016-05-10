@@ -83,7 +83,7 @@ public class AmqpDeliveryProvider implements DeliveryProvider {
 
     @Override
     public DeliveryParameter[] getParameters() {
-        DeliveryParameter defaultHostParam = new DeliveryParameter(EXTENSION_NAMESPACE,
+        DeliveryParameter defaultHostParam = new DeliveryParameter("url", EXTENSION_NAMESPACE,
                 "defaultHost", defaultHost);
         return new DeliveryParameter[] {defaultHostParam};
     }
