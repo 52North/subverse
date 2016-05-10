@@ -40,4 +40,6 @@ public interface SubverseSettings extends ServiceSettings {
 
     String AMQP_DEFAULT_HOST = "subverse.amqp.defaultHost";
 
+    String FILESYSTEM_SUBSCRIPTION_STORAGE_DIRECTORY = "data";
+
 }

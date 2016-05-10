@@ -28,13 +28,14 @@
  */
 package org.n52.subverse.delivery;
 
+import java.io.Serializable;
 import java.util.Optional;
 
 /**
  *
  * @author <a href="mailto:m.rieke@52north.org">Matthes Rieke</a>
  */
-public interface DeliveryEndpoint {
+public interface DeliveryEndpoint extends Serializable {
 
     void deliver(Optional<Streamable> o);
 

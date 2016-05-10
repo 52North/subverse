@@ -78,7 +78,8 @@ This project includes:
   subverse delivery amqp implementation under GNU General Public License, version 2
   subverse delivery API under GNU General Public License, version 2
   subverse delivery WS-BaseNotification implementation under GNU General Public License, version 2
-  subverse filter engine under GNU General Public License, version 2
+  subverse filesystem storage under GNU General Public License, version 2
+  subverse filtering under GNU General Public License, version 2
   subverse MQTT consumer under GNU General Public License, version 2
   subverse service under GNU General Public License, version 2
   subverse webapp under GNU General Public License, version 2

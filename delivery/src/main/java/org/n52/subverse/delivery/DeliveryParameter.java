@@ -28,19 +28,18 @@
  */
 package org.n52.subverse.delivery;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.google.common.base.Objects;
+import java.io.Serializable;
 
 /**
  *
  * @author <a href="mailto:m.rieke@52north.org">Matthes Rieke</a>
  */
-public class DeliveryParameter {
+public class DeliveryParameter implements Serializable {
 
     private final String namespace;
     private final String elementName;
     private final String value;
-    private final List<DeliveryParameter> children = new ArrayList<>();
 
     public DeliveryParameter(String namespace, String elementName, String value) {
         this.namespace = namespace;
@@ -60,16 +59,25 @@ public class DeliveryParameter {
         return value;
     }
 
-    public void addChildren(DeliveryParameter p) {
-        children.add(p);
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(this.namespace,
+                this.elementName,
+                this.value);
     }
 
-    public List<DeliveryParameter> getChildren() {
-        return children;
-    }
-
-    public boolean hasChildren() {
-        return !children.isEmpty();
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final DeliveryParameter other = (DeliveryParameter) obj;
+        return Objects.equal(this.namespace, other.namespace)
+            && Objects.equal(this.elementName, other.elementName)
+            && Objects.equal(this.value, other.value);
     }
 
 }

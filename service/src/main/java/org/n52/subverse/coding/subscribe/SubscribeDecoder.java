@@ -179,12 +179,12 @@ public class SubscribeDecoder implements Decoder<AbstractServiceRequest, String>
         */
 
         SubscribeOptions options = new SubscribeOptions(pubId.get(),
-                Optional.ofNullable(terminationTime),
-                filter,
-                Optional.ofNullable(filterLanguage),
-                Optional.ofNullable(deliveryDef),
+                terminationTime,
+                filter.orElse(null),
+                filterLanguage,
+                deliveryDef,
                 Collections.emptyMap(),
-                Optional.ofNullable(null));
+                null);
         return new SubscribeRequest(options);
     }
 

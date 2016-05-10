@@ -82,9 +82,8 @@ public class CapabilitiesEncoderTest {
             DeliveryParameter p1 = new DeliveryParameter("mytestspace", "myprop", "whatever");
             DeliveryParameter p2 = new DeliveryParameter("mytestspace", "myprop2", "you");
             DeliveryParameter p3 = new DeliveryParameter("mytestspace", "myprop3", "want");
-            p2.addChildren(p3);
             return new DeliveryParameter[] {
-                p1, p2
+                p1, p2, p3
             };
         }
 

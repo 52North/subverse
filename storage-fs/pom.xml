@@ -8,10 +8,10 @@
         <version>1.0.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>engine</artifactId>  
+    <artifactId>storage-fs</artifactId>  
     <packaging>jar</packaging>
 
-    <name>subverse filter engine</name>
+    <name>subverse filesystem storage</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -20,11 +20,15 @@
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>delivery</artifactId>
+            <artifactId>filtering</artifactId>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>svalbard</artifactId>
+            <artifactId>core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>javax.inject</groupId>
+            <artifactId>javax.inject</artifactId>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
@@ -45,42 +49,16 @@
             <artifactId>spring-core</artifactId>
         </dependency>
         <dependency>
-            <groupId>javax.inject</groupId>
-            <artifactId>javax.inject</artifactId>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
         </dependency>
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.n52.sensorweb</groupId>
-            <artifactId>52n-xml-filter-v20</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>joda-time</groupId>
-            <artifactId>joda-time</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.n52.epos</groupId>
-            <artifactId>epos-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.n52.epos</groupId>
-            <artifactId>epos-pattern-esper</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.n52.epos</groupId>
-            <artifactId>epos-filter-basic</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.n52.epos</groupId>
-            <artifactId>epos-pattern-eml</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.n52.sensorweb</groupId>
-                    <artifactId>52n-xml-swes-v20</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
     </dependencies>
 </project>

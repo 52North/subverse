@@ -52,12 +52,13 @@
 
     <modules>
         <module>core</module>
-        <module>engine</module>
+        <module>filtering</module>
         <module>delivery</module>
         <module>delivery-amqp</module>
         <module>delivery-wsn</module>
         <module>consumer-mqtt</module>
         <module>service</module>
+        <module>storage-fs</module>
         <module>webapp</module>
         <module>svalbard</module>
         <module>amqp-client</module>
@@ -103,7 +104,7 @@
             </dependency>
             <dependency>
                 <groupId>${project.groupId}</groupId>
-                <artifactId>engine</artifactId>
+                <artifactId>filtering</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

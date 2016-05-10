@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pubsub:PublisherCapabilities xmlns:pubsub="http://www.opengis.net/pubsub/1.0" xmlns:fes="http://www.opengis.net/fes/2.0" xmlns:gml="http://www.opengis.net/gml/3.2" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:soap12="http://www.w3.org/2003/05/soap-envelope" xmlns:wsa="http://www.w3.org/2005/08/addressing" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.0.0" xsi:schemaLocation="http://www.w3.org/2003/05/soap-envelope http://www.w3.org/2003/05/soap-envelope/soap-envelope.xsd     http://www.opengis.net/pubsub/1.0 http://schemas.opengis.net/pubsub/1.0.0/pubsubAll.xsd">
+    <ows:ServiceIdentification>
+        <ows:Title>52°North subverse</ows:Title>
+        <ows:Abstract>52°North subverse - an implementation of OGC PubSub 1.0</ows:Abstract>
+        <ows:Keywords>
+            <ows:Keyword>Publish</ows:Keyword>
+            <ows:Keyword>Subscribe</ows:Keyword>
+        </ows:Keywords>
+        <ows:ServiceType codeSpace="http://opengeospatial.net">OGC:PubSub</ows:ServiceType>
+        <ows:ServiceTypeVersion>1.0.0</ows:ServiceTypeVersion>
+        <ows:Profile>http://www.opengis.net/spec/pubsub/1.0/conf/soap/standalone-publisher</ows:Profile>
+        <ows:Fees>NONE</ows:Fees>
+        <ows:AccessConstraints>NONE</ows:AccessConstraints>
+    </ows:ServiceIdentification>
+    <ows:ServiceProvider>
+        <ows:ProviderName>52°North</ows:ProviderName>
+        <ows:ProviderSite xlink:href="http://52north.org/" />
+        <ows:ServiceContact>
+            <ows:ContactInfo>
+                <ows:Phone>
+                    <ows:Voice>+49(0)251/396 371-0</ows:Voice>
+                </ows:Phone>
+                <ows:Address>
+                    <ows:DeliveryPoint>Martin-Luther-King-Weg 24</ows:DeliveryPoint>
+                    <ows:City>Münster</ows:City>
+                    <ows:AdministrativeArea>North Rhine-Westphalia</ows:AdministrativeArea>
+                    <ows:PostalCode>48155</ows:PostalCode>
+                    <ows:Country>Germany</ows:Country>
+                    <ows:ElectronicMailAddress>info@52north.org</ows:ElectronicMailAddress>
+                </ows:Address>
+            </ows:ContactInfo>
+        </ows:ServiceContact>
+    </ows:ServiceProvider>
+    <ows:OperationsMetadata>
+        <ows:Operation name="GetCapabilities">
+            <ows:DCP>
+                <ows:HTTP>
+                    <ows:Get xlink:href="http://localhost:8080/subverse/service">
+                        <ows:Constraint name="Content-Type">
+                            <ows:AllowedValues>
+                                <ows:Value>application/x-kvp</ows:Value>
+                            </ows:AllowedValues>
+                        </ows:Constraint>
+                    </ows:Get>
+                    <ows:Post xlink:href="http://localhost:8080/subverse/service">
+                        <ows:Constraint name="Content-Type">
+                            <ows:AllowedValues>
+                                <ows:Value>application/xml</ows:Value>
+                                <ows:Value>text/xml</ows:Value>
+                            </ows:AllowedValues>
+                        </ows:Constraint>
+                    </ows:Post>
+                </ows:HTTP>
+            </ows:DCP>
+            <ows:Parameter name="AcceptVersions">
+                <ows:AllowedValues>
+                    <ows:Value>1.0.0</ows:Value>
+                </ows:AllowedValues>
+            </ows:Parameter>
+            <ows:Parameter name="AcceptFormats">
+                <ows:AllowedValues>
+                    <ows:Value>application/xml</ows:Value>
+                    <ows:Value>text/xml</ows:Value>
+                </ows:AllowedValues>
+            </ows:Parameter>
+            <ows:Parameter name="Sections">
+                <ows:AllowedValues>
+                    <ows:Value>ServiceIdentification</ows:Value>
+                    <ows:Value>ServiceProvider</ows:Value>
+                    <ows:Value>OperationsMetadata</ows:Value>
+                    <ows:Value>Contents</ows:Value>
+                    <ows:Value>FilterCapabilities</ows:Value>
+                    <ows:Value>DeliveryCapabilities</ows:Value>
+                </ows:AllowedValues>
+            </ows:Parameter>
+        </ows:Operation>
+        <ows:Operation name="DescribePublicationType">
+            <ows:DCP>
+                <ows:HTTP>
+                    <ows:Post xlink:href="http://localhost:8080/subverse/service" />
+                </ows:HTTP>
+            </ows:DCP>
+        </ows:Operation>
+        <ows:Operation name="DescribeSubscription">
+            <ows:DCP>
+                <ows:HTTP>
+                    <ows:Post xlink:href="http://localhost:8080/subverse/service" />
+                </ows:HTTP>
+            </ows:DCP>
+        </ows:Operation>
+        <ows:Operation name="Subscribe">
+            <ows:DCP>
+                <ows:HTTP>
+                    <ows:Post xlink:href="http://localhost:8080/subverse/service" />
+                </ows:HTTP>
+            </ows:DCP>
+        </ows:Operation>
+        <ows:Operation name="Unsubscribe">
+            <ows:DCP>
+                <ows:HTTP>
+                    <ows:Post xlink:href="http://localhost:8080/subverse/service" />
+                </ows:HTTP>
+            </ows:DCP>
+        </ows:Operation>
+        <ows:Operation name="Renew">
+            <ows:DCP>
+                <ows:HTTP>
+                    <ows:Post xlink:href="http://localhost:8080/subverse/service" />
+                </ows:HTTP>
+            </ows:DCP>
+        </ows:Operation>
+    </ows:OperationsMetadata>
+    <pubsub:FilterCapabilities>
+        <pubsub:FilterLanguage>
+            <ows:Abstract>OGC Filter Encoding Spec 2.0</ows:Abstract>
+            <pubsub:Identifier>http://www.opengis.net/fes/2.0</pubsub:Identifier>
+            <pubsub:SupportedCapabilities>
+                <fes:Filter_Capabilities>
+                    <fes:Conformance>
+                        <fes:Constraint name="ImplementsMinSpatialFilter">
+                            <ows:NoValues />
+                            <ows:DefaultValue>true</ows:DefaultValue>
+                        </fes:Constraint>
+                        <fes:Constraint name="ImplementsTemporalFilter">
+                            <ows:NoValues />
+                            <ows:DefaultValue>true</ows:DefaultValue>
+                        </fes:Constraint>
+                    </fes:Conformance>
+                </fes:Filter_Capabilities>
+            </pubsub:SupportedCapabilities>
+        </pubsub:FilterLanguage>
+        <pubsub:FilterLanguage>
+            <ows:Abstract>OGC WFS 2.0 filtering support</ows:Abstract>
+            <pubsub:Identifier>http://www.opengis.net/wfs/2.0</pubsub:Identifier>
+        </pubsub:FilterLanguage>
+    </pubsub:FilterCapabilities>
+    <pubsub:DeliveryCapabilities>
+        <pubsub:DeliveryMethod>
+            <ows:Abstract>SOAP over HTTP - Messages delivered via HTTP POST with SOAP contents (push-based)</ows:Abstract>
+            <pubsub:Identifier>http://schemas.xmlsoap.org/soap/http</pubsub:Identifier>
+        </pubsub:DeliveryMethod>
+    </pubsub:DeliveryCapabilities>
+    <pubsub:Publications>
+        <pubsub:Publication>
+            <ows:Abstract>Aviation Data</ows:Abstract>
+            <pubsub:Identifier>http://localhost:8080/subverse/publications/aviation_data</pubsub:Identifier>
+            <pubsub:ContentType>text/xml</pubsub:ContentType>
+            <pubsub:ContentType>application/xml</pubsub:ContentType>
+            <pubsub:SupportedFilterLanguage>http://www.opengis.net/fes/2.0</pubsub:SupportedFilterLanguage>
+            <pubsub:SupportedFilterLanguage>http://www.opengis.net/wfs/2.0</pubsub:SupportedFilterLanguage>
+            <pubsub:SupportedDeliveryMethod>http://schemas.xmlsoap.org/soap/http</pubsub:SupportedDeliveryMethod>
+        </pubsub:Publication>
+    </pubsub:Publications>
+    <pubsub:Extension>
+        <!-- extension elements may be used for providing extensions to PubSub Core -->
+    </pubsub:Extension>
+</pubsub:PublisherCapabilities>

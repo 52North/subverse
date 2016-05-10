@@ -60,16 +60,7 @@ public class DeliveryParameterXmlHelper {
 
     private static void createElement(XmlCursor cur, DeliveryParameter param) {
         cur.beginElement(new QName(param.getNamespace(), param.getElementName()));
-
-        if (!param.hasChildren()) {
-            cur.insertChars(param.getValue());
-        }
-        else {
-            param.getChildren().forEach(child -> {
-                createElement(cur, child);
-            });
-        }
-
+        cur.insertChars(param.getValue());
         cur.toEndDoc();
     }
 

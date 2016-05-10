@@ -28,7 +28,10 @@
  */
 package org.n52.subverse.subscription;
 
-public class Subscription {
+import com.google.common.base.Objects;
+import java.io.Serializable;
+
+public class Subscription implements Serializable {
 
     private final String id;
     private SubscribeOptions options;
@@ -38,7 +41,6 @@ public class Subscription {
         this.id = id;
         this.options = options;
         this.endpoint = endpoint;
-
     }
 
     public String getId() {
@@ -55,6 +57,26 @@ public class Subscription {
 
     public SubscriptionEndpoint getEndpoint() {
         return endpoint;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(
+            this.id, this.options, this.endpoint);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Subscription other = (Subscription) obj;
+        return Objects.equal(this.id, other.id)
+            && Objects.equal(this.options, other.options)
+            && Objects.equal(this.endpoint, other.endpoint);
     }
 
 }

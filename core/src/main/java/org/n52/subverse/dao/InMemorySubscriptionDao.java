@@ -74,12 +74,12 @@ public class InMemorySubscriptionDao implements SubscriptionDao {
     public void updateTerminationTime(Subscription sub, DateTime terminationTime) {
         SubscribeOptions opts = sub.getOptions();
         SubscribeOptions newOpts = new SubscribeOptions(opts.getPublicationIdentifier(),
-                Optional.of(terminationTime),
-                opts.getFilter(),
-                opts.getFilterLanguageId(),
-                opts.getDeliveryDefinition(),
+                terminationTime,
+                opts.getFilter().orElse(null),
+                opts.getFilterLanguageId().orElse(null),
+                opts.getDeliveryDefinition().orElse(null),
                 opts.getDeliveryParameters(),
-                opts.getContentType());
+                opts.getContentType().orElse(null));
 
         sub.updateOptions(newOpts);
 

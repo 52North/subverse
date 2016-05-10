@@ -28,6 +28,8 @@
  */
 package org.n52.subverse.subscription;
 
+import com.google.common.base.Objects;
+import java.io.Serializable;
 import org.n52.subverse.delivery.DeliveryEndpoint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,7 +38,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author <a href="mailto:m.rieke@52north.org">Matthes Rieke</a>
  */
-public class SubscriptionEndpoint {
+public class SubscriptionEndpoint implements Serializable {
 
     private static final Logger LOG = LoggerFactory.getLogger(SubscriptionEndpoint.class);
     private final DeliveryEndpoint deliveryEndpoint;
@@ -56,6 +58,24 @@ public class SubscriptionEndpoint {
         else {
             LOG.warn("Could not destroy delivery endpoint: null");
         }
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(
+            this.deliveryEndpoint);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final SubscriptionEndpoint other = (SubscriptionEndpoint) obj;
+        return Objects.equal(this.deliveryEndpoint, other.deliveryEndpoint);
     }
 
 }

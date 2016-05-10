@@ -29,6 +29,8 @@
 package org.n52.subverse.delivery;
 
 import com.google.common.base.MoreObjects;
+import com.google.common.base.Objects;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -37,7 +39,7 @@ import java.util.List;
  *
  * @author <a href="mailto:m.rieke@52north.org">Matthes Rieke</a>
  */
-public class DeliveryDefinition {
+public class DeliveryDefinition implements Serializable {
 
     private final String identifier;
     private final String location;
@@ -78,6 +80,26 @@ public class DeliveryDefinition {
         return Collections.unmodifiableList(parameters);
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(this.identifier,
+                this.location,
+                this.publicationId);
+    }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final DeliveryDefinition other = (DeliveryDefinition) obj;
+        return Objects.equal(this.identifier, other.identifier)
+            && Objects.equal(this.location, other.location)
+            && Objects.equal(this.publicationId, other.publicationId)
+            && Objects.equal(this.parameters, other.parameters);
+    }
 
 }

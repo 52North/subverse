@@ -44,29 +44,31 @@
 package org.n52.subverse.subscription;
 
 import com.google.common.base.MoreObjects;
+import com.google.common.base.Objects;
+import java.io.Serializable;
 import java.util.Map;
 import java.util.Optional;
 import org.apache.xmlbeans.XmlObject;
 import org.joda.time.DateTime;
 import org.n52.subverse.delivery.DeliveryDefinition;
 
-public class SubscribeOptions {
+public class SubscribeOptions implements Serializable {
 
     private final String publicationIdentifier;
-    private final Optional<DateTime> terminationTime;
-    private final Optional<XmlObject> filter;
-    private final Optional<String> filterLanguageId;
-    private final Optional<DeliveryDefinition> deliveryDefinition;
+    private final DateTime terminationTime;
+    private final XmlObject filter;
+    private final String filterLanguageId;
+    private final DeliveryDefinition deliveryDefinition;
     private final Map<String, String> deliveryParameters;
-    private final Optional<String> contentType;
+    private final String contentType;
 
     public SubscribeOptions(String publicationIdentifier,
-            Optional<DateTime> terminationTime,
-            Optional<XmlObject> filter,
-            Optional<String> filterLanguageId,
-            Optional<DeliveryDefinition> deliveryDef,
+            DateTime terminationTime,
+            XmlObject filter,
+            String filterLanguageId,
+            DeliveryDefinition deliveryDef,
             Map<String, String> deliveryParameters,
-            Optional<String> contentType) {
+            String contentType) {
         this.publicationIdentifier = publicationIdentifier;
         this.terminationTime = terminationTime;
         this.filter = filter;
@@ -94,19 +96,19 @@ public class SubscribeOptions {
     }
 
     public Optional<DateTime> getTerminationTime() {
-        return terminationTime;
+        return Optional.ofNullable(terminationTime);
     }
 
     public Optional<XmlObject> getFilter() {
-        return filter;
+        return Optional.ofNullable(filter);
     }
 
     public Optional<String> getFilterLanguageId() {
-        return filterLanguageId;
+        return Optional.ofNullable(filterLanguageId);
     }
 
     public Optional<DeliveryDefinition> getDeliveryDefinition() {
-        return deliveryDefinition;
+        return Optional.ofNullable(deliveryDefinition);
     }
 
     public Map<String, String> getDeliveryParameters() {
@@ -114,7 +116,39 @@ public class SubscribeOptions {
     }
 
     public Optional<String> getContentType() {
-        return contentType;
+        return Optional.ofNullable(contentType);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(this.publicationIdentifier,
+                this.terminationTime,
+                this.filter,
+                this.filterLanguageId,
+                this.deliveryDefinition,
+                this.deliveryParameters,
+                this.contentType);
+    }
+
+
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final SubscribeOptions other = (SubscribeOptions) obj;
+        return Objects.equal(this.publicationIdentifier, other.publicationIdentifier)
+            && Objects.equal(this.terminationTime, other.terminationTime)
+            && Objects.equal(this.filter != null ? this.filter.toString() : null,
+                    other.filter != null ? other.filter.toString() : null)
+            && Objects.equal(this.filterLanguageId, other.filterLanguageId)
+            && Objects.equal(this.deliveryDefinition, other.deliveryDefinition)
+            && Objects.equal(this.deliveryParameters, other.deliveryParameters)
+            && Objects.equal(this.contentType, other.contentType);
     }
 
 }
