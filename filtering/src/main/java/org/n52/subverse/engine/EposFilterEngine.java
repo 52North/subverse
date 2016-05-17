@@ -33,6 +33,8 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import net.opengis.fes.x20.FilterDocument;
 import net.opengis.fes.x20.FilterType;
 import org.apache.xmlbeans.XmlObject;
@@ -65,6 +67,8 @@ public class EposFilterEngine implements FilterEngine {
     private static final org.slf4j.Logger LOG = LoggerFactory.getLogger(EposFilterEngine.class);
 
     private final EposEngine engine = EposEngine.getInstance();
+    
+    private static final ExecutorService executor = Executors.newSingleThreadExecutor();
 
     private final Map<String, Rule> rules = new HashMap<>();
 
@@ -74,26 +78,28 @@ public class EposFilterEngine implements FilterEngine {
     }
 
     @Override
-    public void filterMessage(Object message, String publicationId, String contentType) {
-        EposEvent event = null;
-        if (message instanceof EposEvent) {
-            event = (EposEvent) message;
-        }
-        else {
-            try {
-                event = TransformationRepository.Instance.transform(message, EposEvent.class);
-            } catch (TransformationException ex) {
-                LOG.warn("could not transform to EposEvent: {}", ex.getMessage());
+    public void filterMessage(final Object message, final String publicationId, final String contentType) {
+        executor.submit(() -> {
+            EposEvent event = null;
+            if (message instanceof EposEvent) {
+                event = (EposEvent) message;
+            }
+            else {
+                try {
+                    event = TransformationRepository.Instance.transform(message, EposEvent.class);
+                } catch (TransformationException ex) {
+                    LOG.warn("could not transform to EposEvent: {}", ex.getMessage());
+                }
+
+                if (event == null) {
+                    event = new GenericEposEvent(message, contentType);
+                }
             }
 
-            if (event == null) {
-                event = new GenericEposEvent(message, contentType);
-            }
-        }
+            event.setValue(PublicationFilter.KEY, publicationId);
 
-        event.setValue(PublicationFilter.KEY, publicationId);
-
-        this.engine.filterEvent(event);
+            this.engine.filterEvent(event);
+        });
     }
 
     @Override
@@ -195,11 +201,13 @@ public class EposFilterEngine implements FilterEngine {
 
         @Override
         public void onMatchingEvent(EposEvent event) {
+            //TODO implement UseRaw
             this.endpoint.deliver(Optional.ofNullable(createStreamable(event.getOriginalObject(), event.getContentType())));
         }
 
         @Override
         public void onMatchingEvent(EposEvent event, Object desiredOutputToConsumer) {
+            //TODO implement UseRaw
             this.endpoint.deliver(Optional.ofNullable(createStreamable(desiredOutputToConsumer, event.getContentType())));
         }
 
