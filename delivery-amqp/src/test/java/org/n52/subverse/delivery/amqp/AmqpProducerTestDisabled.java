@@ -61,9 +61,8 @@ public class AmqpProducerTestDisabled {
     }
 
     private DeliveryDefinition createDef() {
-        DeliveryDefinition def = new DeliveryDefinition("wurz", "localhost", "test-pub");
+        DeliveryDefinition def = new DeliveryDefinition("wurz", "localhost", "test-pub", true);
         return def;
     }
-
 
 }

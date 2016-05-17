@@ -79,6 +79,7 @@ public class SubscribeDecoder implements Decoder<AbstractServiceRequest, String>
 
     private static final QName PUBLICATION_ID_QN = PublicationIdentifierDocument.type.getDocumentElementName();
     private static final QName DELIVERY_METHOD_QN = DeliveryMethodDocument.type.getDocumentElementName();
+    private static final QName USE_RAW_QN = new QName(SubverseConstants.WS_N_NAMESPACE, "UseRaw");
 
     private PublicationsProducer publicationsProducer;
     private FilterCapabilitiesProducer filterProducer;
@@ -131,11 +132,20 @@ public class SubscribeDecoder implements Decoder<AbstractServiceRequest, String>
             deliveryIdentifier = deliveryElem.getIdentifier();
         }
 
+        boolean useRaw = false;
+        if (subscribe.isSetSubscriptionPolicy()) {
+            SubscribeDocument.Subscribe.SubscriptionPolicy policy = subscribe.getSubscriptionPolicy();
+            Optional<XmlObject> useRawElem = XmlBeansHelper.findFirstChild(USE_RAW_QN, policy);
+            if (useRawElem.isPresent()) {
+                useRaw = true;
+            }
+        }
+
         /*
          * delivery location
          */
         AttributedURIType consumer = subscribe.getConsumerReference().getAddress();
-        deliveryDef = new DeliveryDefinition(deliveryIdentifier, consumer.getStringValue(), pubId.get());
+        deliveryDef = new DeliveryDefinition(deliveryIdentifier, consumer.getStringValue(), pubId.get(), useRaw);
 
         /*
         * termination time

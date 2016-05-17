@@ -26,6 +26,15 @@
     </bean>
 
     <bean class="org.n52.iceland.config.settings.StringSettingDefinition">
+        <property name="key" value="subverse.storage.baseDirectory" />
+        <property name="title" value="Root Storage Directory" />
+        <property name="description" value="The root storage directory" />
+        <property name="order" value="33.1" />
+        <property name="group" ref="subverseSettingDefintionGroup" />
+        <property name="defaultValue" value="data" />
+    </bean>
+
+    <bean class="org.n52.iceland.config.settings.StringSettingDefinition">
         <property name="key" value="subverse.publications.rootPublication" />
         <property name="title" value="Root Publication Identifier" />
         <property name="description" value="The Root Publication Identifier that disables publication filter checking" />

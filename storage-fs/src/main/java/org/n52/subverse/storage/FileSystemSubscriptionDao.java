@@ -91,7 +91,7 @@ public class FileSystemSubscriptionDao implements SubscriptionDao, Constructable
         }
     }
 
-    @Setting(SubverseSettings.FILESYSTEM_SUBSCRIPTION_STORAGE_DIRECTORY)
+    @Setting(SubverseSettings.FILESYSTEM_STORAGE_DIRECTORY)
     public void setStorageDirectory(String storageDir) {
         this.storageDirectory = storageDir;
     }

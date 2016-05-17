@@ -42,22 +42,22 @@ public class AmqpDeliveryEndpointTest {
 
     @Test
     public void testLocationWithTopic() throws URISyntaxException {
-        DeliveryDefinition def = new DeliveryDefinition("amqp10", "localhost", "pubId");
+        DeliveryDefinition def = new DeliveryDefinition("amqp10", "localhost", "pubId", true);
         AmqpDeliveryEndpoint ep = new AmqpDeliveryEndpoint(def, "amqp://localhost");
 
         Assert.assertThat(ep.getEffectiveLocation(), CoreMatchers.startsWith("amqp://localhost/subverse.pubId."));
 
-        def = new DeliveryDefinition("amqp10", "remote-host/trying-to-path", "pubId");
+        def = new DeliveryDefinition("amqp10", "remote-host/trying-to-path", "pubId", true);
         ep = new AmqpDeliveryEndpoint(def, "localhoster");
 
         Assert.assertThat(ep.getEffectiveLocation(), CoreMatchers.startsWith("amqp://remote-host/trying-to-path"));
 
-        def = new DeliveryDefinition("amqp10", "defaulthost/trying-to-path", "pubId");
+        def = new DeliveryDefinition("amqp10", "defaulthost/trying-to-path", "pubId", true);
         ep = new AmqpDeliveryEndpoint(def, "defaulthost");
 
         Assert.assertThat(ep.getEffectiveLocation(), CoreMatchers.startsWith("amqp://defaulthost/trying-to-path"));
 
-        def = new DeliveryDefinition("amqp10", "localhost", "pubId");
+        def = new DeliveryDefinition("amqp10", "localhost", "pubId", true);
         ep = new AmqpDeliveryEndpoint(def, "defaulthost");
 
         Assert.assertThat(ep.getEffectiveLocation(), CoreMatchers.is("amqp://localhost"));

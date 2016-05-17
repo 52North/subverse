@@ -45,11 +45,13 @@ public class DeliveryDefinition implements Serializable {
     private final String location;
     private final String publicationId;
     private final List<DeliveryParameter> parameters = new ArrayList<>();
+    private final boolean useRaw;
 
-    public DeliveryDefinition(String identifier, String location, String publicationId) {
+    public DeliveryDefinition(String identifier, String location, String publicationId, boolean useRaw) {
         this.identifier = identifier;
         this.location = location;
         this.publicationId = publicationId;
+        this.useRaw = useRaw;
     }
 
     public String getIdentifier() {
@@ -62,6 +64,10 @@ public class DeliveryDefinition implements Serializable {
 
     public String getPublicationId() {
         return publicationId;
+    }
+
+    public boolean isUseRaw() {
+        return useRaw;
     }
 
     public void addParameter(DeliveryParameter param) {
@@ -84,7 +90,8 @@ public class DeliveryDefinition implements Serializable {
     public int hashCode() {
         return Objects.hashCode(this.identifier,
                 this.location,
-                this.publicationId);
+                this.publicationId,
+                this.useRaw);
     }
 
     @Override
@@ -99,6 +106,7 @@ public class DeliveryDefinition implements Serializable {
         return Objects.equal(this.identifier, other.identifier)
             && Objects.equal(this.location, other.location)
             && Objects.equal(this.publicationId, other.publicationId)
+                && Objects.equal(this.useRaw, other.useRaw)
             && Objects.equal(this.parameters, other.parameters);
     }
 

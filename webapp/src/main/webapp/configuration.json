@@ -152,6 +152,10 @@
       "type" : "string",
       "value" : "localhost"
     },
+    "subverse.storage.baseDirectory": {
+      "type" : "string",
+      "value" : "data"
+    },
     "subverse.publications.rootPublication" : {
       "type" : "string",
       "value" : "all"

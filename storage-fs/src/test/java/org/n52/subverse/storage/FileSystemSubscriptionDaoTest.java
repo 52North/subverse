@@ -98,7 +98,7 @@ public class FileSystemSubscriptionDaoTest {
                 new DateTime(),
                 XmlObject.Factory.newInstance(),
                 "my-filter-lang",
-                new DeliveryDefinition("my-deldef", "http://for.you", "my-pub"),
+                new DeliveryDefinition("my-deldef", "http://for.you", "my-pub", true),
                 Collections.singletonMap("my", "val"),
                 "my-content-type");
 
