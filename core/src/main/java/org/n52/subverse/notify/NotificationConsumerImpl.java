@@ -30,6 +30,7 @@ package org.n52.subverse.notify;
 
 import javax.inject.Inject;
 import org.n52.subverse.engine.FilterEngine;
+import org.n52.subverse.publications.PublicationsProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,8 +38,9 @@ import org.slf4j.LoggerFactory;
  *
  * @author <a href="mailto:m.rieke@52north.org">Matthes Rieke</a>
  */
-public class NotificationConsumerImpl implements NotificationConsumer {
+public class NotificationConsumerImpl implements NotificationConsumer, PublicationsProvider {
 
+    private static final String IDENTIFIER = "generic";
     private static final Logger LOG = LoggerFactory.getLogger(NotificationConsumerImpl.class);
 
     private FilterEngine engine;
@@ -55,7 +57,22 @@ public class NotificationConsumerImpl implements NotificationConsumer {
     @Override
     public void receive(NotificationMessage m) {
         LOG.info("Received message: "+m);
-        this.engine.filterMessage(m.getMessage());
+        this.engine.filterMessage(m.getMessage(), IDENTIFIER, getContentType());
+    }
+
+    @Override
+    public String getIdentifier() {
+        return IDENTIFIER;
+    }
+
+    @Override
+    public String getAbstract() {
+        return "XML received via the WS-N Notify operation of the Consumer endpoint";
+    }
+
+    @Override
+    public String getContentType() {
+        return "application/xml";
     }
 
 }

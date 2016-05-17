@@ -25,4 +25,13 @@
         <property name="defaultValue" value="localhost" />
     </bean>
 
+    <bean class="org.n52.iceland.config.settings.StringSettingDefinition">
+        <property name="key" value="subverse.publications.rootPublication" />
+        <property name="title" value="Root Publication Identifier" />
+        <property name="description" value="The Root Publication Identifier that disables publication filter checking" />
+        <property name="order" value="33.1" />
+        <property name="group" ref="subverseSettingDefintionGroup" />
+        <property name="defaultValue" value="all" />
+    </bean>
+
 </beans>

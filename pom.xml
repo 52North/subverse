@@ -56,6 +56,7 @@
         <module>delivery</module>
         <module>delivery-amqp</module>
         <module>delivery-wsn</module>
+        <module>publications</module>
         <module>consumer-mqtt</module>
         <module>service</module>
         <module>storage-fs</module>
@@ -110,6 +111,11 @@
             <dependency>
                 <groupId>${project.groupId}</groupId>
                 <artifactId>service</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>publications</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

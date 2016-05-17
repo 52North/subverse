@@ -81,6 +81,7 @@ This project includes:
   subverse filesystem storage under GNU General Public License, version 2
   subverse filtering under GNU General Public License, version 2
   subverse MQTT consumer under GNU General Public License, version 2
+  subverse publications API under GNU General Public License, version 2
   subverse service under GNU General Public License, version 2
   subverse webapp under GNU General Public License, version 2
   svalbard under The Apache Software License, Version 2.0

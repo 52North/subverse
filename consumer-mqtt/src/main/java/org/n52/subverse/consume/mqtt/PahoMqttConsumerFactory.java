@@ -36,6 +36,7 @@ import org.n52.iceland.lifecycle.Destroyable;
 import org.n52.iceland.util.JSONUtils;
 import org.n52.iceland.util.http.MediaTypes;
 import org.n52.subverse.engine.FilterEngine;
+import org.n52.subverse.publications.PublicationsProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,11 +44,12 @@ import org.slf4j.LoggerFactory;
  *
  * @author <a href="mailto:m.rieke@52north.org">Matthes Rieke</a>
  */
-public class PahoMqttConsumerFactory implements Constructable, Destroyable {
+public class PahoMqttConsumerFactory implements Constructable, Destroyable, PublicationsProvider {
 
     private static final Logger LOG = LoggerFactory.getLogger(PahoMqttConsumerFactory.class);
     private PahoMqttConsumer consumer;
     private FilterEngine engine;
+    protected static final String IDENTIFIER = "ads-b";
 
     public FilterEngine getEngine() {
         return engine;
@@ -66,7 +68,7 @@ public class PahoMqttConsumerFactory implements Constructable, Destroyable {
 
         this.consumer = new PahoMqttConsumer(host, UUID.randomUUID().toString(), (byte[] msg) -> {
             String content = new String(msg);
-            engine.filterMessage(content, determineContentType(content));
+            engine.filterMessage(content, IDENTIFIER, determineContentType(content));
         });
 
         new Thread(() -> {
@@ -104,6 +106,21 @@ public class PahoMqttConsumerFactory implements Constructable, Destroyable {
         new Thread(() -> {
             this.consumer.destroy();
         }).start();
+    }
+
+    @Override
+    public String getIdentifier() {
+        return IDENTIFIER;
+    }
+
+    @Override
+    public String getAbstract() {
+        return "provides ADS-B data as JSON";
+    }
+
+    @Override
+    public String getContentType() {
+        return "application/json";
     }
 
 }

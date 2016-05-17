@@ -32,7 +32,10 @@ import java.util.Optional;
 import org.n52.subverse.IdProvider;
 import javax.inject.Inject;
 import org.joda.time.DateTime;
+import org.n52.iceland.config.annotation.Configurable;
+import org.n52.iceland.config.annotation.Setting;
 import org.n52.iceland.lifecycle.Destroyable;
+import org.n52.subverse.SubverseSettings;
 import org.n52.subverse.dao.SubscriptionDao;
 import org.n52.subverse.delivery.DeliveryProvider;
 import org.n52.subverse.delivery.DeliveryProviderRepository;
@@ -41,6 +44,7 @@ import org.n52.subverse.engine.FilterEngine;
 import org.n52.subverse.engine.SubscriptionRegistrationException;
 import org.slf4j.LoggerFactory;
 
+@Configurable
 public class SubscriptionManagerImpl implements SubscriptionManager, Destroyable {
 
     private static final org.slf4j.Logger LOG = LoggerFactory.getLogger(SubscriptionManagerImpl.class);
@@ -48,6 +52,7 @@ public class SubscriptionManagerImpl implements SubscriptionManager, Destroyable
     private IdProvider idProvider;
     private DeliveryProviderRepository deliveryProviderRepository;
     private FilterEngine filterEngine;
+    private String rootPublicationIdentifier;
 
     public FilterEngine getFilterEngine() {
         return filterEngine;
@@ -56,6 +61,12 @@ public class SubscriptionManagerImpl implements SubscriptionManager, Destroyable
     @Inject
     public void setFilterEngine(FilterEngine filterEngine) {
         this.filterEngine = filterEngine;
+    }
+
+
+    @Setting(SubverseSettings.ROOT_PUBLICATION)
+    public void setRootPublicationIdentifier(String pubId) {
+        this.rootPublicationIdentifier = pubId;
     }
 
     public SubscriptionDao getDao() {
@@ -89,7 +100,16 @@ public class SubscriptionManagerImpl implements SubscriptionManager, Destroyable
     public Subscription subscribe(SubscribeOptions options) throws UnsupportedDeliveryDefinitionException,
             SubscriptionRegistrationException {
         SubscriptionEndpoint endpoint = createEndpoint(options);
-        Subscription result = new Subscription(this.idProvider.generateId(), options, endpoint);
+
+        SubscribeOptions finalOptions;
+        if (rootPublicationIdentifier.equals(options.getPublicationIdentifier())) {
+            finalOptions = new SubscribeOptions(null, options);
+        }
+        else {
+            finalOptions = options;
+        }
+
+        Subscription result = new Subscription(this.idProvider.generateId(), finalOptions, endpoint);
 
         this.dao.storeSubscription(result);
 

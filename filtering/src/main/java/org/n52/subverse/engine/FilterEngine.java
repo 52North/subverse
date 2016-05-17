@@ -38,9 +38,9 @@ import org.n52.subverse.subscription.Subscription;
  */
 public interface FilterEngine {
 
-    void filterMessage(Object message);
+    void filterMessage(Object message, String publicationId);
 
-    void filterMessage(Object message, String contentType);
+    void filterMessage(Object message, String publicationId, String contentType);
 
     void register(Subscription result, DeliveryEndpoint deliveryEndpoint)
             throws SubscriptionRegistrationException;

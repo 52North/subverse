@@ -151,6 +151,10 @@
     "subverse.amqp.defaultHost" : {
       "type" : "string",
       "value" : "localhost"
+    },
+    "subverse.publications.rootPublication" : {
+      "type" : "string",
+      "value" : "all"
     }
   }
 }

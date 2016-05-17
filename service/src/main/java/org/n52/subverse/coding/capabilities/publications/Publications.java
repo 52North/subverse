@@ -29,7 +29,9 @@
 package org.n52.subverse.coding.capabilities.publications;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import org.n52.subverse.publications.PublicationsProvider;
 
 /**
  *
@@ -53,6 +55,14 @@ public class Publications {
         if (publicationList.isEmpty()) {
             publicationList.add(new Publication("All data", "all"));
         }
+    }
+
+    Publications(Collection<PublicationsProvider> providers) {
+        publicationList = new ArrayList<>(providers.size());
+
+        providers.stream().forEach(p -> {
+            publicationList.add(new Publication(p.getAbstract(), p.getIdentifier()));
+        });
     }
 
     public List<Publication> getPublicationList() {

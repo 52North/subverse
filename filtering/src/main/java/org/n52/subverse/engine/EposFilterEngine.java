@@ -69,12 +69,12 @@ public class EposFilterEngine implements FilterEngine {
     private final Map<String, Rule> rules = new HashMap<>();
 
     @Override
-    public void filterMessage(Object message) {
-        filterMessage(message, null);
+    public void filterMessage(Object message, String publicationId) {
+        filterMessage(message, publicationId, null);
     }
 
     @Override
-    public void filterMessage(Object message, String contentType) {
+    public void filterMessage(Object message, String publicationId, String contentType) {
         EposEvent event = null;
         if (message instanceof EposEvent) {
             event = (EposEvent) message;
@@ -91,17 +91,17 @@ public class EposFilterEngine implements FilterEngine {
             }
         }
 
+        event.setValue(PublicationFilter.KEY, publicationId);
+
         this.engine.filterEvent(event);
     }
-
-
 
     @Override
     public synchronized void register(Subscription result, DeliveryEndpoint deliveryEndpoint)
             throws SubscriptionRegistrationException {
         try {
             Optional<XmlObject> filter = result.getOptions().getFilter();
-            Rule rule = createRule(filter, deliveryEndpoint);
+            Rule rule = createRule(filter, deliveryEndpoint, result.getOptions().getPublicationIdentifier());
             this.engine.registerRule(rule);
             this.rules.put(result.getId(), rule);
         } catch (FilterInstantiationException ex) {
@@ -118,7 +118,7 @@ public class EposFilterEngine implements FilterEngine {
         this.engine.unregisterRule(this.rules.get(subscriptionId));
     }
 
-    private Rule createRule(Optional<XmlObject> filter, DeliveryEndpoint endpoint)
+    private Rule createRule(Optional<XmlObject> filter, DeliveryEndpoint endpoint, String pubId)
             throws FilterInstantiationException {
         Rule rule = new RuleInstance(new LocalRuleListener(endpoint));
 
@@ -132,6 +132,10 @@ public class EposFilterEngine implements FilterEngine {
                 // this should not happen as we just created the rule
                 throw new FilterInstantiationException(ex);
             }
+        }
+
+        if (pubId != null) {
+            rule.addActiveFilter(new PublicationFilter(pubId));
         }
 
         return rule;

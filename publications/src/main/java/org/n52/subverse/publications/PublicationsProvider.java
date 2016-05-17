@@ -26,20 +26,18 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
  * Public License for more details.
  */
-package org.n52.subverse;
-
-import org.n52.iceland.service.ServiceSettings;
+package org.n52.subverse.publications;
 
 /**
  *
  * @author <a href="mailto:m.rieke@52north.org">Matthes Rieke</a>
  */
-public interface SubverseSettings extends ServiceSettings {
+public interface PublicationsProvider {
 
-    String PUBLICATIONS = "subverse.publications";
+    String getIdentifier();
 
-    String AMQP_DEFAULT_HOST = "subverse.amqp.defaultHost";
+    String getAbstract();
 
-    String ROOT_PUBLICATION = "subverse.publications.rootPublication";
+    String getContentType();
 
 }

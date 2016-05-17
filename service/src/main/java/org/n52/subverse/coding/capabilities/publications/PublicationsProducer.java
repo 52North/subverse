@@ -32,6 +32,9 @@ import org.n52.iceland.config.annotation.Configurable;
 import org.n52.iceland.config.annotation.Setting;
 import org.n52.iceland.util.Producer;
 import org.n52.subverse.SubverseSettings;
+import org.n52.subverse.publications.PublicationsProvider;
+import org.n52.subverse.publications.PublicationsProviderRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 
 
 /**
@@ -39,9 +42,13 @@ import org.n52.subverse.SubverseSettings;
  * @author <a href="mailto:m.rieke@52north.org">Matthes Rieke</a>
  */
 @Configurable
-public class PublicationsProducer implements Producer<Publications> {
+public class PublicationsProducer implements Producer<Publications>, PublicationsProvider {
 
     private String publicationsString;
+
+    @Autowired
+    private PublicationsProviderRepository providerRepository;
+    private String rootPublicationIdentifier;
 
     @Setting(SubverseSettings.PUBLICATIONS)
     public PublicationsProducer setPublicationsString(String ps) {
@@ -49,9 +56,35 @@ public class PublicationsProducer implements Producer<Publications> {
         return this;
     }
 
+    @Setting(SubverseSettings.ROOT_PUBLICATION)
+    public PublicationsProvider setRootPublicationIdentifier(String pubId) {
+        this.rootPublicationIdentifier = pubId;
+        return this;
+    }
+
     @Override
     public Publications get() {
-        return new Publications(this.publicationsString);
+        if (providerRepository == null) {
+            return new Publications(publicationsString);
+        }
+        else {
+            return new Publications(providerRepository.getProviders());
+        }
+    }
+
+    @Override
+    public String getIdentifier() {
+        return rootPublicationIdentifier;
+    }
+
+    @Override
+    public String getAbstract() {
+        return "root publication providing all data available";
+    }
+
+    @Override
+    public String getContentType() {
+        return null;
     }
 
 }

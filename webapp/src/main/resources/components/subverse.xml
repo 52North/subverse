@@ -65,5 +65,6 @@
     <bean class="org.n52.subverse.delivery.amqp.AmqpDeliveryProvider" />
     <bean class="org.n52.subverse.delivery.wsn.WsnDeliveryProvider" />
     <bean class="org.n52.subverse.delivery.DeliveryProviderRepository" />
+    <bean class="org.n52.subverse.publications.PublicationsProviderRepository" />
 
 </beans>

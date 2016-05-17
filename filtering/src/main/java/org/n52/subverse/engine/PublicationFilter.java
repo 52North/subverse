@@ -26,20 +26,39 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
  * Public License for more details.
  */
-package org.n52.subverse;
 
-import org.n52.iceland.service.ServiceSettings;
+package org.n52.subverse.engine;
+
+import org.n52.epos.event.EposEvent;
+import org.n52.epos.filter.ActiveFilter;
+import org.n52.epos.filter.FilterSerialization;
 
 /**
  *
  * @author <a href="mailto:m.rieke@52north.org">Matthes Rieke</a>
  */
-public interface SubverseSettings extends ServiceSettings {
+public class PublicationFilter implements ActiveFilter {
 
-    String PUBLICATIONS = "subverse.publications";
+    private final String publicationId;
+    public static final String KEY = "publicationId";
 
-    String AMQP_DEFAULT_HOST = "subverse.amqp.defaultHost";
+    public PublicationFilter(String pubId) {
+        this.publicationId = pubId;
+    }
 
-    String ROOT_PUBLICATION = "subverse.publications.rootPublication";
+    @Override
+    public boolean matches(EposEvent event) {
+        return this.publicationId.equals(event.getValue(KEY));
+    }
+
+    @Override
+    public CharSequence serialize(FilterSerialization serializer) {
+        return serializer.serializeFilter(this);
+    }
+
+    @Override
+    public CharSequence serialize() {
+        return String.format("{\"type\": \"publicationFilter\", \"publicationId\": \"%s\"}", publicationId);
+    }
 
 }

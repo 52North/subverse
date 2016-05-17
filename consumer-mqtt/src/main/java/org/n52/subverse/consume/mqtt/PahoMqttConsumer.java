@@ -131,7 +131,7 @@ public class PahoMqttConsumer {
         }
     }
 
-    public static interface MessageCallback {
+    protected static interface MessageCallback {
 
         void receive(byte[] msg);
 

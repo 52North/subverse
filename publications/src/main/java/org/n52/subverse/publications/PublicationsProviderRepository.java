@@ -26,20 +26,27 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
  * Public License for more details.
  */
-package org.n52.subverse;
+package org.n52.subverse.publications;
 
-import org.n52.iceland.service.ServiceSettings;
+import java.util.Collection;
+import java.util.Collections;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  *
  * @author <a href="mailto:m.rieke@52north.org">Matthes Rieke</a>
  */
-public interface SubverseSettings extends ServiceSettings {
+public class PublicationsProviderRepository {
 
-    String PUBLICATIONS = "subverse.publications";
+    private Collection<PublicationsProvider> providers;
 
-    String AMQP_DEFAULT_HOST = "subverse.amqp.defaultHost";
+    @Autowired
+    public void setProviders(Collection<PublicationsProvider> providers) {
+        this.providers = providers;
+    }
 
-    String ROOT_PUBLICATION = "subverse.publications.rootPublication";
+    public Collection<PublicationsProvider> getProviders() {
+        return Collections.unmodifiableCollection(providers);
+    }
 
 }
