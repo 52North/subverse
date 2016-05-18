@@ -28,6 +28,8 @@
  */
 package org.n52.subverse.subscription;
 
+import com.google.common.base.MoreObjects;
+import java.util.Objects;
 import java.util.Optional;
 import org.n52.subverse.IdProvider;
 import javax.inject.Inject;
@@ -44,7 +46,11 @@ import org.n52.subverse.delivery.DeliveryProviderRepository;
 import org.n52.subverse.delivery.UnsupportedDeliveryDefinitionException;
 import org.n52.subverse.engine.FilterEngine;
 import org.n52.subverse.engine.SubscriptionRegistrationException;
+import org.n52.subverse.termination.Terminatable;
+import org.n52.subverse.termination.TerminationScheduler;
+import org.n52.subverse.termination.UnknownTerminatableException;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @Configurable
 public class SubscriptionManagerImpl implements SubscriptionManager, Constructable, Destroyable {
@@ -55,6 +61,9 @@ public class SubscriptionManagerImpl implements SubscriptionManager, Constructab
     private DeliveryProviderRepository deliveryProviderRepository;
     private FilterEngine filterEngine;
     private String rootPublicationIdentifier;
+
+    @Autowired
+    private TerminationScheduler terminationScheduler;
 
     public FilterEngine getFilterEngine() {
         return filterEngine;
@@ -124,6 +133,11 @@ public class SubscriptionManagerImpl implements SubscriptionManager, Constructab
 
         LOG.info("Registered subscription '{}'", result.getId());
 
+        if (options.getTerminationTime().isPresent()) {
+            this.terminationScheduler.scheduleTermination(new SubscriptionTerminatable(result.getId(),
+                options.getTerminationTime().get()));
+        }
+
         return result;
     }
 
@@ -192,8 +206,71 @@ public class SubscriptionManagerImpl implements SubscriptionManager, Constructab
         }
 
         this.dao.updateTerminationTime(sub.get(), terminationTime);
-        //TODO implement termination time manager
+
+        SubscriptionTerminatable term = new SubscriptionTerminatable(subscriptionId, terminationTime);
+        try {
+            this.terminationScheduler.cancelTermination(term);
+        } catch (UnknownTerminatableException ex) {
+            LOG.warn("Subscription termination did not exist. This might be ok. "+ex.getMessage());
+            LOG.debug(ex.getMessage(), ex);
+        }
+        this.terminationScheduler.scheduleTermination(term);
     }
 
+
+    private class SubscriptionTerminatable implements Terminatable {
+
+        private final String subscription;
+        private final DateTime endOfLife;
+
+        private SubscriptionTerminatable(String subId, DateTime eol) {
+            this.subscription = subId;
+            this.endOfLife = eol;
+        }
+
+        @Override
+        public void terminate() {
+            try {
+                unsubscribe(subscription);
+            } catch (UnsubscribeFailedException ex) {
+                LOG.warn("Could not unsubscribe!", ex);
+            }
+        }
+
+        @Override
+        public DateTime getEndOfLife() {
+            return this.endOfLife;
+        }
+
+        @Override
+        public String toString() {
+            return MoreObjects.toStringHelper(this)
+                    .add("subscription", subscription).toString();
+        }
+
+        @Override
+        public int hashCode() {
+            int hash = 3;
+            hash = 41 * hash + Objects.hashCode(this.subscription);
+            return hash;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj) {
+                return true;
+            }
+            if (obj == null) {
+                return false;
+            }
+            if (getClass() != obj.getClass()) {
+                return false;
+            }
+            final SubscriptionTerminatable other = (SubscriptionTerminatable) obj;
+            return Objects.equals(this.subscription, other.subscription);
+        }
+
+
+    }
 
 }

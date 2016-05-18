@@ -19,6 +19,7 @@ This project includes:
   Apache HttpClient under Apache License, Version 2.0
   Apache HttpCore under Apache License, Version 2.0
   Apache Log4j under The Apache Software License, Version 2.0
+  c3p0:JDBC DataSources/Resource Pools under GNU LESSER GENERAL PUBLIC LICENSE
   ClassLoader Leak Prevention library under Apache 2
   Code Generation Library under ASF 2.0
   Cross-Origin Resource Sharing (CORS) Filter under The Apache Software License, Version 2.0
@@ -61,6 +62,7 @@ This project includes:
   OGC SWES schema (spec. v2.0) under The Apache Software License, Version 2.0
   org.eclipse.paho.client.mqttv3 under Eclipse Distribution License 1.0
   proton-j under The Apache Software License, Version 2.0
+  quartz under The Apache Software License, Version 2.0
   rxjava under The Apache Software License, Version 2.0
   Saxon-HE under Mozilla Public License Version 1.0
   servlet-api under CDDL 1.1 or GPL2 w/ CPE

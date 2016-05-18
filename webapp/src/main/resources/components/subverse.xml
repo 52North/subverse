@@ -67,5 +67,6 @@
     <bean class="org.n52.subverse.delivery.DeliveryProviderRepository" />
     <bean class="org.n52.subverse.publications.PublicationsProviderRepository" />
     <bean class="org.n52.subverse.storage.FileSystemSubscriptionDao" />
+    <bean class="org.n52.subverse.termination.QuartzTerminationScheduler" />
 
 </beans>
