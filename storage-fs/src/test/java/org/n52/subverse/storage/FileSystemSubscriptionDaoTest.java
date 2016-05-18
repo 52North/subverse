@@ -59,7 +59,7 @@ public class FileSystemSubscriptionDaoTest {
         Subscription sub = createSubscription();
 
         FileSystemSubscriptionDao dao = new FileSystemSubscriptionDao();
-        dao.setStorageDirectory("test-subscriptions-"+UUID.randomUUID().toString());
+        dao.setStorageDirectory(String.format("target%stest-subscriptions-%s", System.getProperty("file.separator"), UUID.randomUUID().toString()));
         dao.init();
 
         dao.storeSubscription(sub);
@@ -69,7 +69,7 @@ public class FileSystemSubscriptionDaoTest {
         Assert.assertThat(recovered.get(), CoreMatchers.equalTo(sub));
     }
 
-//    @Test
+    @Test
     public void testReadAll() {
         Subscription sub1 = createSubscription();
         Subscription sub2 = createSubscription();
@@ -77,7 +77,7 @@ public class FileSystemSubscriptionDaoTest {
         Subscription sub4 = createSubscription();
 
         FileSystemSubscriptionDao dao = new FileSystemSubscriptionDao();
-        dao.setStorageDirectory("test-subscriptions-"+UUID.randomUUID().toString());
+        dao.setStorageDirectory(String.format("target%stest-subscriptions-%s", System.getProperty("file.separator"), UUID.randomUUID().toString()));
         dao.init();
 
         dao.storeSubscription(sub1);

@@ -75,6 +75,9 @@ public class FileSystemSubscriptionDao implements SubscriptionDao, Constructable
         }
         try {
             Path base = Paths.get(getClass().getResource("/").toURI());
+            if (base.getParent() != null && base.getParent().getParent() != null) {
+                base = base.getParent().getParent();
+            }
             this.storagePath = base.resolve(storageDirectory);
         } catch (URISyntaxException ex) {
             LOG.warn("Could not resolve base storage directory. falling back to OS tmpdir", ex);
@@ -89,6 +92,8 @@ public class FileSystemSubscriptionDao implements SubscriptionDao, Constructable
                 LOG.warn("Could not create or access storage directory", ex);
             }
         }
+
+        LOG.info("Subscription Storage path: {}", this.storagePath);
     }
 
     @Setting(SubverseSettings.FILESYSTEM_STORAGE_DIRECTORY)

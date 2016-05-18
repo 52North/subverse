@@ -5,7 +5,7 @@
 
     <!-- components implementations -->
 <!--    <bean class="org.n52.subverse.subscription.SubscriptionManagerImpl" />-->
-    <bean class="org.n52.subverse.dao.InMemorySubscriptionDao" />
+    <!--<bean class="org.n52.subverse.dao.InMemorySubscriptionDao" />-->
     <bean class="org.n52.subverse.UuidProvider" />
     <bean class="org.n52.subverse.notify.NotificationConsumerImpl" />
     <bean class="org.n52.subverse.engine.EposFilterEngine" />

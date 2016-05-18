@@ -38,6 +38,10 @@
             <artifactId>consumer-mqtt</artifactId>
         </dependency>
         <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>storage-fs</artifactId>
+        </dependency>
+        <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
         </dependency>
@@ -100,7 +104,6 @@
                         <extraClasspath>target/classes;../core/target/classes;../delivery/target/classes;../delivery-amqp/target/classes;../delivery-wsn/target/classes;../service/target/classes;../svalbard/target/classes</extraClasspath>
                     </webAppConfig>
                     <scanTargets>
-                        <scanTarget>target/classes</scanTarget>
                         <scanTarget>../core/target/classes</scanTarget>
                         <scanTarget>../delivery/target/classes</scanTarget>
                         <scanTarget>../delivery-amqp/target/classes</scanTarget>
@@ -109,6 +112,14 @@
                         <scanTarget>../service/target/classes</scanTarget>
                         <scanTarget>../svalbard/target/classes</scanTarget>
                     </scanTargets>
+                    <scanTargetPatterns>
+                        <scanTargetPattern>
+                            <directory>target/classes</directory>
+                            <excludes>
+                                <exclude>**/*.sub</exclude>
+                            </excludes>
+                        </scanTargetPattern>
+                    </scanTargetPatterns>
                 </configuration>
             </plugin>
         </plugins>

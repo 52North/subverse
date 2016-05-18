@@ -6,3 +6,4 @@ target
 **/subverse/*.log
 
 /amqp-client/logs/
+/webapp/data/

@@ -34,6 +34,7 @@ import javax.inject.Inject;
 import org.joda.time.DateTime;
 import org.n52.iceland.config.annotation.Configurable;
 import org.n52.iceland.config.annotation.Setting;
+import org.n52.iceland.lifecycle.Constructable;
 import org.n52.iceland.lifecycle.Destroyable;
 import org.n52.subverse.SubverseSettings;
 import org.n52.subverse.dao.SubscriptionDao;
@@ -46,7 +47,7 @@ import org.n52.subverse.engine.SubscriptionRegistrationException;
 import org.slf4j.LoggerFactory;
 
 @Configurable
-public class SubscriptionManagerImpl implements SubscriptionManager, Destroyable {
+public class SubscriptionManagerImpl implements SubscriptionManager, Constructable, Destroyable {
 
     private static final org.slf4j.Logger LOG = LoggerFactory.getLogger(SubscriptionManagerImpl.class);
     private SubscriptionDao dao;
@@ -100,6 +101,13 @@ public class SubscriptionManagerImpl implements SubscriptionManager, Destroyable
     @Override
     public Subscription subscribe(SubscribeOptions options) throws UnsupportedDeliveryDefinitionException,
             SubscriptionRegistrationException {
+        Subscription result = internalSubscribe(options, this.idProvider.generateId());
+        this.dao.storeSubscription(result);
+        return result;
+    }
+
+    private Subscription internalSubscribe(SubscribeOptions options, String id) throws UnsupportedDeliveryDefinitionException,
+            SubscriptionRegistrationException {
         SubscriptionEndpoint endpoint = createEndpoint(options);
 
         SubscribeOptions finalOptions;
@@ -110,9 +118,7 @@ public class SubscriptionManagerImpl implements SubscriptionManager, Destroyable
             finalOptions = options;
         }
 
-        Subscription result = new Subscription(this.idProvider.generateId(), finalOptions, endpoint);
-
-        this.dao.storeSubscription(result);
+        Subscription result = new Subscription(id, finalOptions, endpoint);
 
         this.filterEngine.register(result, endpoint.getDeliveryEndpoint());
 
@@ -155,6 +161,20 @@ public class SubscriptionManagerImpl implements SubscriptionManager, Destroyable
         DeliveryDefinition delDef = options.getDeliveryDefinition().get();
         return new SubscriptionEndpoint(provider.createDeliveryEndpoint(delDef), delDef);
     }
+
+    @Override
+    public void init() {
+        this.dao.getAllSubscriptions().forEach(sub -> {
+            try {
+                this.internalSubscribe(sub.getOptions(), sub.getId());
+                LOG.info("Re-subscribed subscription '{}'", sub.getId());
+            } catch (UnsupportedDeliveryDefinitionException | SubscriptionRegistrationException ex) {
+                LOG.warn("Could not re-subscribe subscription '{}'", sub.getId(), ex);
+            }
+        });
+    }
+
+
 
     @Override
     public void destroy() {
