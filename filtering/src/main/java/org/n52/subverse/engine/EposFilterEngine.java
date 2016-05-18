@@ -51,6 +51,7 @@ import org.n52.epos.rules.Rule;
 import org.n52.epos.rules.RuleListener;
 import org.n52.epos.transform.TransformationException;
 import org.n52.epos.transform.TransformationRepository;
+import org.n52.subverse.delivery.DeliveryDefinition;
 import org.n52.subverse.delivery.DeliveryEndpoint;
 import org.n52.subverse.delivery.Streamable;
 import org.n52.subverse.delivery.streamable.GenericStreamable;
@@ -67,7 +68,7 @@ public class EposFilterEngine implements FilterEngine {
     private static final org.slf4j.Logger LOG = LoggerFactory.getLogger(EposFilterEngine.class);
 
     private final EposEngine engine = EposEngine.getInstance();
-    
+
     private static final ExecutorService executor = Executors.newSingleThreadExecutor();
 
     private final Map<String, Rule> rules = new HashMap<>();
@@ -106,8 +107,15 @@ public class EposFilterEngine implements FilterEngine {
     public synchronized void register(Subscription result, DeliveryEndpoint deliveryEndpoint)
             throws SubscriptionRegistrationException {
         try {
+            boolean useRaw = false;
+            Optional<DeliveryDefinition> delDef = result.getOptions().getDeliveryDefinition();
+            if (delDef.isPresent()) {
+                useRaw = delDef.get().isUseRaw();
+            }
+
             Optional<XmlObject> filter = result.getOptions().getFilter();
-            Rule rule = createRule(filter, deliveryEndpoint, result.getOptions().getPublicationIdentifier());
+            Rule rule = createRule(filter, deliveryEndpoint, result.getOptions().getPublicationIdentifier(),
+                    useRaw);
             this.engine.registerRule(rule);
             this.rules.put(result.getId(), rule);
         } catch (FilterInstantiationException ex) {
@@ -124,9 +132,9 @@ public class EposFilterEngine implements FilterEngine {
         this.engine.unregisterRule(this.rules.get(subscriptionId));
     }
 
-    private Rule createRule(Optional<XmlObject> filter, DeliveryEndpoint endpoint, String pubId)
+    private Rule createRule(Optional<XmlObject> filter, DeliveryEndpoint endpoint, String pubId, boolean useRaw)
             throws FilterInstantiationException {
-        Rule rule = new RuleInstance(new LocalRuleListener(endpoint));
+        Rule rule = new RuleInstance(new LocalRuleListener(endpoint, useRaw));
 
         if (filter.isPresent()) {
             try {
@@ -194,21 +202,29 @@ public class EposFilterEngine implements FilterEngine {
     private class LocalRuleListener implements RuleListener {
 
         private final DeliveryEndpoint endpoint;
+        private final boolean useRaw;
 
-        public LocalRuleListener(DeliveryEndpoint endpoint) {
+        public LocalRuleListener(DeliveryEndpoint endpoint, boolean useRaw) {
             this.endpoint = endpoint;
+            this.useRaw = useRaw;
         }
 
         @Override
         public void onMatchingEvent(EposEvent event) {
             //TODO implement UseRaw
-            this.endpoint.deliver(Optional.ofNullable(createStreamable(event.getOriginalObject(), event.getContentType())));
+            this.endpoint.deliver(Optional.ofNullable(createStreamable(
+                    event.getOriginalObject(),
+                    event.getContentType())),
+                    this.useRaw);
         }
 
         @Override
         public void onMatchingEvent(EposEvent event, Object desiredOutputToConsumer) {
             //TODO implement UseRaw
-            this.endpoint.deliver(Optional.ofNullable(createStreamable(desiredOutputToConsumer, event.getContentType())));
+            this.endpoint.deliver(Optional.ofNullable(createStreamable(
+                    desiredOutputToConsumer,
+                    event.getContentType())),
+                    this.useRaw);
         }
 
         @Override

@@ -37,6 +37,7 @@ import org.n52.iceland.config.annotation.Setting;
 import org.n52.iceland.lifecycle.Destroyable;
 import org.n52.subverse.SubverseSettings;
 import org.n52.subverse.dao.SubscriptionDao;
+import org.n52.subverse.delivery.DeliveryDefinition;
 import org.n52.subverse.delivery.DeliveryProvider;
 import org.n52.subverse.delivery.DeliveryProviderRepository;
 import org.n52.subverse.delivery.UnsupportedDeliveryDefinitionException;
@@ -151,7 +152,8 @@ public class SubscriptionManagerImpl implements SubscriptionManager, Destroyable
                     +options.getDeliveryDefinition());
         }
 
-        return new SubscriptionEndpoint(provider.createDeliveryEndpoint(options.getDeliveryDefinition().get()));
+        DeliveryDefinition delDef = options.getDeliveryDefinition().get();
+        return new SubscriptionEndpoint(provider.createDeliveryEndpoint(delDef), delDef);
     }
 
     @Override

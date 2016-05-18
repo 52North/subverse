@@ -61,7 +61,7 @@ public class WsnConsumerEndpointTest {
             return null;
         }).when(spied).sendPayload(Matchers.any(), Matchers.any());
 
-        spied.deliver(Optional.of(new StringStreamable("hahaha")));
+        spied.deliver(Optional.of(new StringStreamable("hahaha")), false);
 
         Assert.assertThat(result.size(), CoreMatchers.is(1));
         Assert.assertThat(result.get(0), CoreMatchers.containsString("<![CDATA[hahaha]]>"));

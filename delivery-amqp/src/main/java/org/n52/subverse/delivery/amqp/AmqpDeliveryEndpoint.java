@@ -107,7 +107,7 @@ public class AmqpDeliveryEndpoint implements DeliveryEndpoint {
     }
 
     @Override
-    public synchronized void deliver(Optional<Streamable> o) {
+    public synchronized void deliver(Optional<Streamable> o, boolean asRaw) {
         try {
             if (!o.isPresent()) {
                 LOG.warn("Cannot delivery null object");

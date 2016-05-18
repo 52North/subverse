@@ -37,7 +37,7 @@ import java.util.Optional;
  */
 public interface DeliveryEndpoint extends Serializable {
 
-    void deliver(Optional<Streamable> o);
+    void deliver(Optional<Streamable> o, boolean asRaw);
 
     String getEffectiveLocation();
 

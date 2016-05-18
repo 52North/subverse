@@ -54,7 +54,7 @@ public class AmqpProducerTestDisabled {
         int i = 0;
         while (i++ < 10) {
             LOG.info("Sending message... "+i);
-            ade.deliver(Optional.of(new StringStreamable("hahaha "+i)));
+            ade.deliver(Optional.of(new StringStreamable("hahaha "+i)), false);
             Thread.sleep(10000);
         }
 

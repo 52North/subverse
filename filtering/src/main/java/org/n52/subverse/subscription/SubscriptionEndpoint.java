@@ -30,6 +30,7 @@ package org.n52.subverse.subscription;
 
 import com.google.common.base.Objects;
 import java.io.Serializable;
+import org.n52.subverse.delivery.DeliveryDefinition;
 import org.n52.subverse.delivery.DeliveryEndpoint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,13 +43,19 @@ public class SubscriptionEndpoint implements Serializable {
 
     private static final Logger LOG = LoggerFactory.getLogger(SubscriptionEndpoint.class);
     private final DeliveryEndpoint deliveryEndpoint;
+    private final DeliveryDefinition deliveryDefinition;
 
-    public SubscriptionEndpoint(DeliveryEndpoint deliveryEndpoint) {
+    public SubscriptionEndpoint(DeliveryEndpoint deliveryEndpoint, DeliveryDefinition deliveryDef) {
         this.deliveryEndpoint = deliveryEndpoint;
+        this.deliveryDefinition = deliveryDef;
     }
 
     public DeliveryEndpoint getDeliveryEndpoint() {
         return deliveryEndpoint;
+    }
+
+    public DeliveryDefinition getDeliveryDefinition() {
+        return deliveryDefinition;
     }
 
     public void destroy() {

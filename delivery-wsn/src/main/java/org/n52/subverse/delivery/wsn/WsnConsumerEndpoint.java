@@ -62,26 +62,21 @@ public class WsnConsumerEndpoint implements DeliveryEndpoint {
 
     private static final Logger LOG = LoggerFactory.getLogger(WsnConsumerEndpoint.class);
     private final URL targetUrl;
-    private final boolean useRawOutput;
     private final XmlOptions xmlOptions;
 
-    public WsnConsumerEndpoint(String location, XmlOptions xo) throws MalformedURLException {
-        this(location, false, xo);
-    }
 
-    public WsnConsumerEndpoint(String location, boolean useRawOutput, XmlOptions xo) throws MalformedURLException {
+    public WsnConsumerEndpoint(String location, XmlOptions xo) throws MalformedURLException {
         this.targetUrl = new URL(location);
-        this.useRawOutput = useRawOutput;
         this.xmlOptions = xo;
     }
 
     @Override
-    public void deliver(Optional<Streamable> o) {
+    public void deliver(Optional<Streamable> o, boolean useRaw) {
         LOG.debug("Delivering object to '{}': {}", targetUrl, o);
 
         if (o.isPresent()) {
             try {
-                byte[] payload = createPayload(o.get());
+                byte[] payload = createPayload(o.get(), useRaw);
 
                 sendPayload(o, payload);
             }
@@ -99,8 +94,7 @@ public class WsnConsumerEndpoint implements DeliveryEndpoint {
                 client = HttpClients.createDefault()) {
             HttpPost post = new HttpPost(this.targetUrl.toURI());
             post.setEntity(new ByteArrayEntity(payload));
-            post.addHeader("Content-Type", this.useRawOutput ? o.get().getContentType() : "application/soap+xml");
-//            post.addHeader("Content-Length", Integer.toString(payload.length));
+            post.addHeader("Content-Type", o.get().getContentType() != null ? o.get().getContentType() : "application/soap+xml");
             client.execute(post);
         }
         catch (IOException | URISyntaxException ex) {
@@ -108,37 +102,27 @@ public class WsnConsumerEndpoint implements DeliveryEndpoint {
         }
     }
 
-    private byte[] createPayload(Streamable o) throws IOException {
-        if (this.useRawOutput) {
-            return streamToByteArray(o.asStream());
+    private byte[] createPayload(Streamable o, boolean useRaw) throws IOException {
+        EnvelopeDocument envDoc = EnvelopeDocument.Factory.newInstance();
+        Envelope env = envDoc.addNewEnvelope();
+        Body body = env.addNewBody();
+
+        if (useRaw) {
+            createMessageContent(body, o);
         }
         else {
-            EnvelopeDocument envDoc = EnvelopeDocument.Factory.newInstance();
-            Envelope env = envDoc.addNewEnvelope();
-            Body body = env.addNewBody();
             NotifyDocument notifyDoc = NotifyDocument.Factory.newInstance();
             NotifyDocument.Notify notify = notifyDoc.addNewNotify();
-
             NotificationMessageHolderType msg = notify.addNewNotificationMessage();
-
             NotificationMessageHolderType.Message message = msg.addNewMessage();
             createMessageContent(message, o);
-
             body.set(notifyDoc);
-            return envDoc.xmlText(this.xmlOptions.setUseCDataBookmarks()).getBytes();
-        }
-    }
-
-    private byte[] streamToByteArray(InputStream is) throws IOException {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        while (is.available() > 0) {
-            baos.write(is.read());
         }
 
-        return baos.toByteArray();
+        return envDoc.xmlText(this.xmlOptions.setUseCDataBookmarks()).getBytes();
     }
 
-    private void createMessageContent(NotificationMessageHolderType.Message msg, Streamable o) throws IOException {
+    private void createMessageContent(XmlObject msg, Streamable o) throws IOException {
         if (o.originalObject() instanceof XmlObject) {
             msg.set((XmlObject) o.originalObject());
         }

@@ -94,15 +94,16 @@ public class FileSystemSubscriptionDaoTest {
     }
 
     private Subscription createSubscription() {
+        DeliveryDefinition delDef = new DeliveryDefinition("my-deldef", "http://for.you", "my-pub", true);
         SubscribeOptions options = new SubscribeOptions("my-id",
                 new DateTime(),
                 XmlObject.Factory.newInstance(),
                 "my-filter-lang",
-                new DeliveryDefinition("my-deldef", "http://for.you", "my-pub", true),
+                delDef,
                 Collections.singletonMap("my", "val"),
                 "my-content-type");
 
-        SubscriptionEndpoint endpoint = new SubscriptionEndpoint(new DummyEndpoint("magic-endpoint"));
+        SubscriptionEndpoint endpoint = new SubscriptionEndpoint(new DummyEndpoint("magic-endpoint"), delDef);
 
         Subscription sub = new Subscription(UUID.randomUUID().toString(), options, endpoint);
         return sub;
@@ -117,7 +118,7 @@ public class FileSystemSubscriptionDaoTest {
         }
 
         @Override
-        public void deliver(Optional<Streamable> o) {
+        public void deliver(Optional<Streamable> o, boolean useRaw) {
         }
 
         @Override

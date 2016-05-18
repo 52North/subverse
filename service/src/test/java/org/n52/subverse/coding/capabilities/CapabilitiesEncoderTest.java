@@ -91,7 +91,7 @@ public class CapabilitiesEncoderTest {
         public DeliveryEndpoint createDeliveryEndpoint(DeliveryDefinition def) throws UnsupportedDeliveryDefinitionException {
             return new DeliveryEndpoint() {
                 @Override
-                public void deliver(Optional<Streamable> o) {
+                public void deliver(Optional<Streamable> o, boolean useRaw) {
                 }
 
                 @Override
