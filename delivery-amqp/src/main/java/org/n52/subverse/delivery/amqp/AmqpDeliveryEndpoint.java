@@ -117,12 +117,12 @@ public class AmqpDeliveryEndpoint implements DeliveryEndpoint {
             if (this.client == null) {
                 this.connection = ConnectionBuilder.create(URI.create(this.address)).build();
                 this.client = this.connection.createPublisher();
-                LOG.info("AMQP Client for {} created", this.address);
+                LOG.debug("AMQP Client for {} created", this.address);
             }
 
-            LOG.info("Sending message to {}", this.address);
+            LOG.trace("Sending message to {}", this.address);
             this.client.publish(prepareBody(o.get()), new ContentType(o.get().getContentType()));
-            LOG.info("Message sent to {}", this.address);
+            LOG.trace("Message sent to {}", this.address);
         } catch (PublisherCreationFailedException | IOException | AmqpConnectionCreationFailedException ex) {
             LOG.warn("Could not send AMQP message", ex);
         }

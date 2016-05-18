@@ -79,7 +79,7 @@ public class QuartzTerminationSchedulerTest {
 
         Assert.assertThat(term.terminated, CoreMatchers.is(false));
     }
-    
+
     @Test
     public void testHistoric() throws InterruptedException, BrokenBarrierException, TimeoutException, UnknownTerminatableException {
         QuartzTerminationScheduler qts = new QuartzTerminationScheduler();

@@ -81,6 +81,11 @@ public class EposFilterEngine implements FilterEngine {
     @Override
     public void filterMessage(final Object message, final String publicationId, final String contentType) {
         executor.submit(() -> {
+            if (rules.isEmpty()) {
+                LOG.trace("No rules registered at the moment, no filtering required!");
+                return;
+            }
+
             EposEvent event = null;
             if (message instanceof EposEvent) {
                 event = (EposEvent) message;
@@ -130,6 +135,7 @@ public class EposFilterEngine implements FilterEngine {
             throw new UnknownSubscriptionException("Subscription unknown: "+subscriptionId);
         }
         this.engine.unregisterRule(this.rules.get(subscriptionId));
+        this.rules.remove(subscriptionId);
     }
 
     private Rule createRule(Optional<XmlObject> filter, DeliveryEndpoint endpoint, String pubId, boolean useRaw)
