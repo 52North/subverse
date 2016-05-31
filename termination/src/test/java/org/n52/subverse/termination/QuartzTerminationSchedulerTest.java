@@ -28,7 +28,6 @@
  */
 package org.n52.subverse.termination;
 
-import com.google.common.base.MoreObjects;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.BrokenBarrierException;
@@ -53,7 +52,6 @@ public class QuartzTerminationSchedulerTest {
     @Test
     public void testTermination() throws InterruptedException, BrokenBarrierException, TimeoutException {
         QuartzTerminationScheduler qts = new QuartzTerminationScheduler();
-        qts.init();
 
         CyclicBarrier barrier = new CyclicBarrier(2);
         DummyTerminatable term = new DummyTerminatable(barrier, 0);
@@ -68,7 +66,6 @@ public class QuartzTerminationSchedulerTest {
     @Test
     public void testCancel() throws InterruptedException, BrokenBarrierException, TimeoutException, UnknownTerminatableException {
         QuartzTerminationScheduler qts = new QuartzTerminationScheduler();
-        qts.init();
 
         DummyTerminatable term = new DummyTerminatable(new CyclicBarrier(2), 2);
 
@@ -83,7 +80,6 @@ public class QuartzTerminationSchedulerTest {
     @Test
     public void testHistoric() throws InterruptedException, BrokenBarrierException, TimeoutException, UnknownTerminatableException {
         QuartzTerminationScheduler qts = new QuartzTerminationScheduler();
-        qts.init();
 
         CyclicBarrier barrier = new CyclicBarrier(2);
         DummyTerminatable term = new DummyTerminatable(barrier, -20);
@@ -110,7 +106,7 @@ public class QuartzTerminationSchedulerTest {
 
         @Override
         public String toString() {
-            return MoreObjects.toStringHelper(this).add("id", id).toString();
+            return "DummyTerminatable{" + "id=" + id + ", terminated=" + terminated + ", endOfLife=" + endOfLife + '}';
         }
 
         @Override

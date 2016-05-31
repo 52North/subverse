@@ -53,6 +53,7 @@
     <modules>
         <module>core</module>
         <module>filtering</module>
+        <module>termination</module>
         <module>delivery</module>
         <module>delivery-amqp</module>
         <module>delivery-wsn</module>
@@ -151,6 +152,11 @@
             <dependency>
                 <groupId>${project.groupId}</groupId>
                 <artifactId>storage-fs</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>termination</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

@@ -28,8 +28,6 @@
  */
 package org.n52.subverse.termination;
 
-import org.joda.time.DateTime;
-
 /**
  *
  * @author <a href="mailto:m.rieke@52north.org">Matthes Rieke</a>
@@ -40,4 +38,5 @@ public interface TerminationScheduler {
 
     void cancelTermination(Terminatable term) throws UnknownTerminatableException;
 
+    void shutdown();
 }

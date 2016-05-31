@@ -35,8 +35,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 import org.joda.time.DateTime;
-import org.n52.iceland.lifecycle.Constructable;
-import org.n52.iceland.lifecycle.Destroyable;
 import org.quartz.Job;
 import org.quartz.JobBuilder;
 import org.quartz.JobDetail;
@@ -54,7 +52,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author <a href="mailto:m.rieke@52north.org">Matthes Rieke</a>
  */
-public class QuartzTerminationScheduler implements TerminationScheduler, Constructable, Destroyable {
+public class QuartzTerminationScheduler implements TerminationScheduler  {
 
 
     private static final Logger LOG = LoggerFactory.getLogger(QuartzTerminationScheduler.class);
@@ -62,20 +60,15 @@ public class QuartzTerminationScheduler implements TerminationScheduler, Constru
     private final Map<Terminatable, JobDetail> jobs = new HashMap<>();
 
     public QuartzTerminationScheduler() {
-    }
-
-    @Override
-    public void init() {
         try {
             this.quartz = new StdSchedulerFactory().getScheduler();
             this.quartz.start();
         } catch (SchedulerException ex) {
-            LOG.warn("Could not initialize scheduling component. Subscriptions will not be removed at end of life!", ex);
+            throw new IllegalStateException("Could not initialize scheduling component.", ex);
         }
     }
 
-    @Override
-    public void destroy() {
+    public void shutdown() {
         try {
             this.quartz.shutdown(true);
         } catch (SchedulerException ex) {

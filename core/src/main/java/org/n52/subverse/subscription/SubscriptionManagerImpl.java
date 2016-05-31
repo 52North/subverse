@@ -195,6 +195,8 @@ public class SubscriptionManagerImpl implements SubscriptionManager, Constructab
         this.dao.getAllSubscriptions().forEach(sub -> {
             sub.getEndpoint().getDeliveryEndpoint().destroy();
         });
+
+        this.terminationScheduler.shutdown();
     }
 
     @Override
