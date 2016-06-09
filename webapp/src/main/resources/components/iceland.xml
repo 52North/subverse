@@ -32,6 +32,8 @@
 
     <bean id="icelandServlet" class="org.n52.iceland.service.Service" />
 
+    <bean id="wsdlServlet" class="org.n52.subverse.wsdl.WsdlService" />
+
     <bean id="eventListenerRegistrator" class="org.n52.iceland.event.ServiceEventListenerRegistrator">
         <description>Used to decouple EventListener and EventBus creation.</description>
     </bean>

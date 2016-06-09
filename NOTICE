@@ -39,6 +39,7 @@ This project includes:
   Jackson-core under The Apache Software License, Version 2.0
   jackson-databind under The Apache Software License, Version 2.0
   Java Property Utility under The Apache Software License, Version 2.0
+  Java Servlet API under CDDL 1.1 or GPL2 w/ CPE
   javax.inject under The Apache Software License, Version 2.0
   Joda-Time under Apache 2
   JTS Topology Suite under Lesser General Public License (LGPL)
