@@ -40,6 +40,7 @@ public class GenericEposEvent implements EposEvent {
     private final Object originalObject;
     private final long creationTime;
     private final String contentType;
+    private String publication;
 
     public GenericEposEvent(Object message) {
         this(message, null);
@@ -53,12 +54,18 @@ public class GenericEposEvent implements EposEvent {
 
     @Override
     public void setValue(CharSequence key, Object value) {
+        if (PublicationFilter.KEY.equals(key)) {
+            this.publication = (String) value;
+        }
     }
 
     @Override
     public Object getValue(CharSequence key) {
         if (key.equals(MapEposEvent.ORIGNIAL_OBJECT_KEY)) {
             return getOriginalObject();
+        }
+        else if (PublicationFilter.KEY.equals(key)) {
+            return publication;
         }
         return null;
     }

@@ -14,6 +14,7 @@
 
     <bean id="serviceMetadataRepository" class="org.n52.iceland.ogc.ows.ServiceMetadataRepositoryImpl"/>
 
+    <bean class="org.n52.iceland.coding.DocumentBuilderProvider" />
     <bean id="bindingRepository" class="org.n52.iceland.binding.BindingRepository" />
     <bean id="codingRepository" class="org.n52.iceland.coding.CodingRepository" />
     <bean id="supportedTypeRepository" class="org.n52.iceland.coding.SupportedTypeRepository"/>
