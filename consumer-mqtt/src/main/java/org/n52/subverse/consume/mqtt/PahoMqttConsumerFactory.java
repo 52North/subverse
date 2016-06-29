@@ -88,7 +88,7 @@ public class PahoMqttConsumerFactory implements Constructable, Destroyable, Publ
     private String determineContentType(String content) {
         try {
             JSONUtils.loadString(content);
-            return MediaTypes.APPLICATION_JSON.getType();
+            return MediaTypes.APPLICATION_JSON.toString();
         }
         catch (RuntimeException e) {
             LOG.info("Not a JSON message");

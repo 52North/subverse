@@ -86,7 +86,7 @@ public class FixmMqttConsumerFactory implements Constructable, Destroyable, Publ
     }
 
     private String determineContentType(String content) {
-        return MediaTypes.APPLICATION_XML.getType();
+        return MediaTypes.APPLICATION_XML.toString();
     }
 
     @Override
@@ -112,7 +112,7 @@ public class FixmMqttConsumerFactory implements Constructable, Destroyable, Publ
 
     @Override
     public String getContentType() {
-        return MediaTypes.APPLICATION_XML.getType();
+        return MediaTypes.APPLICATION_XML.toString();
     }
 
 }
