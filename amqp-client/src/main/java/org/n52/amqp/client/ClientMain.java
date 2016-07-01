@@ -35,7 +35,7 @@ public class ClientMain {
 
     private static final Logger LOG = LoggerFactory.getLogger(ClientMain.class);
 
-    public static void main(String[] args) throws AmqpConnectionCreationFailedException, URISyntaxException {
+    public static void main(String[] args) throws AmqpConnectionCreationFailedException, URISyntaxException, InterruptedException {
         if (args == null || args.length < 1) {
             throw new IllegalArgumentException("Host must be provided as argument");
         }
@@ -59,7 +59,7 @@ public class ClientMain {
             }
         });
 
-        new Thread(() -> {
+        Thread t = new Thread(() -> {
             try {
                 for (int i = 0; i < 10; i++) {
                     Thread.sleep(5000);
@@ -71,8 +71,10 @@ public class ClientMain {
             }
             
             LOG.info("Finished publishing");
-        }).start();
+        });
 
+        t.start();
+        t.join();
     }
 
 }
