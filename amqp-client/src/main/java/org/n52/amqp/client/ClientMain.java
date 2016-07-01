@@ -22,10 +22,12 @@ import org.n52.amqp.AmqpConnectionCreationFailedException;
 import org.n52.amqp.AmqpMessage;
 import org.n52.amqp.Connection;
 import org.n52.amqp.ConnectionBuilder;
+import org.n52.amqp.Publisher;
 import org.n52.amqp.PublisherCreationFailedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import rx.Subscriber;
+import rx.schedulers.Schedulers;
 
 /**
  *
@@ -42,7 +44,10 @@ public class ClientMain {
 
         Connection conn = ConnectionBuilder.create(new URI(String.format("amqp://%s:8001/N52-test", args[0]))).build();
         LOG.info("Connecting to: "+conn.getRemoteURI());
-        conn.createObservable().subscribe(new Subscriber<AmqpMessage>() {
+        conn.createObservable()
+                .subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.computation())
+                .subscribe(new Subscriber<AmqpMessage>() {
             @Override
             public void onCompleted() {
                 LOG.info("completed observable");
@@ -59,22 +64,18 @@ public class ClientMain {
             }
         });
 
-        Thread t = new Thread(() -> {
-            try {
-                for (int i = 0; i < 10; i++) {
-                    Thread.sleep(5000);
-                    LOG.info("Publishing message #"+i);
-                    conn.createPublisher().publish("echo "+i);
-                }
-            } catch (InterruptedException | PublisherCreationFailedException ex) {
-                LOG.warn(ex.getMessage(), ex);
+        try {
+            Publisher pub = conn.createPublisher();
+            for (int i = 0; i < 10; i++) {
+                Thread.sleep(5000);
+                LOG.info("Publishing message #"+i);
+                pub.publish("echo "+i);
             }
-            
-            LOG.info("Finished publishing");
-        });
+        } catch (InterruptedException | PublisherCreationFailedException ex) {
+            LOG.warn(ex.getMessage(), ex);
+        }
 
-        t.start();
-        t.join();
+        LOG.info("Finished publishing");
     }
 
 }
