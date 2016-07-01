@@ -22,6 +22,7 @@ import org.n52.amqp.AmqpConnectionCreationFailedException;
 import org.n52.amqp.AmqpMessage;
 import org.n52.amqp.Connection;
 import org.n52.amqp.ConnectionBuilder;
+import org.n52.amqp.ContentType;
 import org.n52.amqp.Publisher;
 import org.n52.amqp.PublisherCreationFailedException;
 import org.slf4j.Logger;
@@ -69,7 +70,7 @@ public class ClientMain {
             for (int i = 0; i < 10; i++) {
                 Thread.sleep(5000);
                 LOG.info("Publishing message #"+i);
-                pub.publish("echo "+i);
+                pub.publish("echo "+i, "test", ContentType.TEXT_PLAIN);
             }
         } catch (InterruptedException | PublisherCreationFailedException ex) {
             LOG.warn(ex.getMessage(), ex);
