@@ -63,12 +63,14 @@ public class ClientMain {
             try {
                 for (int i = 0; i < 10; i++) {
                     Thread.sleep(5000);
-
+                    LOG.info("Publishing message #"+i);
                     conn.createPublisher().publish("echo "+i);
                 }
             } catch (InterruptedException | PublisherCreationFailedException ex) {
                 LOG.warn(ex.getMessage(), ex);
             }
+            
+            LOG.info("Finished publishing");
         }).start();
 
     }
