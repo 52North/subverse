@@ -32,11 +32,11 @@
             <artifactId>junit</artifactId>
             <scope>test</scope>
         </dependency>
-<!--        <dependency>
+        <!--        <dependency>
             <groupId>org.apache.activemq</groupId>
             <artifactId>activemq-amqp</artifactId>
         </dependency>-->
-<!--        <dependency>
+        <!--        <dependency>
             <groupId>io.netty</groupId>
             <artifactId>netty-all</artifactId>
         </dependency>-->
@@ -57,4 +57,33 @@
             <artifactId>logback-classic</artifactId>
         </dependency>
     </dependencies>
+    
+    
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.5.0</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <executable>java</executable>
+                    <arguments>
+                        <!--<argument>-Dmyproperty=myvalue</argument>-->
+                        <argument>-classpath</argument>
+                        <!-- automatically creates the classpath using all project dependencies,
+                        also adding the project build directory -->
+                        <classpath/>
+                        <argument>org.n52.amqp.client.ClientMain</argument>
+                    </arguments>
+                </configuration>
+            </plugin>    
+        </plugins>
+    </build>
 </project>
