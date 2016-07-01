@@ -22,6 +22,7 @@ import org.n52.amqp.AmqpConnectionCreationFailedException;
 import org.n52.amqp.AmqpMessage;
 import org.n52.amqp.Connection;
 import org.n52.amqp.ConnectionBuilder;
+import org.n52.amqp.PublisherCreationFailedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import rx.Subscriber;
@@ -35,7 +36,12 @@ public class ClientMain {
     private static final Logger LOG = LoggerFactory.getLogger(ClientMain.class);
 
     public static void main(String[] args) throws AmqpConnectionCreationFailedException, URISyntaxException {
-        Connection conn = ConnectionBuilder.create(new URI("amqp://192.190.127.45:8001/N52")).build();
+        if (args == null || args.length < 1) {
+            throw new IllegalArgumentException("Host must be provided as argument");
+        }
+
+        Connection conn = ConnectionBuilder.create(new URI(String.format("amqp://%s:8001/N52-test", args[0]))).build();
+        LOG.info("Connecting to: "+conn.getRemoteURI());
         conn.createObservable().subscribe(new Subscriber<AmqpMessage>() {
             @Override
             public void onCompleted() {
@@ -49,9 +55,22 @@ public class ClientMain {
 
             @Override
             public void onNext(AmqpMessage t) {
-                LOG.info("new message: "+t);
+                LOG.info("[new message] "+t);
             }
         });
+
+        new Thread(() -> {
+            try {
+                for (int i = 0; i < 10; i++) {
+                    Thread.sleep(5000);
+
+                    conn.createPublisher().publish("echo "+i);
+                }
+            } catch (InterruptedException | PublisherCreationFailedException ex) {
+                LOG.warn(ex.getMessage(), ex);
+            }
+        }).start();
+
     }
 
 }
