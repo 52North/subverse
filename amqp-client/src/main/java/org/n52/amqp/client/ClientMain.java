@@ -39,10 +39,10 @@ public class ClientMain {
 
     public static void main(String[] args) throws AmqpConnectionCreationFailedException, URISyntaxException, InterruptedException {
         if (args == null || args.length < 1) {
-            throw new IllegalArgumentException("Host must be provided as argument");
+            throw new IllegalArgumentException("'schema://host:port/queue' must be provided as argument");
         }
 
-        Connection conn = ConnectionBuilder.create(new URI(String.format("amqp://%s:8001/N52-test", args[0]))).build();
+        Connection conn = ConnectionBuilder.create(new URI(args[0])).build();
         LOG.info("Connecting to: "+conn.getRemoteURI());
         conn.createObservable()
                 .subscribeOn(Schedulers.io())
