@@ -169,7 +169,7 @@ public class FileSystemSubscriptionDao implements SubscriptionDao, Constructable
             return result.get();
         }
 
-        throw new UnknownSubscriptionException("Subscription with id '{}' is not known");
+        throw new UnknownSubscriptionException("Subscription with id '"+subscriptionId+"' is not known");
     }
 
     @Override
