@@ -43,9 +43,9 @@ public class ClientMain {
             throw new IllegalArgumentException("'schema://host:port/queue' must be provided as argument");
         }
 
-        Connection conn = ConnectionBuilder.create(new URI(args[0])).build();
-        LOG.info("Connecting to: "+conn.getRemoteURI());
-        conn.createObservable()
+        Connection connConsumer = ConnectionBuilder.create(new URI(args[0])).build();
+        LOG.info("Connecting to: "+connConsumer.getRemoteURI());
+        connConsumer.createObservable()
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.computation())
                 .subscribe(new Subscriber<AmqpMessage>() {
@@ -66,7 +66,8 @@ public class ClientMain {
         });
 
         try {
-            Publisher pub = conn.createPublisher();
+            Connection connPublisher = ConnectionBuilder.create(new URI(args.length > 1 ? args[1] : args[0])).build();
+            Publisher pub = connPublisher.createPublisher();
             for (int i = 0; i < 10; i++) {
                 Thread.sleep(5000);
                 LOG.info("Publishing message #"+i);
