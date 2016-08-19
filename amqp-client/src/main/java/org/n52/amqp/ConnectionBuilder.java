@@ -16,6 +16,7 @@
 package org.n52.amqp;
 
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Objects;
 
 /**
@@ -53,15 +54,40 @@ public class ConnectionBuilder {
         return this;
     }
 
-    public Connection build() throws AmqpConnectionCreationFailedException {
+    public Connection build() throws AmqpConnectionCreationFailedException, URISyntaxException {
         if (this.user != null) {
             if (this.password == null) {
                 throw new AmqpConnectionCreationFailedException("If a user is provided, a password is required as well");
             }
         }
+        
+        if (this.address.getUserInfo() != null) {
+            String[] arr = this.address.getUserInfo().split(":");
+            if (arr.length != 2) {
+                throw new AmqpConnectionCreationFailedException("Unsupported user credentials provided");
+            }
+            
+            this.user = arr[0];
+            this.password = arr[1];
+        }
+        
+        URI finalAddress;
+        if (this.address.getUserInfo() == null && this.user != null) {
+            //set the URI user info
+            finalAddress = new URI(this.address.getScheme(),
+                    String.format("%s:%s", this.user.trim(), this.password.trim()),
+                    this.address.getHost(),
+                    this.address.getPort(),
+                    this.address.getPath(),
+                    this.address.getQuery(),
+                    this.address.getFragment());
+        }
+        else {
+            finalAddress = this.address;
+        }
 
         try {
-            return new Connection(this.address, this.user, this.password);
+            return new Connection(finalAddress, this.user, this.password);
         } catch (Exception ex) {
             throw new AmqpConnectionCreationFailedException(ex);
         }

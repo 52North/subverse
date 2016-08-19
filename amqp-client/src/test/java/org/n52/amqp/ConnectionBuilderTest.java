@@ -17,6 +17,8 @@ package org.n52.amqp;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import org.hamcrest.CoreMatchers;
+import org.junit.Assert;
 import org.junit.Test;
 
 /**
@@ -59,6 +61,28 @@ public class ConnectionBuilderTest {
     public void testCreationWrongScheme() throws AmqpConnectionCreationFailedException, URISyntaxException {
         try {
             ConnectionBuilder.create(new URI("http://localhost")).build();
+        }
+        catch (AmqpConnectionCreationFailedException e) {
+            if (e.getCause() instanceof java.net.ConnectException) {
+                //probably no broker running
+            }
+            else {
+                throw e;
+            }
+        }
+    }
+    
+    @Test
+    public void testUserPasswordParsing() throws AmqpConnectionCreationFailedException, URISyntaxException {
+        try {
+            Connection conn = ConnectionBuilder.create(new URI("amqp://tester:test123@localhost")).build();
+            Assert.assertThat(conn.getUsername(), CoreMatchers.is("tester"));
+            Assert.assertThat(conn.getPassword(), CoreMatchers.is("test123"));
+            
+            conn = ConnectionBuilder.create(new URI("amqp://localhost")).user("worker").password("s3cret").build();
+            Assert.assertThat(conn.getUsername(), CoreMatchers.is("worker"));
+            Assert.assertThat(conn.getPassword(), CoreMatchers.is("s3cret"));
+            Assert.assertThat(conn.getRemoteURI().toString(), CoreMatchers.is("amqp://worker:s3cret@localhost"));
         }
         catch (AmqpConnectionCreationFailedException e) {
             if (e.getCause() instanceof java.net.ConnectException) {
