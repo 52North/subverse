@@ -123,7 +123,7 @@ public class AmqpDeliveryEndpoint implements DeliveryEndpoint {
             LOG.trace("Sending message to {}", this.address);
             this.client.publish(prepareBody(o.get()), new ContentType(o.get().getContentType()));
             LOG.trace("Message sent to {}", this.address);
-        } catch (PublisherCreationFailedException | IOException | AmqpConnectionCreationFailedException ex) {
+        } catch (PublisherCreationFailedException | IOException | URISyntaxException | AmqpConnectionCreationFailedException ex) {
             LOG.warn("Could not send AMQP message", ex);
         }
     }
