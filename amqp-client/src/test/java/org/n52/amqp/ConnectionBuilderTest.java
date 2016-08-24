@@ -71,14 +71,14 @@ public class ConnectionBuilderTest {
             }
         }
     }
-    
+
     @Test
     public void testUserPasswordParsing() throws AmqpConnectionCreationFailedException, URISyntaxException {
         try {
             Connection conn = ConnectionBuilder.create(new URI("amqp://tester:test123@localhost")).build();
             Assert.assertThat(conn.getUsername(), CoreMatchers.is("tester"));
             Assert.assertThat(conn.getPassword(), CoreMatchers.is("test123"));
-            
+
             conn = ConnectionBuilder.create(new URI("amqp://localhost")).user("worker").password("s3cret").build();
             Assert.assertThat(conn.getUsername(), CoreMatchers.is("worker"));
             Assert.assertThat(conn.getPassword(), CoreMatchers.is("s3cret"));

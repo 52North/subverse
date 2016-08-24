@@ -29,34 +29,34 @@ import org.apache.qpid.proton.messenger.Messenger;
  * @author <a href="mailto:m.rieke@52north.org">Matthes Rieke</a>
  */
 public class QpidPublisher {
-    
+
     public static void main(String[] args) throws IOException {
         Map<String, String> messageAnnotations = new HashMap<>();
         Map<String, String> deliveryAnnotations = new HashMap<>();
-        
+
         Messenger messenger = Messenger.Factory.create("my-id");
         messenger.start();
-        
+
         Message message = Message.Factory.create();
         message.setAddress("amqp://localhost/my-test-queue");
-        
+
         message.setSubject("testing-amqp");
         message.setContentType("text/plain");
-        
+
         //set message annotations
         messageAnnotations.forEach((String k, String v) -> {
             message.getMessageAnnotations().getValue().put(Symbol.valueOf(k), v);
         });
-        
+
         //set delivery annotations
         deliveryAnnotations.forEach((String k, String v) -> {
             message.getDeliveryAnnotations().getValue().put(Symbol.valueOf(k), v);
         });
-        
+
         message.setBody(new AmqpValue("Hello AMQP!"));
-        
+
         messenger.put(message);
         messenger.send();
     }
-    
+
 }

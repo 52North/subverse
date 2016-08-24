@@ -100,8 +100,12 @@ public class Publisher {
                 message.setBody(new AmqpValue(msg));
 
                 synchronized (this) {
+                    LOG.debug("putting message...");
                     messenger.put(message);
+                    LOG.debug("sending message...");
                     messenger.send();
+                    LOG.debug("stopping messenger...");
+                    messenger.stop();
                 }
             } catch (IOException ex) {
                 LOG.warn("Could not send message", ex);

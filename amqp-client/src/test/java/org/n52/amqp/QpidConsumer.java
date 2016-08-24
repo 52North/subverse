@@ -28,13 +28,13 @@ import org.apache.qpid.proton.messenger.Messenger;
  * @author <a href="mailto:m.rieke@52north.org">Matthes Rieke</a>
  */
 public class QpidConsumer {
-    
+
     public static void main(String[] args) throws IOException {
         Messenger messenger = Messenger.Factory.create();
         messenger.start();
         while (true) {
             messenger.subscribe("amqp://localhost/my-test-queue");
-            
+
             while (!messenger.stopped()) {
                 System.out.println("start receiving");
                 messenger.recv();
@@ -46,7 +46,7 @@ public class QpidConsumer {
                     if (body instanceof AmqpValue) {
                         System.out.println(((AmqpValue) body).getValue());
                     }
-                    
+
                     ApplicationProperties ap = msg.getApplicationProperties();
                     if (ap != null && !ap.getValue().isEmpty()) {
                         ap.getValue().forEach((Object key, Object value) -> {
@@ -57,5 +57,5 @@ public class QpidConsumer {
             }
         }
     }
-    
+
 }

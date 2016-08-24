@@ -60,17 +60,17 @@ public class ConnectionBuilder {
                 throw new AmqpConnectionCreationFailedException("If a user is provided, a password is required as well");
             }
         }
-        
+
         if (this.address.getUserInfo() != null) {
             String[] arr = this.address.getUserInfo().split(":");
             if (arr.length != 2) {
                 throw new AmqpConnectionCreationFailedException("Unsupported user credentials provided");
             }
-            
+
             this.user = arr[0];
             this.password = arr[1];
         }
-        
+
         URI finalAddress;
         if (this.address.getUserInfo() == null && this.user != null) {
             //set the URI user info
