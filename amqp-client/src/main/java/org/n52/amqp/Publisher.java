@@ -33,7 +33,7 @@ import org.slf4j.LoggerFactory;
 public class Publisher {
 
     private static final Logger LOG = LoggerFactory.getLogger(Publisher.class);
-    private final Connection connection;
+    public final Connection connection;
     private final String id = UUID.randomUUID().toString();
     private Messenger messenger;
 

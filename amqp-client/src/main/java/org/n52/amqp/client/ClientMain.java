@@ -19,7 +19,6 @@ package org.n52.amqp.client;
 import java.net.URI;
 import java.net.URISyntaxException;
 import org.n52.amqp.AmqpConnectionCreationFailedException;
-import org.n52.amqp.AmqpMessage;
 import org.n52.amqp.Connection;
 import org.n52.amqp.ConnectionBuilder;
 import org.n52.amqp.ContentType;
@@ -43,30 +42,30 @@ public class ClientMain {
             throw new IllegalArgumentException("'schema://host:port/queue' must be provided as argument");
         }
 
-        Connection connConsumer = ConnectionBuilder.create(new URI(args[0])).build();
-        LOG.info("Connecting to: "+connConsumer.getRemoteURI());
-        connConsumer.createObservable()
-                .subscribeOn(Schedulers.io())
-                .observeOn(Schedulers.computation())
-                .subscribe(new Subscriber<AmqpMessage>() {
-            @Override
-            public void onCompleted() {
-                LOG.info("completed observable");
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                LOG.warn("AMQP Error: "+e.getMessage(), e);
-            }
-
-            @Override
-            public void onNext(AmqpMessage t) {
-                LOG.info("[new message] "+t);
-            }
-        });
+//        Connection connConsumer = ConnectionBuilder.create(new URI(args[0])).build();
+//        LOG.info("Connecting to: "+connConsumer.getRemoteURI());
+//        connConsumer.createObservable()
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(Schedulers.computation())
+//                .subscribe(new Subscriber<AmqpMessage>() {
+//            @Override
+//            public void onCompleted() {
+//                LOG.info("completed observable");
+//            }
+//
+//            @Override
+//            public void onError(Throwable e) {
+//                LOG.warn("AMQP Error: "+e.getMessage(), e);
+//            }
+//
+//            @Override
+//            public void onNext(AmqpMessage t) {
+//                LOG.info("[new message] "+t);
+//            }
+//        });
 
         try {
-            Connection connPublisher = ConnectionBuilder.create(new URI(args.length > 1 ? args[1] : args[0])).build();
+            Connection connPublisher = ConnectionBuilder.create(new URI(args[0])).jmsFlavor().build();
             Publisher pub = connPublisher.createPublisher();
             for (int i = 0; i < 10; i++) {
                 Thread.sleep(5000);

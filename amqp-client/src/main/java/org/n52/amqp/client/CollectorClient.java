@@ -22,9 +22,6 @@ import org.n52.amqp.AmqpConnectionCreationFailedException;
 import org.n52.amqp.AmqpMessage;
 import org.n52.amqp.Connection;
 import org.n52.amqp.ConnectionBuilder;
-import org.n52.amqp.ContentType;
-import org.n52.amqp.Publisher;
-import org.n52.amqp.PublisherCreationFailedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import rx.Subscriber;
@@ -65,6 +62,9 @@ public class CollectorClient {
             }
         });
 
+        while (true) {
+            Thread.sleep(1000);
+        }
     }
 
 }

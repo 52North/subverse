@@ -31,6 +31,8 @@ import org.apache.qpid.jms.JmsConnectionFactory;
 import org.n52.amqp.AmqpMessage;
 import org.n52.amqp.Connection;
 import org.n52.amqp.ContentType;
+import org.n52.amqp.Publisher;
+import org.n52.amqp.PublisherCreationFailedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import rx.Observable;
@@ -42,7 +44,7 @@ import rx.Observable;
 public class JmsOverAmqpConnection extends Connection {
 
     private static final Logger LOG = LoggerFactory.getLogger(JmsOverAmqpConnection.class);
-    private static final String TOPIC_PREFIX = "topic://";
+    protected static final String TOPIC_PREFIX = "topic://";
 
     private final String host;
     private final int port;
@@ -79,13 +81,7 @@ public class JmsOverAmqpConnection extends Connection {
 
             javax.jms.Connection connection;
             try {
-                JmsConnectionFactory factory = new JmsConnectionFactory(String.format("%s://%s:%s",
-                        uri.getScheme(),
-                        this.host,
-                        this.port));
-                connection = factory.createConnection(this.getUsername(), this.getPassword());
-                connection.start();
-
+                connection = createInternalConnection(uri);
                 consumer = createConsumer(connection);
             } catch (JMSException ex) {
                 LOG.warn("Could not spawn subscriber", ex);
@@ -121,6 +117,17 @@ public class JmsOverAmqpConnection extends Connection {
         });
     }
 
+    protected javax.jms.Connection createInternalConnection(URI uri) throws JMSException {
+        javax.jms.Connection connection;
+        JmsConnectionFactory factory = new JmsConnectionFactory(String.format("%s://%s:%s",
+                uri.getScheme(),
+                this.host,
+                this.port));
+        connection = factory.createConnection(this.getUsername(), this.getPassword());
+        connection.start();
+        return connection;
+    }
+
     private MessageConsumer createConsumer(javax.jms.Connection connection) throws JMSException {
         Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
 
@@ -142,7 +149,7 @@ public class JmsOverAmqpConnection extends Connection {
         String ct = null;
         while (names.hasMoreElements()) {
             Object next = names.nextElement();
-            if (next.toString().equals("Content-Type")) {
+            if (next.toString().equals("Content__Type")) {
                 ct = msg.getStringProperty(next.toString());
             }
             else {
@@ -153,5 +160,12 @@ public class JmsOverAmqpConnection extends Connection {
         return new AmqpMessage(msg.getText(), ct != null ? new ContentType(ct) : null, null,
                 Collections.emptyMap(), messageAnnotations);
     }
+
+    @Override
+    public Publisher createPublisher() throws PublisherCreationFailedException {
+        return new JmsOverAmqpPublisher(this);
+    }
+
+
 
 }
