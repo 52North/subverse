@@ -18,6 +18,7 @@ package org.n52.amqp;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Objects;
+import org.n52.amqp.jms.JmsOverAmqpConnection;
 
 /**
  *
@@ -28,6 +29,7 @@ public class ConnectionBuilder {
     private final URI address;
     private String user;
     private String password;
+    private boolean jmsFlavor;
 
 
     private ConnectionBuilder(URI address) {
@@ -51,6 +53,11 @@ public class ConnectionBuilder {
 
     public ConnectionBuilder password(String pwd) {
         this.password = pwd;
+        return this;
+    }
+
+    public ConnectionBuilder jmsFlavor() {
+        this.jmsFlavor = true;
         return this;
     }
 
@@ -87,6 +94,9 @@ public class ConnectionBuilder {
         }
 
         try {
+            if (this.jmsFlavor) {
+                return new JmsOverAmqpConnection(finalAddress, this.user, this.password);
+            }
             return new Connection(finalAddress, this.user, this.password);
         } catch (Exception ex) {
             throw new AmqpConnectionCreationFailedException(ex);

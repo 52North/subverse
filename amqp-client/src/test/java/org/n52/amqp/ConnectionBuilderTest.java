@@ -20,6 +20,7 @@ import java.net.URISyntaxException;
 import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
 import org.junit.Test;
+import org.n52.amqp.jms.JmsOverAmqpConnection;
 
 /**
  *
@@ -92,5 +93,13 @@ public class ConnectionBuilderTest {
                 throw e;
             }
         }
+    }
+
+    @Test
+    public void testJmsFlavor() throws URISyntaxException, AmqpConnectionCreationFailedException {
+        Connection conn = ConnectionBuilder.create(new URI("amqp://tester:test123@localhost/queue://hahahaha")).jmsFlavor().build();
+
+        Assert.assertThat(conn, CoreMatchers.instanceOf(JmsOverAmqpConnection.class));
+        Assert.assertThat(((JmsOverAmqpConnection) conn).getDestination(), CoreMatchers.is("queue://hahahaha"));
     }
 }
