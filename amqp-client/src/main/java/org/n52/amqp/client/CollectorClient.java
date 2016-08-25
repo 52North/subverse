@@ -80,7 +80,7 @@ public class CollectorClient {
             public void onNext(AmqpMessage t) {
                 LOG.info("[new message] "+t);
                 try {
-                    storeToFile(t, storageDir, prefix+count.get());
+                    storeToFile(t, storageDir, prefix+count.getAndIncrement());
                 } catch (IOException e) {
                     LOG.warn("storage Error: "+e.getMessage(), e);
                 }
