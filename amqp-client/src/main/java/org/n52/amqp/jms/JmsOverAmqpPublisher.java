@@ -48,6 +48,12 @@ public class JmsOverAmqpPublisher extends Publisher {
     public void publish(CharSequence msg, String subject, ContentType ct,
             Map<String, String> deliveryAnnotations,
             Map<String, String> messageAnnotations) {
+        
+        if (!this.connection.isOpen()) {
+            LOG.warn("Cannot send message. Connection already closed");
+            return;
+        }
+        
         try {
             synchronized (this) {
                 if (this.producer == null) {

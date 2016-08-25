@@ -16,8 +16,15 @@
 
 package org.n52.amqp.client;
 
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
+import java.util.UUID;
+import java.util.concurrent.atomic.AtomicInteger;
 import org.n52.amqp.AmqpConnectionCreationFailedException;
 import org.n52.amqp.AmqpMessage;
 import org.n52.amqp.Connection;
@@ -35,11 +42,24 @@ public class CollectorClient {
 
     private static final Logger LOG = LoggerFactory.getLogger(CollectorClient.class);
 
-    public static void main(String[] args) throws AmqpConnectionCreationFailedException, URISyntaxException, InterruptedException {
+    public static void main(String[] args) throws AmqpConnectionCreationFailedException, URISyntaxException, InterruptedException, IOException {
         if (args == null || args.length < 1) {
             throw new IllegalArgumentException("'schema://[user:pwd@]host[:port]/[destination]' must be provided as argument");
         }
-
+        
+        Path storageDir;
+        if (args.length > 1) {
+            //storage dir
+            storageDir = Paths.get(args[2]);
+        }
+        else {
+            storageDir = Files.createTempDirectory("amqp-collector");
+        }
+        
+        String prefix = UUID.randomUUID().toString().substring(0, 6).concat("_");
+        LOG.info("Storing messages in folder: {}, with prefix: {}", storageDir, prefix);
+        
+        AtomicInteger count = new AtomicInteger();
         Connection connConsumer = ConnectionBuilder.create(new URI(args[0])).jmsFlavor().build();
         LOG.info("Connecting to: "+connConsumer.getRemoteURI());
         connConsumer.createObservable()
@@ -59,12 +79,22 @@ public class CollectorClient {
             @Override
             public void onNext(AmqpMessage t) {
                 LOG.info("[new message] "+t);
+                try {
+                    storeToFile(t, storageDir, prefix+count.get());
+                } catch (IOException e) {
+                    LOG.warn("storage Error: "+e.getMessage(), e);
+                }
             }
+
         });
 
         while (true) {
             Thread.sleep(1000);
         }
+    }
+    
+    private static void storeToFile(AmqpMessage t, Path storageDir, String fileName) throws IOException {
+        Files.write(storageDir.resolve(fileName), t.getBody().toString().getBytes(), StandardOpenOption.CREATE);
     }
 
 }
