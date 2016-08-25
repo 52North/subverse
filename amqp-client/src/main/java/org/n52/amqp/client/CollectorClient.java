@@ -23,6 +23,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.TimeZone;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 import org.n52.amqp.AmqpConnectionCreationFailedException;
@@ -46,6 +50,10 @@ public class CollectorClient {
         if (args == null || args.length < 1) {
             throw new IllegalArgumentException("'schema://[user:pwd@]host[:port]/[destination]' must be provided as argument");
         }
+        
+        TimeZone tz = TimeZone.getTimeZone("UTC");
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'");
+        df.setTimeZone(tz);
         
         Path storageDir;
         if (args.length > 1) {
@@ -80,7 +88,7 @@ public class CollectorClient {
             public void onNext(AmqpMessage t) {
                 LOG.info("[new message] "+t);
                 try {
-                    storeToFile(t, storageDir, prefix+count.getAndIncrement());
+                    storeToFile(t, storageDir, prefix+count.getAndIncrement(), df);
                 } catch (IOException e) {
                     LOG.warn("storage Error: "+e.getMessage(), e);
                 }
@@ -93,8 +101,15 @@ public class CollectorClient {
         }
     }
     
-    private static void storeToFile(AmqpMessage t, Path storageDir, String fileName) throws IOException {
-        Files.write(storageDir.resolve(fileName), t.getBody().toString().getBytes(), StandardOpenOption.CREATE);
+    private static void storeToFile(AmqpMessage t, Path storageDir, String fileName, DateFormat df) throws IOException {
+        String date = df.format(new Date());
+        StringBuilder sb = new StringBuilder();
+        sb.append(date);
+        sb.append(System.getProperty("line.separator"));
+        sb.append(System.getProperty("line.separator"));
+        sb.append(t.getBody().toString());
+                
+        Files.write(storageDir.resolve(fileName), sb.toString().getBytes(), StandardOpenOption.CREATE);
     }
 
 }
