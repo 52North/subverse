@@ -25,7 +25,8 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.TimeZone;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -50,11 +51,11 @@ public class CollectorClient {
         if (args == null || args.length < 1) {
             throw new IllegalArgumentException("'schema://[user:pwd@]host[:port]/[destination]' must be provided as argument");
         }
-        
+
         TimeZone tz = TimeZone.getTimeZone("UTC");
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'");
         df.setTimeZone(tz);
-        
+
         Path storageDir;
         if (args.length > 1) {
             //storage dir
@@ -63,10 +64,10 @@ public class CollectorClient {
         else {
             storageDir = Files.createTempDirectory("amqp-collector");
         }
-        
+
         String prefix = UUID.randomUUID().toString().substring(0, 6).concat("_");
         LOG.info("Storing messages in folder: {}, with prefix: {}", storageDir, prefix);
-        
+
         AtomicInteger count = new AtomicInteger();
         Connection connConsumer = ConnectionBuilder.create(new URI(args[0])).jmsFlavor().build();
         LOG.info("Connecting to: "+connConsumer.getRemoteURI());
@@ -100,15 +101,14 @@ public class CollectorClient {
             Thread.sleep(1000);
         }
     }
-    
+
     private static void storeToFile(AmqpMessage t, Path storageDir, String fileName, DateFormat df) throws IOException {
-        String date = df.format(new Date());
         StringBuilder sb = new StringBuilder();
-        sb.append(date);
+        sb.append(ZonedDateTime.now().format( DateTimeFormatter.ISO_INSTANT ));
         sb.append(System.getProperty("line.separator"));
         sb.append(System.getProperty("line.separator"));
         sb.append(t.getBody().toString());
-                
+
         Files.write(storageDir.resolve(fileName), sb.toString().getBytes(), StandardOpenOption.CREATE);
     }
 
