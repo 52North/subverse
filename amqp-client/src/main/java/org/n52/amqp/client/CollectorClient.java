@@ -50,7 +50,7 @@ public class CollectorClient {
         Path storageDir;
         if (args.length > 1) {
             //storage dir
-            storageDir = Paths.get(args[2]);
+            storageDir = Paths.get(args[1]);
         }
         else {
             storageDir = Files.createTempDirectory("amqp-collector");
