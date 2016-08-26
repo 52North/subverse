@@ -69,7 +69,7 @@ public class CollectorClient {
         LOG.info("Storing messages in folder: {}, with prefix: {}", storageDir, prefix);
 
         AtomicInteger count = new AtomicInteger();
-        Connection connConsumer = ConnectionBuilder.create(new URI(args[0])).build();
+        Connection connConsumer = ConnectionBuilder.create(new URI(args[0])).jmsFlavor().build();
         LOG.info("Connecting to: "+connConsumer.getRemoteURI());
         connConsumer.createObservable()
                 .subscribeOn(Schedulers.io())
