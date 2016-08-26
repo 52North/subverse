@@ -18,6 +18,7 @@ package org.n52.amqp.client;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Collections;
 import org.n52.amqp.AmqpConnectionCreationFailedException;
 import org.n52.amqp.Connection;
 import org.n52.amqp.ConnectionBuilder;
@@ -67,12 +68,13 @@ public class ClientMain {
         try {
             Connection connPublisher = ConnectionBuilder.create(new URI(args[0])).jmsFlavor().build();
             Publisher pub = connPublisher.createPublisher();
-            for (int i = 0; i < 10; i++) {
-                Thread.sleep(5000);
+            for (int i = 0; i < 1; i++) {
                 LOG.info("Publishing message #"+i);
-                pub.publish("echo "+i, "test", ContentType.TEXT_PLAIN);
+                pub.publish("echo "+i, "test", ContentType.TEXT_PLAIN,
+                        Collections.singletonMap("delivery_anno1", "wuuut"),
+                        Collections.singletonMap("message_anno1", "wooot"));
             }
-        } catch (InterruptedException | PublisherCreationFailedException ex) {
+        } catch (PublisherCreationFailedException ex) {
             LOG.warn(ex.getMessage(), ex);
         }
 

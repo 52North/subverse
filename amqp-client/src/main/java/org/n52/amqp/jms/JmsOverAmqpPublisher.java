@@ -64,6 +64,7 @@ public class JmsOverAmqpPublisher extends Publisher {
             }
 
             TextMessage tm = session.createTextMessage(msg.toString());
+            tm.setJMSType(subject);
 
             messageAnnotations.forEach((String k, String v) -> {
                 try {

@@ -26,7 +26,7 @@ import java.util.Optional;
  */
 public class AmqpMessage {
 
-    private final Object body;
+    private final String body;
     private final Optional<ContentType> contentType;
     private final Optional<String> subject;
     private final Map<String, String> deliveryAnnotations;
@@ -50,14 +50,14 @@ public class AmqpMessage {
 
     public AmqpMessage(Object body, ContentType contentType, String subject,
             Map<String, String> deliveryAnnotations, Map<String, String> messageAnnotations) {
-        this.body = body;
+        this.body = (body instanceof String) ? (String) body : convertToString(body);
         this.contentType = Optional.ofNullable(contentType);
         this.subject = Optional.ofNullable(subject);
         this.deliveryAnnotations = deliveryAnnotations != null ? deliveryAnnotations : Collections.emptyMap();
         this.messageAnnotations = messageAnnotations != null ? messageAnnotations : Collections.emptyMap();
     }
 
-    public Object getBody() {
+    public String getBody() {
         return body;
     }
 
@@ -79,7 +79,21 @@ public class AmqpMessage {
 
     @Override
     public String toString() {
-        return String.format("AmqpMessage{%s, %s, %s}", body, getContentType(), getSubject());
+        return "AmqpMessage{" +
+                "body=" + body +
+                ", contentType=" + contentType +
+                ", subject=" + subject +
+                ", deliveryAnnotations=" + deliveryAnnotations +
+                ", messageAnnotations=" + messageAnnotations + '}';
+    }
+
+
+    private String convertToString(Object body) {
+        if (body instanceof byte[]) {
+            return new String((byte[]) body);
+        }
+
+        return body.toString();
     }
 
 

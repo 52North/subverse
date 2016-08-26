@@ -21,6 +21,7 @@ import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
+import javax.jms.BytesMessage;
 import javax.jms.Destination;
 import javax.jms.JMSException;
 import javax.jms.Message;
@@ -28,6 +29,12 @@ import javax.jms.MessageConsumer;
 import javax.jms.Session;
 import javax.jms.TextMessage;
 import org.apache.qpid.jms.JmsConnectionFactory;
+import org.apache.qpid.jms.message.JmsMessage;
+import org.apache.qpid.jms.message.facade.JmsMessageFacade;
+import org.apache.qpid.jms.provider.amqp.message.AmqpJmsMessageFacade;
+import org.apache.qpid.proton.amqp.Symbol;
+import org.apache.qpid.proton.amqp.messaging.DeliveryAnnotations;
+import org.apache.qpid.proton.amqp.messaging.MessageAnnotations;
 import org.n52.amqp.AmqpMessage;
 import org.n52.amqp.Connection;
 import org.n52.amqp.ContentType;
@@ -93,10 +100,9 @@ public class JmsOverAmqpConnection extends Connection {
             while (this.isOpen() && !t.isUnsubscribed()) {
                 try {
                     Message msg = consumer.receive();
-                    if (msg instanceof TextMessage) {
-                        t.onNext(parseMessage((TextMessage) msg));
-                    } else {
-                        LOG.warn("Unsupported message type: {}", msg.getClass());
+                    AmqpMessage parsed = parseMessage(msg);
+                    if (parsed != null) {
+                        t.onNext(parsed);
                     }
                 } catch (JMSException ex) {
                     LOG.warn("Could not receive message", ex);
@@ -142,23 +148,133 @@ public class JmsOverAmqpConnection extends Connection {
         return consumer;
     }
 
-    private AmqpMessage parseMessage(TextMessage msg) throws JMSException {
-        Enumeration names = msg.getPropertyNames();
+    private AmqpMessage parseMessage(Message msg) throws JMSException {
+        Map<String, String> messageAnnotations = extractMessageAnnotations(msg);
+        Map<String, String> deliveryAnnotations = extractDeliveryAnnotations(msg);
 
-        Map<String, String> messageAnnotations = new HashMap<>();
-        String ct = null;
-        while (names.hasMoreElements()) {
-            Object next = names.nextElement();
-            if (next.toString().equals("Content__Type")) {
-                ct = msg.getStringProperty(next.toString());
-            }
-            else {
-                messageAnnotations.put(next.toString(), msg.getStringProperty(next.toString()));
+        if (messageAnnotations == null) {
+            messageAnnotations = parseMessageAnnotations(msg);
+        }
+        else {
+            messageAnnotations.putAll(parseMessageAnnotations(msg));
+        }
+
+        String ct;
+        if (messageAnnotations.containsKey("Content__Type")) {
+            ct = messageAnnotations.get("Content__Type");
+        }
+        else {
+            ct = extractContentType(msg);
+        }
+
+        String text;
+        if (msg instanceof TextMessage) {
+            text = ((TextMessage) msg).getText();
+        }
+        else if (msg instanceof BytesMessage) {
+            byte[] buffer = new byte[(int) ((BytesMessage) msg).getBodyLength()];
+            ((BytesMessage) msg).readBytes(buffer, buffer.length);
+            text = new String(buffer);
+        }
+        else {
+            LOG.warn("Unsupported message type: {}", msg.getClass());
+            return null;
+        }
+
+        return new AmqpMessage(text, ct != null ? new ContentType(ct) : null, msg.getJMSType(),
+                deliveryAnnotations, messageAnnotations);
+    }
+
+    private String extractContentType(Message msg) {
+        if (msg instanceof JmsMessage) {
+            JmsMessageFacade facade = ((JmsMessage) msg).getFacade();
+            if (facade instanceof AmqpJmsMessageFacade) {
+                return ((AmqpJmsMessageFacade) facade).getContentType();
             }
         }
 
-        return new AmqpMessage(msg.getText(), ct != null ? new ContentType(ct) : null, null,
-                Collections.emptyMap(), messageAnnotations);
+        return null;
+    }
+
+    private Map<String, String> extractDeliveryAnnotations(Message msg) {
+        if (msg instanceof JmsMessage) {
+            JmsMessageFacade facade = ((JmsMessage) msg).getFacade();
+            if (facade instanceof AmqpJmsMessageFacade) {
+                org.apache.qpid.proton.message.Message amqpMessage = ((AmqpJmsMessageFacade) facade).getAmqpMessage();
+                DeliveryAnnotations origDeliveryAnnos = amqpMessage.getDeliveryAnnotations();
+                if (origDeliveryAnnos != null && origDeliveryAnnos.getValue() != null) {
+                    Map<String, String> result = new HashMap<>();
+                    origDeliveryAnnos.getValue().forEach((Symbol k, Object v) -> {
+                        result.put(k.toString(), v.toString());
+                    });
+                    return result;
+                }
+            }
+        }
+
+        return Collections.emptyMap();
+    }
+
+    private Map<String, String> extractMessageAnnotations(Message msg) {
+        if (msg instanceof JmsMessage) {
+            JmsMessageFacade facade = ((JmsMessage) msg).getFacade();
+            if (facade instanceof AmqpJmsMessageFacade) {
+                org.apache.qpid.proton.message.Message amqpMessage = ((AmqpJmsMessageFacade) facade).getAmqpMessage();
+                MessageAnnotations origMessageAnnos = amqpMessage.getMessageAnnotations();
+                if (origMessageAnnos != null && origMessageAnnos.getValue() != null) {
+                    Map<String, String> result = new HashMap<>();
+                    origMessageAnnos.getValue().forEach((Symbol k, Object v) -> {
+                        result.put(k.toString(), v.toString());
+                    });
+                    return result;
+                }
+            }
+        }
+
+        return Collections.emptyMap();
+    }
+
+    private Map<String, String> parseMessageAnnotations(Message msg) throws JMSException {
+        Enumeration names = msg.getPropertyNames();
+
+        Map<String, String> messageAnnotations = new HashMap<>();
+        while (names.hasMoreElements()) {
+            Object next = names.nextElement();
+            String val = parseToString(msg, next.toString());
+            if (val != null) {
+                messageAnnotations.put(next.toString(), val);
+            }
+        }
+        return messageAnnotations;
+    }
+
+    private String parseToString(Message msg, String key) {
+        String result;
+        try {
+            result = msg.getStringProperty(key);
+            return result;
+        } catch (JMSException ex) {
+        }
+
+        try {
+            result = String.format("%s", msg.getLongProperty(key));
+            return result;
+        } catch (JMSException ex) {
+        }
+
+        try {
+            result = String.format("%s", msg.getBooleanProperty(key));
+            return result;
+        } catch (JMSException ex) {
+        }
+
+        try {
+            result = String.format("%s", msg.getDoubleProperty(key));
+            return result;
+        } catch (JMSException ex) {
+        }
+
+        return null;
     }
 
     @Override

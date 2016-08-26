@@ -69,7 +69,7 @@ public class CollectorClient {
         LOG.info("Storing messages in folder: {}, with prefix: {}", storageDir, prefix);
 
         AtomicInteger count = new AtomicInteger();
-        Connection connConsumer = ConnectionBuilder.create(new URI(args[0])).jmsFlavor().build();
+        Connection connConsumer = ConnectionBuilder.create(new URI(args[0])).build();
         LOG.info("Connecting to: "+connConsumer.getRemoteURI());
         connConsumer.createObservable()
                 .subscribeOn(Schedulers.io())
@@ -106,8 +106,20 @@ public class CollectorClient {
         StringBuilder sb = new StringBuilder();
         sb.append(ZonedDateTime.now().format( DateTimeFormatter.ISO_INSTANT ));
         sb.append(System.getProperty("line.separator"));
+        sb.append("deliveryAnnotations=");
+        sb.append(t.getDeliveryAnnotations());
         sb.append(System.getProperty("line.separator"));
-        sb.append(t.getBody().toString());
+        sb.append("messageAnnotations=");
+        sb.append(t.getMessageAnnotations());
+        sb.append(System.getProperty("line.separator"));
+        sb.append("subject=");
+        sb.append(t.getSubject().orElse(null));
+        sb.append(System.getProperty("line.separator"));
+        sb.append("Content-Type=");
+        sb.append(t.getContentType().orElse(null));
+        sb.append(System.getProperty("line.separator"));
+        sb.append(System.getProperty("line.separator"));
+        sb.append(t.getBody());
 
         Files.write(storageDir.resolve(fileName), sb.toString().getBytes(), StandardOpenOption.CREATE);
     }

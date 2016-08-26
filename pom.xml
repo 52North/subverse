@@ -63,7 +63,7 @@
         <module>storage-fs</module>
         <module>webapp</module>
         <module>svalbard</module>
-        <module>amqp-client</module>
+        <!--<module>amqp-client</module>-->
     </modules>
 
     <properties>

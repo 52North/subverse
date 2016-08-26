@@ -17,8 +17,12 @@ package org.n52.amqp;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.HashMap;
+import java.util.Map;
+import org.apache.qpid.proton.amqp.Symbol;
 import org.apache.qpid.proton.amqp.messaging.AmqpValue;
 import org.apache.qpid.proton.amqp.messaging.Section;
+import org.apache.qpid.proton.amqp.messaging.Source;
 import org.apache.qpid.proton.message.Message;
 import org.apache.qpid.proton.messenger.Messenger;
 import org.slf4j.Logger;
@@ -118,9 +122,37 @@ public class Connection {
     }
 
     private AmqpMessage createMessage(Message msg) {
+        Map<String, String> deliveryAnnotations = new HashMap<>();
+        if (msg.getDeliveryAnnotations() != null && msg.getDeliveryAnnotations().getValue() != null) {
+            msg.getDeliveryAnnotations().getValue().forEach((Symbol k, Object v) -> {
+                deliveryAnnotations.put(k.toString(), v.toString());
+            });
+        }
+
+        Map<String, String> messageAnnotations = new HashMap<>();
+        if (msg.getMessageAnnotations()!= null && msg.getMessageAnnotations().getValue() != null) {
+            msg.getMessageAnnotations().getValue().forEach((Symbol k, Object v) -> {
+                messageAnnotations.put(k.toString(), v.toString());
+            });
+        }
+
+        if (msg.getApplicationProperties()!= null && msg.getApplicationProperties().getValue() != null) {
+            msg.getApplicationProperties().getValue().forEach((Object k, Object v) -> {
+                messageAnnotations.put(k.toString(), v.toString());
+            });
+        }
+
+        String ct;
+        if (msg.getContentType() != null) {
+            ct = msg.getContentType();
+        }
+        else {
+            ct = messageAnnotations.get("Content__Type");
+        }
+
         return new AmqpMessage(((AmqpValue) msg.getBody()).getValue(),
-            createContentType(msg.getContentType()),
-            msg.getSubject());
+            createContentType(ct),
+            msg.getSubject(), deliveryAnnotations, messageAnnotations);
     }
 
     private ContentType createContentType(String contentType) {

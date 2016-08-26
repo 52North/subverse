@@ -17,10 +17,13 @@ package org.n52.amqp;
 
 import java.io.IOException;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 import org.apache.qpid.proton.amqp.Symbol;
 import org.apache.qpid.proton.amqp.messaging.AmqpValue;
+import org.apache.qpid.proton.amqp.messaging.DeliveryAnnotations;
+import org.apache.qpid.proton.amqp.messaging.MessageAnnotations;
 import org.apache.qpid.proton.message.Message;
 import org.apache.qpid.proton.messenger.Messenger;
 import org.slf4j.Logger;
@@ -89,13 +92,17 @@ public class Publisher {
                     }
                 }
 
+                Map<Symbol, Object> messageAnnoMap = new HashMap<>();
                 messageAnnotations.forEach((String k, String v) -> {
-                    message.getMessageAnnotations().getValue().put(Symbol.valueOf(k), v);
+                    messageAnnoMap.put(Symbol.valueOf(k), v);
                 });
+                message.setMessageAnnotations(new MessageAnnotations(messageAnnoMap));
 
+                Map<Symbol, Object> deliveryAnnoMap = new HashMap<>();
                 deliveryAnnotations.forEach((String k, String v) -> {
-                    message.getDeliveryAnnotations().getValue().put(Symbol.valueOf(k), v);
+                    deliveryAnnoMap.put(Symbol.valueOf(k), v);
                 });
+                message.setDeliveryAnnotations(new DeliveryAnnotations(deliveryAnnoMap));
 
                 message.setBody(new AmqpValue(msg));
 
