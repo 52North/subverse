@@ -120,6 +120,7 @@ public class CollectorClient {
         sb.append(System.getProperty("line.separator"));
         sb.append(System.getProperty("line.separator"));
         sb.append(t.getBody());
+        sb.append(System.getProperty("line.separator"));
 
         Files.write(storageDir.resolve(fileName), sb.toString().getBytes(), StandardOpenOption.CREATE);
     }
