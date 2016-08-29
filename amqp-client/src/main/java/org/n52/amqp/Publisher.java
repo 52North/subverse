@@ -24,6 +24,7 @@ import org.apache.qpid.proton.amqp.Symbol;
 import org.apache.qpid.proton.amqp.messaging.AmqpValue;
 import org.apache.qpid.proton.amqp.messaging.DeliveryAnnotations;
 import org.apache.qpid.proton.amqp.messaging.MessageAnnotations;
+import org.apache.qpid.proton.amqp.messaging.Properties;
 import org.apache.qpid.proton.message.Message;
 import org.apache.qpid.proton.messenger.Messenger;
 import org.slf4j.Logger;
@@ -68,6 +69,12 @@ public class Publisher {
     public void publish(CharSequence msg, String subject, ContentType ct,
             Map<String, String> deliveryAnnotations,
             Map<String, String> messageAnnotations) {
+        publish(msg, subject, ct, deliveryAnnotations, messageAnnotations, null);
+    }
+
+    public void publish(CharSequence msg, String subject, ContentType ct,
+            Map<String, String> deliveryAnnotations,
+            Map<String, String> messageAnnotations, String toDestination) {
         LOG.debug("publishing message to target '{}'", connection.getRemoteURI());
         if (this.connection.isOpen()) {
             try {
@@ -79,11 +86,18 @@ public class Publisher {
                 }
 
                 Message message = Message.Factory.create();
-                message.setAddress(this.connection.getRemoteURI().toString());
 
+                Properties props = new Properties();
                 if (subject != null) {
-                    message.setSubject(subject);
+                    props.setSubject(subject);
                 }
+
+                if (toDestination != null) {
+                    props.setTo(toDestination);
+                }
+
+                message.setProperties(props);
+                message.setAddress(this.connection.getRemoteURI().toString());
 
                 if (ct != null) {
                     message.setContentType(ct.getName());
@@ -111,8 +125,8 @@ public class Publisher {
                     messenger.put(message);
                     LOG.debug("sending message...");
                     messenger.send();
-                    LOG.debug("stopping messenger...");
-                    messenger.stop();
+//                    LOG.debug("stopping messenger...");
+//                    messenger.stop();
                 }
             } catch (IOException ex) {
                 LOG.warn("Could not send message", ex);

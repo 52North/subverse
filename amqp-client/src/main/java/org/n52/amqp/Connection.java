@@ -22,7 +22,6 @@ import java.util.Map;
 import org.apache.qpid.proton.amqp.Symbol;
 import org.apache.qpid.proton.amqp.messaging.AmqpValue;
 import org.apache.qpid.proton.amqp.messaging.Section;
-import org.apache.qpid.proton.amqp.messaging.Source;
 import org.apache.qpid.proton.message.Message;
 import org.apache.qpid.proton.messenger.Messenger;
 import org.slf4j.Logger;
@@ -150,9 +149,14 @@ public class Connection {
             ct = messageAnnotations.get("Content__Type");
         }
 
+        String to = null;
+        if (msg.getProperties() != null) {
+            to = msg.getProperties().getTo();
+        }
+
         return new AmqpMessage(((AmqpValue) msg.getBody()).getValue(),
             createContentType(ct),
-            msg.getSubject(), deliveryAnnotations, messageAnnotations);
+            msg.getSubject(), deliveryAnnotations, messageAnnotations, to);
     }
 
     private ContentType createContentType(String contentType) {

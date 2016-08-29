@@ -31,6 +31,7 @@ public class AmqpMessage {
     private final Optional<String> subject;
     private final Map<String, String> deliveryAnnotations;
     private final Map<String, String> messageAnnotations;
+    private final Optional<String> to;
 
     public AmqpMessage(Object body) {
         this(body, null, null);
@@ -50,11 +51,18 @@ public class AmqpMessage {
 
     public AmqpMessage(Object body, ContentType contentType, String subject,
             Map<String, String> deliveryAnnotations, Map<String, String> messageAnnotations) {
+        this(body, contentType, subject, deliveryAnnotations, messageAnnotations, null);
+    }
+
+    public AmqpMessage(Object body, ContentType contentType, String subject,
+            Map<String, String> deliveryAnnotations, Map<String, String> messageAnnotations,
+            String to) {
         this.body = (body instanceof String) ? (String) body : convertToString(body);
         this.contentType = Optional.ofNullable(contentType);
         this.subject = Optional.ofNullable(subject);
         this.deliveryAnnotations = deliveryAnnotations != null ? deliveryAnnotations : Collections.emptyMap();
         this.messageAnnotations = messageAnnotations != null ? messageAnnotations : Collections.emptyMap();
+        this.to = Optional.ofNullable(to);
     }
 
     public String getBody() {
@@ -77,6 +85,10 @@ public class AmqpMessage {
         return messageAnnotations;
     }
 
+    public Optional<String> getTo() {
+        return to;
+    }
+
     @Override
     public String toString() {
         return "AmqpMessage{" +
@@ -84,9 +96,9 @@ public class AmqpMessage {
                 ", contentType=" + contentType +
                 ", subject=" + subject +
                 ", deliveryAnnotations=" + deliveryAnnotations +
-                ", messageAnnotations=" + messageAnnotations + '}';
+                ", messageAnnotations=" + messageAnnotations +
+                ", to=" + to + '}';
     }
-
 
     private String convertToString(Object body) {
         if (body instanceof byte[]) {

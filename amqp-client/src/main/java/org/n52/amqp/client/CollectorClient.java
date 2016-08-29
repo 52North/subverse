@@ -119,6 +119,8 @@ public class CollectorClient {
         sb.append(t.getContentType().orElse(null));
         sb.append(System.getProperty("line.separator"));
         sb.append(System.getProperty("line.separator"));
+        sb.append("### body ###");
+        sb.append(System.getProperty("line.separator"));
         sb.append(t.getBody());
         sb.append(System.getProperty("line.separator"));
 
