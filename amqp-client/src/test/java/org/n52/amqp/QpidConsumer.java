@@ -33,7 +33,7 @@ public class QpidConsumer {
         Messenger messenger = Messenger.Factory.create();
         messenger.start();
         while (true) {
-            messenger.subscribe("amqp://localhost/my-test-queue");
+            messenger.subscribe("amqp://ows.dev.52north.org/subverse.FIXM.bwxgqyukki");
 
             while (!messenger.stopped()) {
                 System.out.println("start receiving");

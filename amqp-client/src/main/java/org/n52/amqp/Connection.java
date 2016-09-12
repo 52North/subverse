@@ -106,6 +106,8 @@ public class Connection {
                         }
                     }
                 }
+
+                LOG.debug("Messenger stopped for {}",  this.remoteURI);
             }
 
             if (messenger != null && !messenger.stopped()) {

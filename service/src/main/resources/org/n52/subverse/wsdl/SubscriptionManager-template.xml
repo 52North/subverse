@@ -71,13 +71,13 @@
         <wsdl:part element="wsrf-rl:SetTerminationTimeResponse" name="SetTerminationTimeResponse"/>
     </wsdl:message>
     <wsdl:message name="SubscribeRequest">
-        <wsdl:part name="SubscribeRequest" element="wsn-b:Subscribe"/>
+        <wsdl:part element="wsn-b:Subscribe" name="SubscribeRequest"/>
     </wsdl:message>
     <wsdl:message name="SubscribeResponse">
-        <wsdl:part name="SubscribeResponse" element="wsn-b:SubscribeResponse"/>
+        <wsdl:part element="wsn-b:SubscribeResponse" name="SubscribeResponse"/>
     </wsdl:message>
     <wsdl:message name="SubscribeCreationFailedFault">
-        <wsdl:part name="SubscribeCreationFailedFault" element="wsn-b:SubscribeCreationFailedFault"/>
+        <wsdl:part element="wsn-b:SubscribeCreationFailedFault" name="SubscribeCreationFailedFault"/>
     </wsdl:message>
     <wsdl:message name="DestroyRequest">
         <wsdl:part element="wsrf-rl:Destroy" name="DestroyRequest"/>
@@ -86,28 +86,28 @@
         <wsdl:part element="wsrf-rl:DestroyResponse" name="DestroyResponse"/>
     </wsdl:message>
     <wsdl:message name="UnsubscribeRequest">
-        <wsdl:part element="wsnt:Unsubscribe" name="UnsubscribeRequest"/>
+        <wsdl:part element="wsn-b:Unsubscribe" name="UnsubscribeRequest"/>
     </wsdl:message>
     <wsdl:message name="UnsubscribeResponse">
-        <wsdl:part element="wsnt:UnsubscribeResponse" name="UnsubscribeResponse"/>
+        <wsdl:part element="wsn-b:UnsubscribeResponse" name="UnsubscribeResponse"/>
     </wsdl:message>
     <wsdl:message name="PauseSubscriptionRequest">
-        <wsdl:part name="PauseSubscriptionRequest" element="wsntw:PauseSubscription"/>
+        <wsdl:part element="wsn-b:PauseSubscription" name="PauseSubscriptionRequest"/>
     </wsdl:message>
     <wsdl:message name="ResumeFailedFault">
-        <wsdl:part element="wsntw:ResumeFailedFault" name="ResumeFailedFault"/>
+        <wsdl:part element="wsn-b:ResumeFailedFault" name="ResumeFailedFault"/>
     </wsdl:message>
     <wsdl:message name="PauseFailedFault">
-        <wsdl:part element="wsntw:PauseFailedFault" name="PauseFailedFault"/>
+        <wsdl:part element="wsn-b:PauseFailedFault" name="PauseFailedFault"/>
     </wsdl:message>
     <wsdl:message name="PauseSubscriptionResponse">
-        <wsdl:part name="PauseSubscriptionResponse" element="wsntw:PauseSubscriptionResponse"/>
+        <wsdl:part element="wsn-b:PauseSubscriptionResponse" name="PauseSubscriptionResponse"/>
     </wsdl:message>
     <wsdl:message name="ResumeSubscriptionRequest">
-        <wsdl:part name="ResumeSubscriptionRequest" element="wsntw:ResumeSubscription"/>
+        <wsdl:part element="wsn-b:ResumeSubscription" name="ResumeSubscriptionRequest"/>
     </wsdl:message>
     <wsdl:message name="ResumeSubscriptionResponse">
-        <wsdl:part name="ResumeSubscriptionResponse" element="wsntw:ResumeSubscriptionResponse"/>
+        <wsdl:part element="wsn-b:ResumeSubscriptionResponse" name="ResumeSubscriptionResponse"/>
     </wsdl:message>
     <wsdl:message name="ResourceNotDestroyedFault">
         <wsdl:part element="wsrf-rl:ResourceNotDestroyedFault" name="ResourceNotDestroyedFault"/>
@@ -140,19 +140,16 @@
         <wsdl:part element="wsrf-rp:GetResourcePropertyDocumentResponse" name="GetResourcePropertyDocumentResponse"/>
     </wsdl:message>
     <wsdl:message name="UnacceptableInitialTerminationTimeFault">
-        <wsdl:part name="UnacceptableInitialTerminationTimeFault" element="wsn-b:UnacceptableInitialTerminationTimeFault"/>
+        <wsdl:part element="wsn-b:UnacceptableInitialTerminationTimeFault" name="UnacceptableInitialTerminationTimeFault"/>
     </wsdl:message>
     <wsdl:message name="InvalidTopicExpressionFault">
-        <wsdl:part name="InvalidTopicExpressionFault" element="wsn-b:InvalidTopicExpressionFault"/>
+        <wsdl:part element="wsn-b:InvalidTopicExpressionFault" name="InvalidTopicExpressionFault"/>
     </wsdl:message>
     <wsdl:message name="TopicNotSupportedFault">
-        <wsdl:part name="TopicNotSupportedFault" element="wsn-b:TopicNotSupportedFault"/>
+        <wsdl:part element="wsn-b:TopicNotSupportedFault" name="TopicNotSupportedFault"/>
     </wsdl:message>
     <wsdl:message name="MultipleTopicsSpecifiedFault">
-        <wsdl:part name="MultipleTopicsSpecifiedFault" element="wsn-b:MultipleTopicsSpecifiedFault"/>
-    </wsdl:message>
-    <wsdl:message name="ServiceException">
-        <wsdl:part name="ServiceException" element="pubsub:ServiceException"/>
+        <wsdl:part element="wsn-b:MultipleTopicsSpecifiedFault" name="MultipleTopicsSpecifiedFault"/>
     </wsdl:message>
     <wsdl:portType name="SubscriptionManager">
         <wsdl:operation name="Subscribe">
@@ -174,14 +171,14 @@
         <wsdl:operation name="PauseSubscription">
             <wsdl:input message="pubsub:PauseSubscriptionRequest" name="PauseSubscriptionRequest" wsa:Action="http://docs.oasis-open.org/wsn/bw-2/SubscriptionManager/PauseSubscriptionRequest"/>
             <wsdl:output message="pubsub:PauseSubscriptionResponse" name="PauseSubscriptionResponse" wsa:Action="http://docs.oasis-open.org/wsn/bw-2/SubscriptionManager/PauseSubscriptionResponse"/>
-            <wsdl:fault name="ResourceUnknownFault" message="pubsub:ResourceUnknownFault"/>
-            <wsdl:fault name="PauseFailedFault" message="pubsub:PauseFailedFault"/>
+            <wsdl:fault message="pubsub:ResourceUnknownFault" name="ResourceUnknownFault"/>
+            <wsdl:fault message="pubsub:PauseFailedFault" name="PauseFailedFault"/>
         </wsdl:operation>
         <wsdl:operation name="ResumeSubscription">
             <wsdl:input message="pubsub:ResumeSubscriptionRequest" name="ResumeSubscriptionRequest" wsa:Action="http://docs.oasis-open.org/wsn/bw-2/SubscriptionManager/ResumeSubscriptionRequest"/>
             <wsdl:output message="pubsub:ResumeSubscriptionResponse" name="ResumeSubscriptionResponse" wsa:Action="http://docs.oasis-open.org/wsn/bw-2/SubscriptionManager/ResumeSubscriptionResponse"/>
-            <wsdl:fault name="ResourceUnknownFault" message="pubsub:ResourceUnknownFault"/>
-            <wsdl:fault name="ResumeFailedFault" message="pubsub:ResumeFailedFault"/>
+            <wsdl:fault message="pubsub:ResourceUnknownFault" name="ResourceUnknownFault"/>
+            <wsdl:fault message="pubsub:ResumeFailedFault" name="ResumeFailedFault"/>
         </wsdl:operation>
     </wsdl:portType>
     <wsdl:binding
