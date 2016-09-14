@@ -30,9 +30,10 @@ This project includes:
   EPOS Esper Pattern Engine under GNU GENERAL PUBLIC LICENSE Version 2, June 1991
   EPOS Patterns Tools under GNU GENERAL PUBLIC LICENSE Version 2, June 1991
   EPOS Transform module for AIXM using simple XPath under GNU GENERAL PUBLIC LICENSE Version 2, June 1991
-  EPOS Transform module for OM XMLBeans bindings under GNU GENERAL PUBLIC LICENSE Version 2, June 1991
+  EPOS Transform module for FIXM XMLBeans bindings under GNU GENERAL PUBLIC LICENSE Version 2, June 1991
   Esper under GNU General Public License Version 2
   Event Model schema version 0.2.0 under The Apache Software License, Version 2.0
+  FIXM 3.0.1 schemas under The Apache Software License, Version 2.0
   Guava: Google Core Libraries for Java under The Apache Software License, Version 2.0
   Hamcrest Core under New BSD License
   Jackson-annotations under The Apache Software License, Version 2.0
@@ -53,12 +54,8 @@ This project includes:
   OGC Filter schema (spec. v2.0) under The Apache Software License, Version 2.0
   OGC GML schema (spec. v3.1.1) under The Apache Software License, Version 2.0
   OGC GML schema (spec. v3.2.1) under The Apache Software License, Version 2.0
-  OGC O&M schema (spec. v1.0.0) under The Apache Software License, Version 2.0
-  OGC O&M schema (spec. v2.0) under The Apache Software License, Version 2.0
   OGC OWS schema (spec. v1.1.0) under The Apache Software License, Version 2.0
   OGC PubSub SOAP schema (spec. v1.0) under The Apache Software License, Version 2.0
-  OGC Sampling schema (spec. v1.0.0) under The Apache Software License, Version 2.0
-  OGC SensorML schema (spec. v1.0.1) under The Apache Software License, Version 2.0
   OGC SWECommon schema (spec. v1.0.1) under The Apache Software License, Version 2.0
   OGC SWES schema (spec. v2.0) under The Apache Software License, Version 2.0
   org.eclipse.paho.client.mqttv3 under Eclipse Distribution License 1.0

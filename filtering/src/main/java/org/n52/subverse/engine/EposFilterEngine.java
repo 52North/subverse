@@ -92,12 +92,13 @@ public class EposFilterEngine implements FilterEngine {
             }
             else {
                 try {
-                    event = TransformationRepository.Instance.transform(message, EposEvent.class);
+                    event = TransformationRepository.Instance.transform(message, EposEvent.class, contentType);
                 } catch (TransformationException ex) {
                     LOG.warn("could not transform to EposEvent: {}", ex.getMessage());
                 }
 
                 if (event == null) {
+                    LOG.info("Using Generic event");
                     event = new GenericEposEvent(message, contentType);
                 }
             }

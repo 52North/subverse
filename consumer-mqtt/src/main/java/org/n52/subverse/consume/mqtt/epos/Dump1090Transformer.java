@@ -58,7 +58,7 @@ public class Dump1090Transformer implements EposTransformer {
 
 
     @Override
-    public EposEvent transform(Object input) throws TransformationException {
+    public EposEvent transform(Object input, String contentType) throws TransformationException {
         try {
             Map<String,Object> o = mapper.readValue((String) input, typeRef);
             Object tsObj = o.get("timestamp");
@@ -85,7 +85,7 @@ public class Dump1090Transformer implements EposTransformer {
     }
 
     @Override
-    public boolean supportsInput(Object input) {
+    public boolean supportsInput(Object input, String contentType) {
         if (input instanceof String) {
             String str = (String) input;
             if (str.contains("\"seen_pos\"") && str.contains("\"timestamp\"")) {

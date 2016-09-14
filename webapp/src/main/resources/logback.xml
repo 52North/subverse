@@ -26,7 +26,7 @@
         </encoder>
     </appender>
     <logger name="org.n52.subverse" level="DEBUG" />
-    <logger name="org.n52.epos" level="WARN" />
+    <logger name="org.n52.epos" level="DEBUG" />
     <logger name="org.n52.subverse.consume.mqtt" level="WARN" />
     <logger name="org.n52.subverse.consume.mqtt.tb12" level="INFO" />
     <root level="WARN">
