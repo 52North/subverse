@@ -77,7 +77,7 @@
         <version.iceland>2-tb12-SNAPSHOT</version.iceland>
         <spring-version>4.2.3.RELEASE</spring-version>
         <spring-amqp-version>1.5.3.RELEASE</spring-amqp-version>
-        <common-xml.version>2.1.1-SNAPSHOT</common-xml.version>
+        <common-xml.version>2.3.0</common-xml.version>
         <version.mockito>1.10.19</version.mockito>
         <epos.version>0.0.1-SNAPSHOT</epos.version>
     </properties>
