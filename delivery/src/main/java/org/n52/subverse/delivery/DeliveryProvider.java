@@ -36,7 +36,9 @@ import java.util.Map;
  */
 public interface DeliveryProvider {
 
-    boolean supportsDeliveryIdentifier(String id);
+    default boolean supportsDeliveryIdentifier(String id) {
+        return id != null ? id.equals(getIdentifier()) : false;
+    };
 
     String getIdentifier();
 
