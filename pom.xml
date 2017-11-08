@@ -1,5 +1,4 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
@@ -10,7 +9,7 @@
 
     <groupId>org.n52.subverse</groupId>
     <artifactId>subverse</artifactId>
-    <version>1.0.0-rc0-SNAPSHOT</version>
+    <version>1.0.0-rc0</version>
     <packaging>pom</packaging>
     <name>52°North subverse</name>
     <description>52°North subverse - an OGC PubSub 1.0 Service implementation</description>
@@ -43,7 +42,8 @@
         <url>https://github.com/52North/subverse</url>
         <connection>scm:git:https://github.com/52North/subverse.git</connection>
         <developerConnection>scm:git:https://github.com/52North/subverse.git</developerConnection>
-    </scm>
+      <tag>v1.0.0-rc0</tag>
+  </scm>
 
     <issueManagement>
         <system>GitHub issues</system>
