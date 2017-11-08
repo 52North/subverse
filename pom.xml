@@ -42,8 +42,8 @@
         <url>https://github.com/52North/subverse</url>
         <connection>scm:git:https://github.com/52North/subverse.git</connection>
         <developerConnection>scm:git:https://github.com/52North/subverse.git</developerConnection>
-      <tag>v1.0.0-rc0</tag>
-  </scm>
+        <tag>v1.0.0-rc0</tag>
+    </scm>
 
     <issueManagement>
         <system>GitHub issues</system>
@@ -51,18 +51,18 @@
     </issueManagement>
 
     <modules>
-<!--        <module>core</module>-->
+        <!--        <module>core</module>-->
         <module>filtering</module>
         <module>termination</module>
         <module>delivery</module>
-<!--        <module>delivery-amqp</module>
+        <!--        <module>delivery-amqp</module>
         <module>delivery-wsn</module>-->
-<!--        <module>publications</module>-->
-<!--        <module>consumer-mqtt</module>-->
-<!--        <module>service</module>-->
-<!--        <module>storage-fs</module>-->
-<!--        <module>webapp</module>-->
-<!--        <module>svalbard</module>-->
+        <!--        <module>publications</module>-->
+        <!--        <module>consumer-mqtt</module>-->
+        <!--        <module>service</module>-->
+        <!--        <module>storage-fs</module>-->
+        <!--        <module>webapp</module>-->
+        <!--        <module>svalbard</module>-->
         <!--<module>amqp-client</module>-->
     </modules>
 
@@ -74,7 +74,7 @@
         <qpid-version>0.32</qpid-version>
         <slf4j-version>1.7.25</slf4j-version>
         <version.java>1.8</version.java>
-<!--        <version.iceland>2-tb12-SNAPSHOT</version.iceland>-->
+        <!--        <version.iceland>2-tb12-SNAPSHOT</version.iceland>-->
         <spring-version>4.2.3.RELEASE</spring-version>
         <spring-amqp-version>1.5.3.RELEASE</spring-amqp-version>
         <common-xml.version>2.3.0</common-xml.version>
@@ -139,7 +139,7 @@
                 <artifactId>consumer-mqtt</artifactId>
                 <version>${project.version}</version>
             </dependency>
-<!--            <dependency>
+            <!--            <dependency>
                 <groupId>${project.groupId}</groupId>
                 <artifactId>svalbard</artifactId>
                 <version>${project.version}</version>
@@ -159,7 +159,7 @@
                 <artifactId>termination</artifactId>
                 <version>${project.version}</version>
             </dependency>
-<!--            <dependency>
+            <!--            <dependency>
                 <groupId>org.n52.iceland</groupId>
                 <artifactId>iceland</artifactId>
                 <version>${version.iceland}</version>
@@ -597,5 +597,17 @@
         </profile>
     </profiles>
 
+    <distributionManagement>
+        <repository>
+            <id>n52-releases-dist</id>
+            <name>repository for 52North releases</name>
+            <url>dav:https://52north.org/maven/repo/releases</url>
+        </repository>
+        <snapshotRepository>
+            <id>n52-snapshots-dist</id>
+            <name>repository for 52North snapshots</name>
+            <url>dav:https://52north.org/maven/repo/snapshots</url>
+        </snapshotRepository>
+    </distributionManagement>
 
 </project>
