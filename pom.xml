@@ -79,7 +79,7 @@
         <spring-amqp-version>1.5.3.RELEASE</spring-amqp-version>
         <common-xml.version>2.3.0</common-xml.version>
         <version.mockito>1.10.19</version.mockito>
-        <epos.version>0.0.1-SNAPSHOT</epos.version>
+        <epos.version>0.1.0</epos.version>
     </properties>
 
     <repositories>
