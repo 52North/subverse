@@ -1,7 +1,10 @@
-# 52°North subverse [![Build Status](https://travis-ci.org/52North/subverse.svg)](https://travis-ci.org/52North/subverse)
+# ARCHIVED
 
-subverse is an implementation of the OGC PubSub 1.0 specification. It
-is currently in development phase.
+This project is no longer maintained and will not receive any further updates. If you plan to continue using it, please be aware that future security issues will not be addressed.
+
+# 52°North subverse
+
+subverse is an implementation of the OGC PubSub 1.0 specification. It is currently in development phase.
 
 # License
 
